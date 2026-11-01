@@ -99,7 +99,8 @@ function mkAudioNode(name, hasClip)
 end
 mkAudioNode("BGM_Ambient", true)
 mkAudioNode("BGM_Ceremony", true)
-mkAudioNode("SFX_Firework", true)
+mkAudioNode("SFX_Firework_Close", true)
+mkAudioNode("SFX_Firework_Far", true)
 
 -- ---------- 外部依赖 ----------
 questComplete = false
@@ -269,16 +270,20 @@ def main():
 
     # ---------------------------------------------------------------- 9
     print()
-    print("[9] 典礼 BGM：主题起、日常压低、每发一声烟花")
+    print("[9] 典礼音频：主题起、日常压低、烟花声床各一声")
     lt = new_state()
     lt.execute("questComplete = true")
     lt.execute("Advance(0.1)")
     check(call(lt, "audioSources['BGM_Ceremony'].played") == 1, "开演就放典礼主题")
     check(call(lt, "audioSources['BGM_Ambient'].volume") == 0.18,
         "日常 BGM 被压低（%.2f）" % call(lt, "audioSources['BGM_Ambient'].volume"))
+    check(call(lt, "audioSources['SFX_Firework_Close'].played") == 1, "近景声床开演播一次")
+    check(call(lt, "audioSources['SFX_Firework_Far'].played") == 1, "远景声床开演播一次")
     lt.execute("Run(20.0)")          # 4 发全部放完
-    check(call(lt, "audioSources['SFX_Firework'].played") == 4,
-        "每发烟花一声，共 %d 声" % call(lt, "audioSources['SFX_Firework'].played"))
+    check(call(lt, "audioSources['SFX_Firework_Close'].played") == 1,
+        "声床不随单发重复（近景共 %d 次）" % call(lt, "audioSources['SFX_Firework_Close'].played"))
+    check(call(lt, "audioSources['SFX_Firework_Far'].played") == 1,
+        "声床不随单发重复（远景共 %d 次）" % call(lt, "audioSources['SFX_Firework_Far'].played"))
 
     # ---------------------------------------------------------------- 10
     print()

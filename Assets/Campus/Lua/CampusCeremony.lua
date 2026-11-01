@@ -86,10 +86,16 @@ local function StartBGM()
     end
 end
 
-local function FireworkSfx()
-    local sfx = AudioSrc("SFX_Firework")
-    if sfx == nil or sfx.clip == nil then return end
-    pcall(function() sfx:Play() end)
+-- 烟花声床：近景 + 远景两条 15s 多响录音，开演各播一次。
+-- 不跟单发对齐 —— 声床内部本身就是密集的多响序列，和 4 发视觉烟花叠在一起
+-- 听感是"一场秀"，比单发一声一声对齐更自然，也不怕视觉节点缺失时错位。
+local function FireworkBeds()
+    for _, name in ipairs({ "SFX_Firework_Close", "SFX_Firework_Far" }) do
+        local sfx = AudioSrc(name)
+        if sfx ~= nil and sfx.clip ~= nil then
+            pcall(function() sfx:Play() end)
+        end
+    end
 end
 
 -- 加一个粒子动画。t0 可以比现在晚（升空弹落地后才爆），t < 0 期间保持隐藏。
@@ -106,10 +112,6 @@ local function FireShot(now)
     -- 永远停在 0，而收尾条件是 shotsFired >= MAX_SHOTS —— 典礼就永远卡在"进行中"，
     -- 既不会结束也不会写标记，玩家看到一条开演提示之后再无下文。
     shotsFired = shotsFired + 1
-
-    -- 声音先于画面判定：就算场景里没有烟花节点（视觉被降级），
-    -- 这一发"响"依然成立 —— 典礼此刻确实发生了。
-    FireworkSfx()
 
     if rocket == nil or #sparks == 0 then
         print(string.format("[CampusCeremony] 第 %d 发（无烟花节点，跳过）", shotsFired))
@@ -171,6 +173,7 @@ local function Start()
         Toast("毕业典礼开始了")
     end
     StartBGM()
+    FireworkBeds()
     print("[CampusCeremony] 开演，她" .. (sheComes and "来了" or "没来（好感未满）"))
 end
 

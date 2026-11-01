@@ -1529,7 +1529,7 @@ public static class DouyinCampusBuilder
     /// 约定：文件放进 Assets/Campus/Audio/ 并按名字命名（ogg/wav/mp3 任一），重建即生效：
     ///   BGM_Ambient   进世界日常 loop（playOnAwake + 循环 + 2D）
     ///   BGM_Ceremony  毕业典礼主题（不循环；Lua 开演时播，并把日常 BGM 音量压低）
-    ///   SFX_Firework  烟花一声（Lua 每发调一次 Play）
+    ///   SFX_Firework_Close / _Far   烟花声床（15s 多响录音，开演各播一次，一近一远）
     /// 缺文件就跳过对应音源 —— 宁可没有，也不引用空 clip。
     ///
     /// AudioListener：本场景和 SDK 全部 prefab 里都没有；玩家相机是引擎运行时生成的，
@@ -1546,7 +1546,10 @@ public static class DouyinCampusBuilder
 
         BuildAudioSource(root.transform, "BGM_Ambient", loop: true, awake: true, vol: 0.55f);
         BuildAudioSource(root.transform, "BGM_Ceremony", loop: false, awake: false, vol: 0.80f);
-        BuildAudioSource(root.transform, "SFX_Firework", loop: false, awake: false, vol: 0.70f);
+        // 烟花声床：两个都是 15s 的多响烟花秀录音（不是单响），典礼开演各播一次。
+        // 近景清脆 0.85 / 远景闷响 0.5 —— 一近一远叠出纵深。
+        BuildAudioSource(root.transform, "SFX_Firework_Close", loop: false, awake: false, vol: 0.85f);
+        BuildAudioSource(root.transform, "SFX_Firework_Far", loop: false, awake: false, vol: 0.50f);
     }
 
     static void BuildAudioSource(Transform root, string name, bool loop, bool awake, float vol)
@@ -1579,11 +1582,12 @@ public static class DouyinCampusBuilder
             var path = "Assets/Campus/Audio/" + baseName + ext;
             if (!System.IO.File.Exists(path)) continue;
 
-            // 长音乐走 Streaming：手机内存紧（<1400MB 预算），整段解压进内存不划算。
+            // 长音频走 Streaming：手机内存紧（<1400MB 预算），整段解压进内存不划算。
+            // BGM 和 15s 的烟花声床都算长音频。
             // ⚠️ 属性叫 defaultSampleSettings（不是 defaultSettings），且是结构体 ——
             //    不能直接 imp.defaultSampleSettings.loadType=x（CS1612：属性返回副本）。
             //    要取出来改完再存回去。
-            if (baseName.StartsWith("BGM_"))
+            if (baseName.StartsWith("BGM_") || baseName.StartsWith("SFX_Firework"))
             {
                 var imp = AssetImporter.GetAtPath(path) as AudioImporter;
                 if (imp != null && imp.defaultSampleSettings.loadType != AudioClipLoadType.Streaming)
