@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: Duplicate Asset Isolation
   m_Data:
     m_SerializedData: []
-  m_GUID: 9f722e109194f4547a50f7b93f707884
+  m_GUID: 2414bfae2c92ab14ab1228378db6a918
   m_SerializeEntries:
   - m_GUID: 211feea29a4364d27bca96926245669d
     m_Address: Assets/DouyinVCreateSDK/World/WorldResources/Shaders/ENV/World_Lit.shader

@@ -1143,7 +1143,7 @@ public static class DouyinCampusBuilder
     }
 
     /// <summary>生成女主角：人形 + 名牌/台词 + 待机点，挂 CampusStar.lua</summary>
-    static void BuildStar(Transform parent, Dictionary<string, int> nameCells, Dictionary<string, int[]> lineCellsByNpc, Dictionary<string, int[]> lineTiersByNpc)
+    static void BuildStar(Transform parent, Dictionary<string, int> nameCells, Dictionary<string, int[]> lineCellsByNpc, Dictionary<string, int[]> lineTiersByNpc, int promptCell)
     {
         const string id = "NPC_08";
         var host = CreateNpcHost(parent, id, StarHome, "Assets/Campus/Lua/CampusStar.lua");
@@ -1154,7 +1154,7 @@ public static class DouyinCampusBuilder
         int nameCell = nameCells.ContainsKey(id) ? nameCells[id] : 0;
         var cells = lineCellsByNpc.ContainsKey(id) ? lineCellsByNpc[id] : new[] { 0 };
         var tiers = (lineTiersByNpc != null && lineTiersByNpc.ContainsKey(id)) ? lineTiersByNpc[id] : null;
-        BuildNpcLabel(host.transform, nameCell, cells, tiers, id);
+        BuildNpcLabel(host.transform, nameCell, cells, tiers, id, promptCell);
 
         // 待机点：Lua 用 Path/Waypoint_01 作为"回家"的坐标（她不像别人那样沿路点巡逻）
         var pathRoot = new GameObject("Path").transform;
@@ -1186,7 +1186,7 @@ public static class DouyinCampusBuilder
     /// 而 quad + World_Lit 和校名牌是同一条已验证的管线，截图和真机都能看到。
     /// 代价是台词要预先画进图集 —— 所以每句话一个 quad，Lua 只负责切显隐。
     /// </summary>
-    static void BuildNpcLabel(Transform root, int nameCell, int[] lineCells, int[] lineTiers = null, string npcId = null)
+    static void BuildNpcLabel(Transform root, int nameCell, int[] lineCells, int[] lineTiers = null, string npcId = null, int promptCell = -1)
     {
         var pivot = new GameObject("Label").transform;
         pivot.SetParent(root, false);
@@ -1247,6 +1247,22 @@ public static class DouyinCampusBuilder
                 }
             }
         }
+        // 按键提示：气泡下方的小纸条「按 F 继续 ▼」，Lua 在对话可推进时点亮。
+        // 初始隐藏；复用台词图集的格子，不占新材质。
+        if (promptCell >= 0)
+        {
+            var pg = new GameObject("Prompt_F");
+            pg.transform.SetParent(bubble, false);
+            pg.transform.localPosition = new Vector3(0f, -0.55f, 0f);
+            pg.transform.localScale = new Vector3(0.72f, 0.72f, 1f);
+            pg.AddComponent<MeshFilter>().sharedMesh = NpcCellMesh(promptCell);
+            var pmr = pg.AddComponent<MeshRenderer>();
+            pmr.sharedMaterial = _mats["M_NpcLine"];
+            pmr.shadowCastingMode = ShadowCastingMode.Off;
+            pmr.receiveShadows = false;
+            pg.isStatic = false;
+            pg.SetActive(false);
+        }
         bubble.gameObject.SetActive(false);
     }
 
@@ -1306,12 +1322,14 @@ public static class DouyinCampusBuilder
     static void LoadNpcLineCells(out Dictionary<string, int> nameCells,
                                  out Dictionary<string, int[]> lineCells,
                                  out Dictionary<string, int[]> lineTiers,
-                                 out Dictionary<string, string[]> lineTexts)
+                                 out Dictionary<string, string[]> lineTexts,
+                                 out int promptCell)
     {
         nameCells = new Dictionary<string, int>();
         lineCells = new Dictionary<string, int[]>();
         lineTiers = new Dictionary<string, int[]>();
         lineTexts = new Dictionary<string, string[]>();
+        promptCell = -1;
 
         const string path = "Assets/Campus/NpcLines.txt";
         if (!File.Exists(path))
@@ -1324,6 +1342,7 @@ public static class DouyinCampusBuilder
         var ids = new List<string>();        // 每句台词属于谁，按文件出现顺序
         var tierOfLine = new List<int>();    // 与 ids 一一对应
         var textOfLine = new List<string>(); // 与 ids 一一对应（配音清单用）
+        string promptText = null;            // kind=P 的按键提示（全 NPC 共用一格）
 
         foreach (var raw in File.ReadAllLines(path))
         {
@@ -1333,6 +1352,7 @@ public static class DouyinCampusBuilder
             if (parts.Length != 3) continue;
             string who = parts[0].Trim(), kind = parts[1].Trim();
             if (kind == "N") { nameOrder.Add(who); }
+            else if (kind == "P") { promptText = parts[2].Trim(); }
             else if (kind.StartsWith("L"))
             {
                 int t = 1;
@@ -1344,6 +1364,7 @@ public static class DouyinCampusBuilder
             }
         }
 
+        // 格位顺序与图集脚本一致：先名字、后台词、最后提示
         int cell = 0;
         foreach (var who in nameOrder) nameCells[who] = cell++;
 
@@ -1380,12 +1401,15 @@ public static class DouyinCampusBuilder
             }
         }
 
+        if (promptText != null) promptCell = cell++;
+
         // 兜底：图集只有 64 格，越界就全指回第 0 格（宁可显示错字也不要空 mesh）
         foreach (var kv in nameCells.ToArray())
             if (kv.Value >= 64) nameCells[kv.Key] = 0;
         foreach (var kv in lineCells.ToArray())
             for (int i = 0; i < kv.Value.Length; i++)
                 if (kv.Value[i] >= 64) kv.Value[i] = 0;
+        if (promptCell >= 64) promptCell = 0;
     }
 
 
@@ -1447,7 +1471,7 @@ public static class DouyinCampusBuilder
     static void BuildNPCs(Transform parent)
     {
         LoadNpcLineCells(out var nameCells, out var lineCellsByNpc, out var lineTiersByNpc,
-                         out var lineTextsByNpc);
+                         out var lineTextsByNpc, out var promptCell);
 
         for (int i = 0; i < NpcSpecs.Length; i++)
         {
@@ -1460,7 +1484,7 @@ public static class DouyinCampusBuilder
             BuildNpcFigure(host.transform, spec);
             int nameCell = nameCells.ContainsKey(id) ? nameCells[id] : 0;
             var lineCells = lineCellsByNpc.ContainsKey(id) ? lineCellsByNpc[id] : new[] { 0 };
-            BuildNpcLabel(host.transform, nameCell, lineCells, null, id);
+            BuildNpcLabel(host.transform, nameCell, lineCells, null, id, promptCell);
 
             // 路点：空物体存世界坐标，Lua 直接读 position
             var pathRoot = new GameObject("Path").transform;
@@ -1475,7 +1499,7 @@ public static class DouyinCampusBuilder
         }
         Debug.Log("[Campus] NPC = " + NpcSpecs.Length);
 
-        BuildStar(parent, nameCells, lineCellsByNpc, lineTiersByNpc);
+        BuildStar(parent, nameCells, lineCellsByNpc, lineTiersByNpc, promptCell);
 
         // 台词配音清单：quad 名 ↔ 台词文本。配音的人照着这个列表提供文件。
         WriteVoiceManifest(lineTextsByNpc, lineTiersByNpc);

@@ -118,6 +118,9 @@ for tier = 1, 4 do
         add_child(bubbleNode, new_t(string.format("Line_%d_%02d", tier, i)))
     end
 end
+-- 按键提示条：气泡下方，Lua 按 F 模式点亮（名字不匹配 Line 模式，不进台词组）
+local promptNode = new_t("Prompt_F")
+add_child(bubbleNode, promptNode)
 
 local path = new_t("Path")
 add_child(root, path)
@@ -133,6 +136,7 @@ CS = {
     UnityEngine = {
         Vector3 = Vector3,
         Quaternion = Quaternion,
+        KeyCode = { F = "F" },   -- Input 本身默认不注入：没有 Input = 自动轮播回退路径
         Time = setmetatable({}, {
             __index = function(_, k)
                 if k == "time" then return now end
@@ -413,6 +417,41 @@ _G["CampusSave"] = saveMock
             "换句后新 quad 的配音放了一次")
         total2 = lt6.eval("(function() local n=0 for _,s in pairs(voicePlays) do n=n+s.played end return n end)()")
         check(total2 == 2, "累计两声，没有叠着响（共 %d 声）" % total2)
+
+    # ---------------------------------------------------------------- 18
+    print("[18] F 键推进对话：靠近开口，之后只按 F 前进")
+    lt7 = new_state()
+    lt7.execute("CS.UnityEngine.KeyCode = { F = 'F' }")
+    lt7.execute("CS.UnityEngine.Input = { GetKeyDown = function(k) return fDown end }")
+    g7 = lt7.globals()
+    g7.fDown = False
+    player_at(lt7, 2.5, 0, -5.0)
+    step(lt7, 5)
+    n1 = active_line(lt7)
+    check(n1 is not None, "靠近即开口（第一句）：" + str(n1))
+    check(lt7.eval("bubbleNode.children['Prompt_F'].gameObject.active") is True,
+        "「按 F 继续」提示条亮着")
+    step(lt7, 60 * 8)                       # 干等 8 秒
+    check(active_line(lt7) == n1, "不按 F 就不换句（自动轮播已停）")
+    g7.fDown = True
+    step(lt7, 1)
+    g7.fDown = False
+    n3 = active_line(lt7)
+    check(n3 is not None and n3 != n1, "按 F 前进到下一句：" + str(n3))
+    if n3:
+        lt7.globals()["qname3"] = n3
+        check(lt7.eval("voicePlays[qname3] ~= nil and voicePlays[qname3].played == 1"),
+            "新一句的配音响了")
+    step(lt7, 60 * 8)
+    check(active_line(lt7) == n3, "按 F 后字幕停留，不会自动收")
+    player_at(lt7, 2.5, 0, -30.0)           # 走远
+    step(lt7, 10)
+    check(lt7.eval("bubbleNode.gameObject.active") is False, "走开后字幕收掉")
+    check(lt7.eval("bubbleNode.children['Prompt_F'].gameObject.active") is False,
+        "提示条也收掉")
+    player_at(lt7, 2.5, 0, -5.0)            # 再回来 → 重新开第一句
+    step(lt7, 5)
+    check(active_line(lt7) is not None, "再靠近重新开口")
 
     print()
     print("全部通过" if ok else "有失败项")

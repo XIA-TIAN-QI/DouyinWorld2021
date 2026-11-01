@@ -46,6 +46,8 @@ local phase = 0
 local talking = false
 local nextLineAt = 0
 local bubbleHideAt = 0
+local promptQuad            -- 气泡下方的「按 F 继续 ▼」提示条
+local talkedOnce = false    -- F 键模式：这次靠近是否已经开过口
 
 -- ---------------------------------------------------------------- 小工具
 
@@ -90,7 +92,8 @@ local function PlayVoice(q)
 end
 
 -- 只开第 i 句的 quad：图集方案下换台词 = 换显隐，没有文本可改
-local function Say(i)
+-- hold=true：字幕不自动收（F 键模式）
+local function Say(i, hold)
     if bubble == nil or #lines == 0 then return end
     if i < 1 then i = 1 end
     if i > #lines then i = #lines end
@@ -98,7 +101,7 @@ local function Say(i)
         lines[k].gameObject:SetActive(k == i)
     end
     bubble.gameObject:SetActive(true)
-    bubbleHideAt = CS.UnityEngine.Time.time + BUBBLE_TIME
+    bubbleHideAt = CS.UnityEngine.Time.time + (hold and 0 or BUBBLE_TIME)
     PlayVoice(lines[i])
 end
 
@@ -192,13 +195,55 @@ local function QuestHintLine()
     return nil
 end
 
+-- ---------------------------------------------------------------- 键盘输入
+-- F 键推进对话。没有 SDK 先例，全 pcall：摸不到 Input 就回退定时轮播，
+-- 提示条也不显示（显示就是撒谎）。
+
+local inputOK = nil        -- nil=还没探测，true/false=探测结果
+
+local function InputReady()
+    if inputOK ~= nil then return inputOK end
+    local ok, has = pcall(function()
+        return CS.UnityEngine.Input ~= nil and CS.UnityEngine.Input.GetKeyDown ~= nil
+    end)
+    inputOK = (ok and has == true)
+    if inputOK then
+        print("[NPCTalk] " .. tostring(id) .. " 键盘输入可用：按 F 推进对话")
+    else
+        print("[NPCTalk] " .. tostring(id) .. " 键盘输入不可用，保持自动轮播")
+    end
+    return inputOK
+end
+
+local function FPressed()
+    if not InputReady() then return false end
+    local ok, hit = pcall(function()
+        return CS.UnityEngine.Input.GetKeyDown(CS.UnityEngine.KeyCode.F)
+    end)
+    if not ok then
+        inputOK = false
+        print("[NPCTalk] 读取键盘失败，退回自动轮播")
+        return false
+    end
+    return hit == true
+end
+
+local function ShowPrompt(v)
+    if promptQuad ~= nil and promptQuad.gameObject.active ~= v then
+        promptQuad.gameObject:SetActive(v)
+    end
+end
+
 local function Talk(dt, playerPos)
     local pos = root.position
     FaceTo(playerPos.x - pos.x, playerPos.z - pos.z, dt * 1.4)
     ResetPose()
 
     local now = CS.UnityEngine.Time.time
-    if now >= nextLineAt then
+
+    -- 特殊句：任务 offer/提醒/收尾（老陈）或线索句（其他 NPC）。
+    -- 返回 true 表示这一下说了特殊句（不消耗普通轮播的游标）
+    local function saySpecial(hold)
         local special = nil
         if pendingSpecial then
             pendingSpecial = false
@@ -207,21 +252,46 @@ local function Talk(dt, playerPos)
                 special = QuestHintLine()
             end
         end
+        if special == nil then return false end
 
-        if special ~= nil then
-            Say(special)
-            -- 老陈把任务说出口之后正式接取（Say 只负责显示）
-            local q = QUEST_LINES[id]
-            local quest = _G["CampusQuest"]
-            if q ~= nil and quest ~= nil and quest.Accept ~= nil
-                and special == q.offer and not quest:IsAccepted() then
-                quest:Accept()
-            end
-        else
-            Say(lineIndex)
-            lineIndex = lineIndex % math.max(1, normalMax) + 1
+        Say(special, hold)
+        -- 老陈把任务说出口之后正式接取（Say 只负责显示）
+        local q = QUEST_LINES[id]
+        local quest = _G["CampusQuest"]
+        if q ~= nil and quest ~= nil and quest.Accept ~= nil
+            and special == q.offer and not quest:IsAccepted() then
+            quest:Accept()
         end
-        nextLineAt = now + TALK_GAP
+        return true
+    end
+
+    if InputReady() then
+        -- F 键模式：靠近说第一句（优先任务/线索句），之后每按一次 F 前进一句
+        ShowPrompt(true)
+        if not talkedOnce then
+            talkedOnce = true
+            if not saySpecial(true) then
+                Say(lineIndex, true)
+            end
+            nextLineAt = now + 0.35
+        elseif FPressed() and now >= nextLineAt then
+            if not saySpecial(false) then
+                Say(lineIndex, false)
+                lineIndex = lineIndex % math.max(1, normalMax) + 1
+            end
+            nextLineAt = now + 0.35
+        end
+        bubbleHideAt = 0        -- 字幕停留到玩家走开
+    else
+        -- 回退：读不到键盘就保持原来的定时轮播
+        ShowPrompt(false)
+        if now >= nextLineAt then
+            if not saySpecial(false) then
+                Say(lineIndex)
+                lineIndex = lineIndex % math.max(1, normalMax) + 1
+            end
+            nextLineAt = now + TALK_GAP
+        end
     end
 end
 
@@ -238,6 +308,7 @@ function Awake()
 
     label = FindChild(root, "Label")
     bubble = FindChild(root, "Label/Bubble")
+    promptQuad = bubble ~= nil and FindChild(bubble, "Prompt_F") or nil
 
     -- 台词 quad：按名字排序，保证 Line_01 就是第一句
     lines = {}
@@ -272,7 +343,9 @@ function Awake()
     pendingSpecial = true
     nextLineAt = 0
     bubbleHideAt = 0
+    talkedOnce = false
     HideBubble()
+    ShowPrompt(false)
 
     print(string.format("[NPCTalk] %s ready, waypoints=%d lines=%d",
         tostring(id), #waypoints, #lines))
@@ -351,7 +424,14 @@ local function Tick(dt, source)
     elseif talking and d ~= nil and d < LEAVE_RANGE then
         ResetPose()                   -- 回差带里：先别急着走，站在原地
     else
+        -- 彻底走开（或世界里没有玩家）：收字幕和提示，下次靠近重新开第一句
         talking = false
+        talkedOnce = false
+        ShowPrompt(false)
+        if bubble ~= nil and bubble.gameObject.active then
+            HideBubble()
+            bubbleHideAt = 0
+        end
         Walk(dt)
     end
 end

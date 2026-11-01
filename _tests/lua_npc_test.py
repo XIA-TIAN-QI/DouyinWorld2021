@@ -105,6 +105,8 @@ for i = 1, 4 do
 end
 -- 顺序故意打乱，验证脚本里的 table.sort
 bubbleNode.childList[1], bubbleNode.childList[4] = bubbleNode.childList[4], bubbleNode.childList[1]
+-- 按键提示条（F 键模式用；名字不匹配 Line_XX，不会混进台词表）
+add_child(bubbleNode, new_t("Prompt_F"))
 
 local path = new_t("Path")
 add_child(root, path)
@@ -363,6 +365,34 @@ def main():
                      quest_lua=QUEST_STUB % ("true", 2, "false", 3))
     approach(lt_h)
     check(active_line(lt_h) == "Line_03", "线索 NPC 先说线索句：" + str(active_line(lt_h)))
+
+    print("[14] F 键推进：靠近开口，F 前进，任务句只在靠近时插一次")
+    lt_f = new_state(npc="NPC_07", lines=7,
+                     quest_lua=QUEST_STUB % ("false", 0, "false", 0))
+    lt_f.execute("CS.UnityEngine.KeyCode = { F = 'F' }")
+    lt_f.execute("CS.UnityEngine.Input = { GetKeyDown = function(k) return fDown end }")
+    gf = lt_f.globals()
+    gf.fDown = False
+    approach(lt_f)
+    check(active_line(lt_f) == "Line_05", "靠近先说发任务句：" + str(active_line(lt_f)))
+    check(lt_f.eval("bubbleNode.children['Prompt_F'].gameObject.active") is True,
+        "「按 F 继续」提示条亮着")
+    step(lt_f, 60 * 8)
+    check(active_line(lt_f) == "Line_05", "不按 F 不换句，字幕停着")
+    gf.fDown = True
+    step(lt_f, 1)
+    gf.fDown = False
+    check(active_line(lt_f) == "Line_01", "按 F 进入普通轮播第一句：" + str(active_line(lt_f)))
+    step(lt_f, 30)                  # 越过 0.35s 防抖
+    gf.fDown = True
+    step(lt_f, 1)
+    gf.fDown = False
+    check(active_line(lt_f) == "Line_02", "再按 F 前进一句：" + str(active_line(lt_f)))
+    gf.playerPos = None
+    step(lt_f, 3)
+    check(lt_f.eval("bubbleNode.gameObject.active") is False, "走开字幕收掉")
+    check(lt_f.eval("bubbleNode.children['Prompt_F'].gameObject.active") is False,
+        "提示条也收掉")
 
     print()
     if ok:

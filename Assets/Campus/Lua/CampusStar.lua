@@ -51,6 +51,7 @@ local V = CS.UnityEngine.Vector3
 local root, model
 local armL, armR, legL, legR
 local label, bubble
+local promptQuad          -- 气泡下方的「按 F 继续 ▼」提示条
 local home
 
 local tierLines = {}     -- [档] = { quad, ... }
@@ -61,6 +62,7 @@ local phase = 0
 local nextLineAt = 0
 local bubbleHideAt = 0
 local engaged = false
+local talkedOnce = false -- F 键模式：这次靠近是否已经开过口（开过之后只按 F 推进）
 
 local affinity = 0
 local tier = 1
@@ -136,12 +138,13 @@ local function PlayVoice(q)
 end
 
 -- 只开一块 quad：图集方案下换台词 = 换显隐，没有文本可改
-local function ShowQuad(q)
+-- hold=true 时字幕不自动消失（F 键模式：停留到按 F 或玩家走开）
+local function ShowQuad(q, hold)
     for i = 1, #allQuads do
         allQuads[i].gameObject:SetActive(allQuads[i] == q)
     end
     if bubble ~= nil then bubble.gameObject:SetActive(true) end
-    bubbleHideAt = CS.UnityEngine.Time.time + BUBBLE_TIME
+    bubbleHideAt = CS.UnityEngine.Time.time + (hold and 0 or BUBBLE_TIME)
     PlayVoice(q)
 end
 
@@ -261,14 +264,58 @@ function StarApi.OnCeremony()
     print("[CampusStar] 典礼开始，她动身去广场")
 end
 
+-- ---------------------------------------------------------------- 键盘输入
+-- F 键推进对话。SDK 的 Lua 没有输入先例，全走 pcall：摸不到 Input 就自动
+-- 退回原来的"定时轮播"，提示条也不显示（显示就是撒谎）。
+
+local inputOK = nil        -- nil=还没探测，true/false=探测结果
+
+local function InputReady()
+    if inputOK ~= nil then return inputOK end
+    local ok, has = pcall(function()
+        return CS.UnityEngine.Input ~= nil and CS.UnityEngine.Input.GetKeyDown ~= nil
+    end)
+    inputOK = (ok and has == true)
+    if inputOK then
+        print("[CampusStar] 键盘输入可用：按 F 推进对话")
+    else
+        print("[CampusStar] 键盘输入不可用，保持自动轮播")
+    end
+    return inputOK
+end
+
+local function FPressed()
+    if not InputReady() then return false end
+    local ok, hit = pcall(function()
+        return CS.UnityEngine.Input.GetKeyDown(CS.UnityEngine.KeyCode.F)
+    end)
+    if not ok then
+        inputOK = false
+        print("[CampusStar] 读取键盘失败，退回自动轮播")
+        return false
+    end
+    return hit == true
+end
+
+local function ShowPrompt(v)
+    if promptQuad ~= nil and promptQuad.gameObject.active ~= v then
+        promptQuad.gameObject:SetActive(v)
+    end
+end
+
 -- 只说不动：是否走到位由 Tick 里的 stopDist 判断，两个距离不能混用
+-- F 键模式下一句只在按键时说；0.35s 防抖防止按住 F 刷屏
+local function AdvanceLine()
+    SayFromTier(tier)
+    nextLineAt = CS.UnityEngine.Time.time + (InputReady() and 0.35 or TALK_GAP)
+    affinity = math.min(AFFINITY_MAX, affinity + AFFINITY_PER_LINE)
+    UpdateTier()
+end
+
 local function TrySay()
     local now = CS.UnityEngine.Time.time
     if now < nextLineAt then return end
-    SayFromTier(tier)
-    nextLineAt = now + TALK_GAP
-    affinity = math.min(AFFINITY_MAX, affinity + AFFINITY_PER_LINE)
-    UpdateTier()
+    AdvanceLine()
 end
 
 -- ---------------------------------------------------------------- 姿态
@@ -388,19 +435,25 @@ function Awake()
 
     label = FindChild(root, "Label")
     bubble = FindChild(root, "Label/Bubble")
+    promptQuad = bubble ~= nil and FindChild(bubble, "Prompt_F") or nil
 
     -- 台词 quad：按名字里的档号分组，组内按名字排序（Line_2_09 < Line_2_10）
+    -- ⚠️ 只收 Line_ 命名的子物体 —— Prompt_F 这类提示条混进来会被 ShowQuad 当
+    --    台词一起切显隐，和 ShowPrompt 打架
     tierLines = {}
     allQuads = {}
     tierCursor = {}
     if bubble ~= nil then
         for i = 0, bubble.childCount - 1 do
             local c = bubble:GetChild(i)
-            local t = tonumber(string.match(c.name, "^Line_(%d+)_%d+$"))
-            if t == nil then t = 1 end          -- 老格式 Line_09 全算第 1 档
-            if tierLines[t] == nil then tierLines[t] = {} end
-            table.insert(tierLines[t], c)
-            allQuads[#allQuads + 1] = c
+            local tierNum = string.match(c.name, "^Line_(%d+)_%d+$")   -- 新：Line_2_09
+            local legacy  = string.match(c.name, "^Line_%d+$")          -- 旧：Line_09（老场景没重建时）
+            if tierNum ~= nil or legacy ~= nil then
+                local t = tonumber(tierNum) or 1
+                if tierLines[t] == nil then tierLines[t] = {} end
+                table.insert(tierLines[t], c)
+                allQuads[#allQuads + 1] = c
+            end
         end
         for _, list in pairs(tierLines) do
             table.sort(list, function(a, b) return a.name < b.name end)
@@ -431,7 +484,9 @@ function Awake()
     saveHooked = false
     ceremonyMode = false
     ceremonySaid = false
+    talkedOnce = false
     HideBubble()
+    ShowPrompt(false)
     _G["CampusStar"] = StarApi
     TryHookSave()          -- 存档若已就绪会立刻把好感度抬回来
 
@@ -502,6 +557,7 @@ local function Tick(dt, source)
     -- 毕业典礼：走向广场。不看玩家在哪 —— 典礼时玩家可能正在别处逛，
     -- 她答应的是"来参加典礼"，不是"跟着你"。
     if ceremonyMode then
+        ShowPrompt(false)     -- 典礼时提示条没有意义，收掉
         local target = V(CEREMONY_X, root.position.y, CEREMONY_Z)
         if MoveTo(target, dt, 1.0, CEREMONY_SPEED) then
             FaceTo(0, 1, dt)
@@ -533,6 +589,12 @@ local function Tick(dt, source)
     end
 
     if not engaged then
+        ShowPrompt(false)
+        if talkedOnce then
+            talkedOnce = false
+            HideBubble()          -- F 模式的字幕没有定时器，彻底走远要在这里收
+            bubbleHideAt = 0
+        end
         GoHome(dt)
         return
     end
@@ -550,8 +612,32 @@ local function Tick(dt, source)
     if d <= TALK_RANGE then
         affinity = math.min(AFFINITY_MAX, affinity + AFFINITY_PER_SEC * dt)
         UpdateTier()
-        TrySay()
+
+        -- 键盘可用：F 键推进对话；字幕停着不走（停留到按 F 或离开）
+        if InputReady() then
+            ShowPrompt(true)
+            if not talkedOnce then
+                talkedOnce = true
+                AdvanceLine()
+                bubbleHideAt = 0
+            elseif FPressed() and CS.UnityEngine.Time.time >= nextLineAt then
+                AdvanceLine()
+                bubbleHideAt = 0
+            end
+        else
+            -- 回退：读不到键盘就保持原来的定时轮播
+            ShowPrompt(false)
+            TrySay()
+        end
         SaveAffinity(false)   -- 只同步到内存，落盘交给 CampusSave 的定期节流
+    else
+        -- 走出对话距离：收字幕和提示，重开一次"第一句"
+        if talkedOnce then
+            talkedOnce = false
+            HideBubble()
+            bubbleHideAt = 0
+        end
+        ShowPrompt(false)
     end
 end
 

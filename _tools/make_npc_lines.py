@@ -31,12 +31,14 @@ INK = (38, 31, 26)          # 深棕字
 
 
 def load_rows():
-    """返回 (names, lines)。格式：NPC_01|N|林小满 / NPC_01|L|台词
+    """返回 (names, lines, prompts)。格式：
+    NPC_01|N|林小满 / NPC_01|L|台词 / PROMPT|P|按 F 继续
 
     kind 以 L 开头都算台词：L 是第 1 档，L2/L3/L4 是第 2/3/4 档（好感度分档）。
-    档号只影响构建脚本给 quad 起名，图集格子仍然是"先名字、后台词出现顺序"。
+    P 是按键提示（图集最后一个格子，所有 NPC 共用）。
+    档号只影响构建脚本给 quad 起名，图集格子仍然是"先名字、后台词、最后提示"。
     """
-    names, lines = [], []
+    names, lines, prompts = [], [], []
     with io.open(TXT, encoding="utf-8") as f:
         for raw in f:
             s = raw.strip()
@@ -48,9 +50,11 @@ def load_rows():
             who, kind, text = parts[0].strip(), parts[1].strip(), parts[2].strip()
             if kind == "N":
                 names.append((who, text))
+            elif kind == "P":
+                prompts.append(text)
             elif kind.startswith("L"):
                 lines.append((who, text))
-    return names, lines
+    return names, lines, prompts
 
 
 def fit_font(draw, text, max_w, max_h, start=76, min_size=26):
@@ -81,7 +85,7 @@ def wrap(draw, text, font, max_w):
     return rows
 
 
-def draw_cell(img, draw, index, text, is_name):
+def draw_cell(img, draw, index, text, is_name, is_prompt=False):
     col, row = index % COLS, index // COLS
     x0, y0 = col * CELL_W, row * CELL_H
     pad_x, pad_y = 14, 10
@@ -98,6 +102,15 @@ def draw_cell(img, draw, index, text, is_name):
         tw, th = box[2] - box[0], box[3] - box[1]
         draw.text((x0 + CELL_W / 2 - tw / 2 - box[0], y0 + CELL_H / 2 - th / 2 - box[1]),
                   text, font=f, fill=INK)
+        return
+
+    if is_prompt:
+        # 提示条：单行居中，字比台词小一号，弱化（浅一档的墨色）
+        f = ImageFont.truetype(FONT, 40)
+        box = draw.textbbox((0, 0), text, font=f)
+        tw, th = box[2] - box[0], box[3] - box[1]
+        draw.text((x0 + CELL_W / 2 - tw / 2 - box[0], y0 + CELL_H / 2 - th / 2 - box[1]),
+                  text, font=f, fill=(96, 84, 70))
         return
 
     # 台词：先定字号，再折行，两行放不下就继续缩
@@ -120,8 +133,8 @@ def draw_cell(img, draw, index, text, is_name):
 
 
 def main():
-    names, lines = load_rows()
-    total = len(names) + len(lines)
+    names, lines, prompts = load_rows()
+    total = len(names) + len(lines) + len(prompts)
     if total > COLS * ROWS:
         raise SystemExit("台词太多，图集放不下：%d > %d" % (total, COLS * ROWS))
 
@@ -132,12 +145,15 @@ def main():
         draw_cell(img, draw, i, nm, True)
     for i, (_, ln) in enumerate(lines):
         draw_cell(img, draw, len(names) + i, ln, False)
+    for i, p in enumerate(prompts):
+        draw_cell(img, draw, len(names) + len(lines) + i, p, False, is_prompt=True)
 
     os.makedirs(os.path.dirname(DST), exist_ok=True)
     img.save(DST)
 
     print("names  = %d" % len(names))
     print("lines  = %d" % len(lines))
+    print("prompt = %d" % len(prompts))
     print("cells  = %d / %d" % (total, COLS * ROWS))
     print("output = %s (%.1f KB)" % (DST, os.path.getsize(DST) / 1024))
 
