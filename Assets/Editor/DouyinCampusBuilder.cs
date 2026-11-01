@@ -124,6 +124,7 @@ public static class DouyinCampusBuilder
         BuildCollection(collect);
         BuildNPCs(npc);
         BuildDataStore(campus);     // 存档：官方 DataStore 预制体 + CampusSave 宿主
+        BuildAudio(campus);         // BGM/音效：文件在 Assets/Campus/Audio/（缺则跳过）
         BuildCeremony(campus);      // 毕业典礼：烟花节点池 + CampusCeremony 宿主
 
         // 拾取物都建完了，统一玻璃材质（省 2 个额度给女主角用）
@@ -1439,6 +1440,81 @@ public static class DouyinCampusBuilder
             if (rb != null) UnityEngine.Object.DestroyImmediate(rb);
             Debug.Log("[Campus] 存档业务宿主 CampusSave 已建成");
         }
+    }
+
+    /// <summary>
+    /// BGM / 音效。音乐文件由作者提供 —— 平台审核拒收未授权音乐，这里只挂原创音频。
+    /// 约定：文件放进 Assets/Campus/Audio/ 并按名字命名（ogg/wav/mp3 任一），重建即生效：
+    ///   BGM_Ambient   进世界日常 loop（playOnAwake + 循环 + 2D）
+    ///   BGM_Ceremony  毕业典礼主题（不循环；Lua 开演时播，并把日常 BGM 音量压低）
+    ///   SFX_Firework  烟花一声（Lua 每发调一次 Play）
+    /// 缺文件就跳过对应音源 —— 宁可没有，也不引用空 clip。
+    ///
+    /// AudioListener：本场景和 SDK 全部 prefab 里都没有；玩家相机是引擎运行时生成的，
+    /// 有没有 listener 无法本地验证。挂一个兜底 —— 双 listener 只是一条警告、且 2D 音
+    /// 不受影响，0 listener 是彻底静音，两害相权取其轻。真机若报双 listener 就删这里。
+    /// </summary>
+    static void BuildAudio(Transform parent)
+    {
+        var root = new GameObject("CampusAudio");
+        root.transform.SetParent(parent, false);
+        root.transform.localPosition = Vector3.zero;
+        root.AddComponent<AudioListener>();
+        Debug.Log("[Campus] 音频根节点 CampusAudio 已建成（含兜底 AudioListener）");
+
+        BuildAudioSource(root.transform, "BGM_Ambient", loop: true, awake: true, vol: 0.55f);
+        BuildAudioSource(root.transform, "BGM_Ceremony", loop: false, awake: false, vol: 0.80f);
+        BuildAudioSource(root.transform, "SFX_Firework", loop: false, awake: false, vol: 0.70f);
+    }
+
+    static void BuildAudioSource(Transform root, string name, bool loop, bool awake, float vol)
+    {
+        var clip = LoadCampusClip(name);
+        if (clip == null)
+        {
+            Debug.LogWarning("[Campus] 缺少音频 " + name +
+                "（Assets/Campus/Audio/ 下没有同名 ogg/wav/mp3），跳过该音源");
+            return;
+        }
+
+        var go = new GameObject(name);
+        go.transform.SetParent(root, false);
+        go.transform.localPosition = Vector3.zero;
+        var src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.loop = loop;
+        src.playOnAwake = awake;
+        src.volume = vol;
+        src.spatialBlend = 0f;   // 2D：BGM 与全局音效不随距离衰减，也不依赖 listener 位置
+        Debug.Log("[Campus] 音源 " + name + " 就位（" + clip.name +
+            ", loop=" + loop + ", playOnAwake=" + awake + "）");
+    }
+
+    static AudioClip LoadCampusClip(string baseName)
+    {
+        foreach (var ext in new[] { ".ogg", ".wav", ".mp3" })
+        {
+            var path = "Assets/Campus/Audio/" + baseName + ext;
+            if (!System.IO.File.Exists(path)) continue;
+
+            // 长音乐走 Streaming：手机内存紧（<1400MB 预算），整段解压进内存不划算。
+            // ⚠️ 属性叫 defaultSampleSettings（不是 defaultSettings），且是结构体 ——
+            //    不能直接 imp.defaultSampleSettings.loadType=x（CS1612：属性返回副本）。
+            //    要取出来改完再存回去。
+            if (baseName.StartsWith("BGM_"))
+            {
+                var imp = AssetImporter.GetAtPath(path) as AudioImporter;
+                if (imp != null && imp.defaultSampleSettings.loadType != AudioClipLoadType.Streaming)
+                {
+                    var s = imp.defaultSampleSettings;
+                    s.loadType = AudioClipLoadType.Streaming;
+                    imp.defaultSampleSettings = s;
+                    imp.SaveAndReimport();
+                }
+            }
+            return AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+        }
+        return null;
     }
 
     /// <summary>

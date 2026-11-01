@@ -40,6 +40,8 @@ CS.UnityEngine.Vector3 = setmetatable({}, {
 CS.DouyinUtility = {
     Toast = function(s) toastLog[#toastLog + 1] = s end,
 }
+CS.UnityEngine.AudioSource = { __kind = "AudioSource" }
+function typeof(t) return t end
 
 -- ---------- 烟花节点树 ----------
 local function newT(name)
@@ -74,9 +76,30 @@ CS.UnityEngine.GameObject = {
             if not fireworksExists then return nil end
             return { name = "Fireworks", transform = fireworksRoot }
         end
+        if n == "CampusAudio" then
+            if not audioExists then return nil end
+            return { name = "CampusAudio", transform = campusAudioT }
+        end
         return nil
     end,
 }
+
+-- ---------- 音频层 ----------
+audioExists = true
+audioSources = {}
+campusAudioT = newT("CampusAudio")
+function mkAudioNode(name, hasClip)
+    local s = { name = name, played = 0, volume = 0.55,
+                clip = hasClip and (name .. ".ogg") or nil }
+    function s:Play() s.played = s.played + 1 end
+    audioSources[name] = s
+    local t = newT(name)
+    t.gameObject.GetComponent = function(self, typ) return s end
+    campusAudioT.children[name] = t
+end
+mkAudioNode("BGM_Ambient", true)
+mkAudioNode("BGM_Ceremony", true)
+mkAudioNode("SFX_Firework", true)
 
 -- ---------- 外部依赖 ----------
 questComplete = false
@@ -243,6 +266,39 @@ def main():
     check(not any("她也来了" in t for t in toasts(lt)), "提示里不点明她来")
     lt.execute("Run(20.0)")
     check(any("典礼结束" in t for t in toasts(lt)), "没有她也照样收尾")
+
+    # ---------------------------------------------------------------- 9
+    print()
+    print("[9] 典礼 BGM：主题起、日常压低、每发一声烟花")
+    lt = new_state()
+    lt.execute("questComplete = true")
+    lt.execute("Advance(0.1)")
+    check(call(lt, "audioSources['BGM_Ceremony'].played") == 1, "开演就放典礼主题")
+    check(call(lt, "audioSources['BGM_Ambient'].volume") == 0.18,
+        "日常 BGM 被压低（%.2f）" % call(lt, "audioSources['BGM_Ambient'].volume"))
+    lt.execute("Run(20.0)")          # 4 发全部放完
+    check(call(lt, "audioSources['SFX_Firework'].played") == 4,
+        "每发烟花一声，共 %d 声" % call(lt, "audioSources['SFX_Firework'].played"))
+
+    # ---------------------------------------------------------------- 10
+    print()
+    print("[10] 没有典礼主题文件：不动日常 BGM（否则像设备坏了）")
+    lt = new_state()
+    lt.execute("questComplete = true")
+    lt.execute("mkAudioNode('BGM_Ceremony', false)")   # 音源在，但没 clip
+    lt.execute("Advance(0.1)")
+    check(call(lt, "audioSources['BGM_Ceremony'].played") == 0, "没 clip 就不放")
+    check(call(lt, "audioSources['BGM_Ambient'].volume") == 0.55, "日常 BGM 音量没被动")
+
+    # ---------------------------------------------------------------- 11
+    print()
+    print("[11] 整个音频层缺失：演出照样走完（降级）")
+    lt = new_state()
+    lt.execute("audioExists = false")
+    lt.execute("questComplete = true")
+    lt.execute("Run(25.0)")
+    check(any("典礼结束" in t for t in toasts(lt)), "没音频也正常收尾")
+    check(count_log(lt, "发，落点") == 4, "烟花照放")
 
     print()
     if ok_all:

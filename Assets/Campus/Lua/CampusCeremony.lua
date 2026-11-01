@@ -54,6 +54,44 @@ local function Toast(msg)
     if not ok then print("[CampusCeremony] " .. msg) end
 end
 
+-- ---------------------------------------------------------------- 音频
+-- BGM/音效挂在场景的 CampusAudio 节点上（构建脚本 BuildAudio 生成：
+-- BGM_Ambient 日常 loop / BGM_Ceremony 典礼主题 / SFX_Firework 烟花一声）。
+-- 音频是"运行时未验证"路径 —— 真机播放、XLua 是否暴露 AudioSource 都没法本地验，
+-- 所以每个调用都包 pcall：链路上任何一环缺失都只跳过，绝不拖垮演出。
+
+local function AudioSrc(name)
+    local ok, src = pcall(function()
+        local root = CS.UnityEngine.GameObject.Find("CampusAudio")
+        if root == nil then return nil end
+        local t = root.transform:Find(name)
+        if t == nil then return nil end
+        return t.gameObject:GetComponent(typeof(CS.UnityEngine.AudioSource))
+    end)
+    if ok then return src end
+    return nil
+end
+
+-- 开演音乐：典礼主题起 + 日常 BGM 压低。
+-- ⚠️ 只有主题真的存在（有音源且有 clip）才压低日常 BGM —— 否则玩家只听到
+-- 日常 BGM 突然变小声、什么都没换上，像设备出了毛病。主题不放就不动音量。
+local function StartBGM()
+    local theme = AudioSrc("BGM_Ceremony")
+    if theme == nil or theme.clip == nil then return end
+    pcall(function() theme:Play() end)
+    local amb = AudioSrc("BGM_Ambient")
+    if amb ~= nil then
+        pcall(function() amb.volume = 0.18 end)
+        print("[CampusCeremony] 典礼主题起，日常 BGM 已压低")
+    end
+end
+
+local function FireworkSfx()
+    local sfx = AudioSrc("SFX_Firework")
+    if sfx == nil or sfx.clip == nil then return end
+    pcall(function() sfx:Play() end)
+end
+
 -- 加一个粒子动画。t0 可以比现在晚（升空弹落地后才爆），t < 0 期间保持隐藏。
 local function AddAnim(tf, p0, v0, t0, life, s0)
     if tf == nil then return end
@@ -68,6 +106,10 @@ local function FireShot(now)
     -- 永远停在 0，而收尾条件是 shotsFired >= MAX_SHOTS —— 典礼就永远卡在"进行中"，
     -- 既不会结束也不会写标记，玩家看到一条开演提示之后再无下文。
     shotsFired = shotsFired + 1
+
+    -- 声音先于画面判定：就算场景里没有烟花节点（视觉被降级），
+    -- 这一发"响"依然成立 —— 典礼此刻确实发生了。
+    FireworkSfx()
 
     if rocket == nil or #sparks == 0 then
         print(string.format("[CampusCeremony] 第 %d 发（无烟花节点，跳过）", shotsFired))
@@ -128,6 +170,7 @@ local function Start()
     else
         Toast("毕业典礼开始了")
     end
+    StartBGM()
     print("[CampusCeremony] 开演，她" .. (sheComes and "来了" or "没来（好感未满）"))
 end
 
