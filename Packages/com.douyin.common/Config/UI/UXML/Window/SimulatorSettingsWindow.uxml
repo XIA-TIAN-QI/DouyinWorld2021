@@ -1,0 +1,101 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <ui:VisualElement name="VisualElement" class="tab-container" style="align-items: flex-start; flex-basis: initial; flex-direction: row; -unity-background-image-tint-color: rgb(248, 237, 237); background-color: rgb(40, 40, 40);">
+        <ui:Button text="虚拟资产调试" display-tooltip-when-elided="true" name="m_Debug" style="width: 100px; white-space: nowrap; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-top-left-radius: 3px; border-bottom-left-radius: 0; border-top-right-radius: 3px; border-bottom-right-radius: 0; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 12px; height: 27px; transform-origin: bottom; -unity-font-style: normal;" />
+        <ui:Button text="设置" display-tooltip-when-elided="true" enable-rich-text="true" focusable="true" tabindex="1" name="m_Setting" style="flex-direction: row; width: 37px; border-top-left-radius: 3px; border-bottom-left-radius: 0; border-top-right-radius: 3px; border-bottom-right-radius: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; display: flex; height: 27px; transform-origin: bottom; -unity-font-style: normal;" />
+        <ui:VisualElement name="VisualElement" />
+    </ui:VisualElement>
+    <ui:VisualElement name="m_DebugTab" focusable="false" style="display: flex; visibility: visible;">
+        <ui:VisualElement style="margin-top: 0; flex-direction: row;">
+            <ui:Label text="抖音虚拟资产调试器" name="UploadAvatarLabel" class="title size1 bold" style="font-size: 16px; margin-left: 5px; margin-top: 22px; color: rgb(255, 255, 255); letter-spacing: -5px; margin-bottom: 28px; display: flex; -unity-font-style: normal;" />
+            <ui:HelpBox text="Ds模式" message-type="None" name="m_dsModeIcon" style="margin-top: 24px; margin-left: 10px; margin-right: 10px; padding-left: 5px; -unity-slice-left: 0; padding-right: 5px; background-color: rgb(70, 142, 56); padding-top: 0; padding-bottom: 0; font-size: 16px; -unity-text-align: middle-left; height: 18px; flex-direction: row; align-items: center; visibility: hidden;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" style="margin-top: 0; margin-bottom: 0;">
+            <ui:VisualElement class="upload-section-container" style="flex-direction: row; border-left-width: 10px; align-items: center;">
+                <ui:Label text="启动世界类型" name="actorTypeLabel" class="label" style="width: 20%; -unity-font-style: normal; color: rgb(255, 255, 255); margin-left: 3px;" />
+                <ui:VisualElement style="width: 70%; flex-direction: row; align-items: center; justify-content: flex-start; gap: 80px;">
+                    <ui:RadioButton text="精灵世界" name="m_actorType0" value="true" style="flex-direction: row;" />
+                    <ui:RadioButton text="仔仔世界" name="m_actorType1" value="false" style="flex-direction: row;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="m_avatarElement" style="align-items: flex-start justify-content space-between; width: 395px; height: 45px; margin-left: 12px; visibility: hidden; display: none;">
+                <ui:TextField picking-mode="Ignore" label="avatar assetbundle URL" name="m_avatarBundleURL" style="align-items: auto; width: 400px; height: 22px;" />
+                <ui:TextField picking-mode="Ignore" label="avatar资源名" name="m_avatarPrefabName" style="align-items: stretch; width: 400px; height: 22px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="upload-section-container" style="flex-direction: row; border-left-width: 10px; margin-top: 10px;">
+            <ui:Label text="调试对象" name="updateObjectText" class="label" style="width: 20%; -unity-font-style: normal; color: rgb(255, 255, 255); margin-left: 3px;" />
+            <ui:TextField name="m_SelectRes" class="textfield" style="width: 70%;" />
+            <ui:Button name="m_changeRes" text="更换" class="button" style="width: 16%; display: none;" />
+        </ui:VisualElement>
+        <ui:VisualElement class="upload-section-container" style="flex-direction: row; border-left-width: 10px; margin-top: 10px;">
+            <ui:Label text="房间ID" name="updateObjectText" class="label" style="width: 20%; color: rgb(255, 255, 255); margin-left: 3px;" />
+            <ui:TextField name="m_roomID" class="textfield" style="width: 70%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="m_RoomIdHintContainer" style="display: none; flex-direction: row; border-left-width: 0; border-top-width: 0; color: rgb(255, 255, 255); margin-left: 10px; margin-top: 10px;">
+            <ui:Label name="m_RoomIdHint" text="房间ID若为0则会创建新房间，或填写房间ID进入已有房间" style="-unity-font-style: normal; color: rgb(202, 202, 202); white-space: normal;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-direction: row; border-left-width: 0; border-top-width: 0; color: rgb(255, 255, 255); margin-left: 10px; margin-top: 10px;">
+            <ui:Toggle label="多客户端调试" name="m_Multiplayer" class="SimulatorSettingToggle unity-label" style="-unity-font-style: normal; color: rgb(255, 255, 255); padding-left: 1px; padding-right: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="m_multilPlayerTitleContainer" class="upload-section-container" style="flex-direction: row; border-left-width: 10px; border-top-width: 10px;">
+            <ui:Label text="合养精灵昵称" display-tooltip-when-elided="true" style="-unity-font-style: normal; justify-content: flex-start; margin-left: 60px; margin-right: 110px;" />
+            <ui:Label text="合养人1" display-tooltip-when-elided="true" style="-unity-font-style: normal; margin-right: 90px;" />
+            <ui:Label text="合养人2" display-tooltip-when-elided="true" style="-unity-font-style: normal;" />
+        </ui:VisualElement>
+        <ui:ListView focusable="true" name="m_account" style="margin-left: 10px; margin-right: 10px; margin-top: 10px;" />
+        <ui:VisualElement name="m_data" style="margin-left: 10px; margin-top: 10px;">
+            <ui:Toggle label="启用数据存储" name="m_OpenDataStorge" class="unity-label SimulatorSettingToggle" style="-unity-font-style: normal; color: rgb(255, 255, 255);" />
+            <ui:VisualElement name="m_dataStorge">
+                <ui:VisualElement style="flex-direction: row; align-items: center; margin: 2px; padding: 4px; background-color: rgb(63, 63, 63); border: 1px solid rgb(0, 0, 0); border-radius: 3px; margin-bottom: 2px; margin-left: 2px; margin-right: 10px; margin-top: 2px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                    <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/tip_warning_1.png?fileID=2800000&amp;guid=4efbe1942a6724d25ab16fcaa8709341&amp;type=3#tip_warning_1&apos;); max-width: 32px; max-height: 34px; min-width: 32px; min-height: 34px; -unity-background-scale-mode: scale-to-fit; margin-right: 8px;" />
+                    <ui:VisualElement style="flex-direction: column; flex-grow: 1;">
+                        <ui:Label text="抖音虚拟创作平台为每个世界提供存储永久数据的能力，若此世界已有上传的版本，则可使用数据存储功能测试。" style="margin-bottom: 0; color: rgb(202, 202, 202); white-space: normal; -unity-word-wrap: normal;" />
+                        <ui:VisualElement style="flex-direction: row; align-items: center;">
+                            <ui:Label text="功能详见：" style="color: rgb(202, 202, 202); margin-right: 2px;" />
+                            <ui:Button text="《抖音虚拟世界数据存储》" name="m_datastoreurl" style="max-width: 220px; text-align: left; background-color: transparent; border: none; color: rgb(76, 126, 254); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; text-decoration: underline; margin-right: 2px; margin-left: 0;" />
+                            <ui:Button text="《抖音虚拟资产调试设置及使用》" name="m_resourcesettingurl" style="max-width: 220px; text-align: left; background-color: transparent; border: none; color: rgb(76, 126, 254); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; text-decoration: underline; margin-left: 0;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:GroupBox>
+                    <ui:VisualElement class="upload-section-container" style="flex-direction: row; border-left-width: 10px;">
+                        <ui:Label text="选择世界" name="Text" class="label" style="width: 55px; -unity-font-style: normal; color: rgb(255, 255, 255); -unity-text-align: middle-center;" />
+                        <ui:TextField name="m_SelectWorldData" class="textfield" style="width: 70%;" />
+                        <ui:Button name="m_changeWorldData" text="选择" class="button" style="width: 12%; display: flex;" />
+                    </ui:VisualElement>
+                </ui:GroupBox>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="m_ProfilerDebugPanel" class="upload-section-container" style="flex-direction: row; border-left-width: 10px; border-top-width: 10px;">
+            <ui:Toggle label="启用性能分析面板" name="m_ProfilerDebug" class="SimulatorSettingToggle" style="-unity-font-style: normal; color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="m_DsModePanel" class="upload-section-container" style="flex-direction: column; border-left-width: 10px; border-top-width: 10px; visibility: hidden;">
+            <ui:Toggle label="启动服务器端" name="m_OpenDsServer" class="SimulatorSettingToggle" style="-unity-font-style: normal; color: rgb(255, 255, 255);" />
+            <ui:Toggle label="无窗口启动" name="m_Windowless" class="SimulatorSettingToggle" style="-unity-font-style: normal; color: rgb(255, 255, 255); border-top-width: 10px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="m_packresource" style="margin-left: 10px; margin-top: 10px;">
+            <ui:Toggle label="是否打包资源" name="m_BuildPackage" class="unity-label SimulatorSettingToggle" style="-unity-font-style: normal; color: rgb(255, 255, 255);" />
+            <ui:VisualElement style="flex-direction: column; align-items: center; justify-content: center; height: 63px; -unity-font-style: normal;">
+                <ui:Button text="开始调试" display-tooltip-when-elided="true" name="m_StartDebug" style="-unity-font-style: normal; font-size: 15px; background-color: rgb(254, 44, 85); width: 228px; align-items: stretch; justify-content: flex-start; height: 28px; flex-direction: column; visibility: visible; left: auto; right: auto;" />
+                <ui:Button text="如何使用抖音虚拟资产调试器" display-tooltip-when-elided="true" name="m_DebugWiki" style="-unity-font-style: normal; font-size: 12px; background-color: rgba(255, 0, 0, 0); width: 228px; align-items: stretch; justify-content: flex-start; height: auto; flex-direction: column; visibility: visible; left: auto; right: auto; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); color: rgb(76, 126, 254);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="m_SettingTab" style="margin-top: 10px;">
+        <ui:Label text="路径选择" class="title size1" style="font-size: 16px; margin-left: 5px; margin-top: 22px; color: rgb(255, 255, 255); letter-spacing: -5px; margin-bottom: 10px; display: flex; -unity-font-style: normal;" />
+        <ui:VisualElement name="HelpBoxElement" style="flex-direction: row; align-items: center; margin: 2px; padding: 4px; background-color: rgb(63, 63, 63); border: 1px solid rgb(0, 0, 0); border-radius: 3px; margin-bottom: 2px; margin-left: 2px; margin-right: 2px; margin-top: 2px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+            <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/tip_warning_1.png?fileID=2800000&amp;guid=4efbe1942a6724d25ab16fcaa8709341&amp;type=3#tip_warning_1&apos;); max-width: 32px; max-height: 34px; min-width: 32px; min-height: 34px; -unity-background-scale-mode: scale-to-fit; margin-right: 8px;" />
+            <ui:GroupBox style="flex-direction: column; align-items: flex-start; min-width: 220px; margin-right: 10px; border-width: 0; margin-top: 0; margin-bottom: 0;">
+                <ui:Label text="测试" name="helpboxlabel" style="max-width: 220px; margin-bottom: 5px; color: rgb(202, 202, 202);" />
+                <ui:Button text="《抖音虚拟资产调试设置及使用》" name="m_HelpButton" style="max-width: 220px; text-align: left; background-color: transparent; border: none; color: rgb(76, 126, 254); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; text-decoration: underline; margin-top: -2px;" />
+            </ui:GroupBox>
+            <ui:Button text="检查更新" name="m_CheckUpdate" style="min-width: 80px; height: 24px; margin-left: auto; padding: 0; border-radius: 2px; background-color: rgba(76, 126, 254, 0.7); color: white;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-direction: row; margin-left: 10px; margin-top: 5px;">
+            <ui:Label text="调试路径" display-tooltip-when-elided="true" style="-unity-text-align: middle-center;" />
+            <ui:TextField picking-mode="Ignore" value="filler text" text="filler text" name="m_path" style="width: 65%; margin-left: 20px;" />
+            <ui:Button text="路径设置" display-tooltip-when-elided="true" name="m_SelectPath" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

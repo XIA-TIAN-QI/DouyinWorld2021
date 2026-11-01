@@ -1,0 +1,78 @@
+
+:root {
+    --validator-font-size-1: 12px;
+    --validator-font-size-2: 12px;
+    --validator-font-color-1: #FFFFFF;
+    --validator-btn-color-1: #FE2C55;
+    --validator-btn-color-2: #585858;
+    --validator-btn-hover-color-2: #676767;
+    --validator-btn-active-color-1: #676767;
+    --validator-btn-active-color-2: #EF6983;
+    --validator-bg-color-1: rgba(48, 48, 48, 1);
+    --validator-bg-color-2: rgba(56, 56, 56, 1);
+}
+
+.container {
+    padding: 0;
+    background-color: var(--validator-bg-color-1);
+}
+
+.sub-container {
+    background-color: var(--validator-bg-color-2);
+}
+
+Button:active,
+Button:focus {
+    border-color: #0d0d0d;
+}
+
+.title {
+    font-size: var(--validator-font-size-2);
+    margin-bottom: 10px;
+}
+
+.button-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /*padding: 10px;*/
+}
+
+#refreshButton, #nextButton {
+    font-size: var(--validator-font-size-1);
+    color: var(--validator-font-color-1);
+    padding: 8px 15px;
+    border-radius: 6px;
+    margin: 10px 10px 10px 10px;
+    flex: 1;
+    max-width: 140px;
+}
+
+#refreshButton {
+    background-color: var(--validator-btn-color-2);
+}
+
+#refreshButton:active {
+    background-color: var(--validator-btn-active-color-1);
+}
+
+#refreshButton:hover {
+    background-color: var(--validator-btn-hover-color-2);
+}
+
+#nextButton {
+    background-color: var(--validator-btn-color-1);
+}
+
+#nextButton:active {
+    background-color: var(--validator-btn-active-color-2);
+}
+
+#nextButton:hover {
+    background-color: var(--validator-btn-active-color-2);
+}
+

@@ -1,0 +1,48 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/AvatarUploadWindow.uss?fileID=7433441132597879392&amp;guid=b19982a12de13d047a97d01ff05e854a&amp;type=3#AvatarUploadWindow" />
+    <ui:VisualElement style="width: 520px; height: 584px; position: absolute; display: none; top: 0;" />
+    <ui:VisualElement style="flex-grow: 1; display: flex;">
+        <ui:VisualElement>
+            <ui:Label text="上传虚拟形象" name="UploadAvatarLabel" class="title" style="color: rgb(255, 255, 255); letter-spacing: -5px; display: flex; margin-left: 12px; margin-top: 11px; margin-bottom: 27px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="display: flex;">
+            <ui:VisualElement style="margin-left: 0; margin-right: 0; border-top-left-radius: 35px; border-bottom-left-radius: 35px; border-top-right-radius: 35px; border-bottom-right-radius: 35px; margin-top: 0; margin-bottom: 0; align-items: center;">
+                <ui:VisualElement name="frame" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/pet_frame.png?fileID=2800000&amp;guid=ba799be6af784264aba9b025917f0be4&amp;type=3#pet_frame&apos;); width: 175px; height: 172px;">
+                    <ui:Image name="imageDisplay" class="bg-color-303030 border-color-191919" style="margin-top: 0; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 0; margin-right: 0; margin-bottom: 0; background-image: none; -unity-background-image-tint-color: rgb(255, 255, 255); overflow: hidden; flex-grow: 1; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="margin-left: 36px; margin-right: 36px; flex-grow: 1; justify-content: flex-start; margin-top: 0; -unity-text-align: upper-left;">
+            <ui:Label text="形象名称" display-tooltip-when-elided="true" name="AvatarNameStaticLabel" style="margin-top: 27px; margin-left: 0; margin-bottom: 10px;" />
+            <ui:VisualElement style="flex-direction: row; margin-top: 0; top: 0; margin-right: 0; height: 18px; display: flex;">
+                <ui:TextField picking-mode="Ignore" name="nameTextField" text="取一个响亮的名字吧" style="flex-grow: 1; margin-left: 0; display: flex; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0;" />
+                <ui:Label text="0/20" display-tooltip-when-elided="true" name="nameCharCountLabel" class="text-gray" style="-unity-text-align: middle-right; position: absolute; flex-direction: column; justify-content: flex-start; width: 61px; right: 8px; top: 2px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; height: 46px;">
+                <ui:Label text="选择性别" display-tooltip-when-elided="true" name="AvatarGenderStaticLabel" />
+                <ui:RadioButton name="GenderRadioButton0" />
+                <ui:RadioButton name="GenderRadioButton1" />
+                <ui:RadioButton name="GenderRadioButton2" />
+            </ui:VisualElement>
+            <ui:VisualElement style="margin-top: 17px;">
+                <ui:Label text="形象介绍" display-tooltip-when-elided="true" name="AvatarIntroStaticLabel" />
+                <ui:VisualElement style="flex-direction: row; margin-top: 8px; height: 106px;">
+                    <ui:TextField picking-mode="Ignore" name="introTextField" text="有趣的介绍可以吸引更多关注" multiline="true" class="multi-line-text-input" style="flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-left: 0; padding-right: 0; padding-bottom: 0; white-space: normal;" />
+                    <ui:Label text="0/100" display-tooltip-when-elided="true" name="introCharCountLabel" class="text-gray" style="position: absolute; justify-content: flex-end; -unity-text-align: upper-right; align-items: flex-end; flex-direction: column; width: 83px; right: 8px; bottom: 4px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement style="align-items: center;">
+                <ui:Button text="上传虚拟形象" display-tooltip-when-elided="true" name="uploadButton" class="red-button" style="margin-top: 32px; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 27px; width: 228px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; align-items: auto;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; justify-content: center; align-items: center; margin-left: -12px; margin-top: 15px; -unity-text-align: upper-left;">
+                <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/info_icon.png?fileID=21300000&amp;guid=a237db8bee26ab04c9f4295f5407b7e9&amp;type=3#info_icon&apos;); width: 13px; height: 12px; flex-shrink: 0; margin-top: 0; margin-right: 4px;" />
+                <ui:Label text="上传或更新的虚拟形象将进行云端处理，云端处理完成后可进行测试和发布" display-tooltip-when-elided="true" name="WarningStaticLabel" class="size-11" style="align-items: auto; -unity-text-align: upper-left; overflow: visible; border-left-width: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; justify-content: center; margin-top: 3px;">
+                <ui:Button text="《如何测试虚拟形象》" display-tooltip-when-elided="true" name="TestLinkButton" class="hyperlink-button  size-11" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                <ui:Button text="《如何发布虚拟形象》" display-tooltip-when-elided="true" name="PublishLinkButton" class="hyperlink-button size-11" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
+         MemoryProfiler="Unity.MemoryProfiler.Editor"
+         noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main"/>
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/UploadSelectResourceWindow.uss?fileID=7433441132597879392&amp;guid=28b232071849d47059912c0de11eea1b&amp;type=3#UploadSelectResourceWindow"/>
+    <ui:VisualElement name="UploadSelectResourcePanel" style="flex-direction: column; height: 100%;">
+        <ui:Label text="请选择一个虚拟形象资产上传" display-tooltip-when-elided="true" name="UploadSelectPrompt"/>
+        <ui:VisualElement name="VisualElementContent">
+            <ui:ListView focusable="true" virtualization-method="DynamicHeight" fixed-item-height="100"
+                         class="radio-container"/>
+        </ui:VisualElement>
+        <ui:Button text="下一步(资源检查)" display-tooltip-when-elided="true" name="NextButton"
+                   style="margin-top: auto; width: 50%; align-self: center;"/>
+    </ui:VisualElement>
+</ui:UXML>

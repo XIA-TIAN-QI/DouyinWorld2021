@@ -1,0 +1,109 @@
+
+:root {
+    --quality-title-color-1: #C4C4C4;
+    --quality-title-font-size-1: 12px;
+    --quality-title-font-size-2: 12px;
+    --quality-title-font-size-3: 12px;
+    --quality-border-radius: 3px;
+    --quality-border-width: 1px;
+    --quality-box-background-color-1: rgba(96, 96, 96, 0.2);
+    --quality-box-border-color-1: #242424;
+    --quality-icon-size-1: 28px;
+    --quality-hyper-link-color: #4C7EFF;
+    --quality-hyper-link-color-hover: #96C3FB;
+}
+
+.quality-container {
+    /*padding: 5px 5px 5px 5px;*/
+    margin-top: -5px;
+}
+
+.title1 {
+    color: var(--quality-title-color-1);
+    font-size: var(--quality-title-font-size-1);
+    padding: 5px 10px;
+}
+
+.q-buttons-container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+.radio-buttons-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 58px;
+}
+
+.radio-buttons-container > * {
+    margin-right: 20px; /* 设置每个按钮之间的间距 */
+}
+
+.quality-warning-box {
+    margin: 0 10px 10px 20px;
+    /*margin-left: 20px;*/
+    padding: 10px;
+    background-color: var(--quality-box-background-color-1);
+    border-left-width: var(--quality-border-width);
+    border-right-width: var(--quality-border-width);
+    border-top-width: var(--quality-border-width);
+    border-bottom-width: var(--quality-border-width);
+    border-radius: var(--quality-border-radius);
+    border-left-color: var(--quality-box-border-color-1);
+    border-right-color: var(--quality-box-border-color-1);
+    border-top-color: var(--quality-box-border-color-1);
+    border-bottom-color: var(--quality-box-border-color-1);
+    font-size: var(--quality-title-font-size-3);
+}
+
+#qualityWarningContainer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#qualitySubWarningContainer {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.quality-title {
+    font-size: var(--quality-title-font-size-2);
+}
+
+#qualityMessageLabel1 {
+    -unity-text-align: middle-left;
+    white-space: normal;
+    padding-left: 5px;
+    padding-right: -10px;
+}
+
+#linkContainer {
+    padding-left: 5px;
+}
+
+#linkLabelTip {
+    -unity-text-align: middle-left;
+    margin-top: 5px;
+}
+
+#linkLabel0, #linkLabel1 {
+    -unity-text-align: middle-left;
+    margin-top: 5px;
+    /*padding-left: 5px;*/
+    color: var(--quality-hyper-link-color);
+}
+
+
+.link-hover-label:hover {
+    color: var(--quality-hyper-link-color-hover);
+}
+
+.quality-style-icon {
+    width: var(--quality-icon-size-1);
+    height: var(--quality-icon-size-1);
+}

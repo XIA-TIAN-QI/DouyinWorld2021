@@ -1,0 +1,61 @@
+# ---------------------------------------------------------------- Unity 工程
+# 这些目录是 Unity 生成/缓存的，体积上 GB 且每次打开都会变，绝对不能入库
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# IDE / 生成工程文件
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity 崩溃日志
+sysinfo.txt
+crashlytics-build.properties
+
+# ---------------------------------------------------------------- 抖音 SDK 缓存与工具
+Cache/
+DouyinDownLoad/
+_install_logs/
+# 调试器是 SDK 附带的一个已编译 Windows 播放器（424MB，含 GameAssembly.dll / UnityPlayer.dll），
+# 属于可重新下载的工具而不是工程源码，绝不入库
+DouyinWorldDebuggerEditor/
+
+# Addressables 的打包产物（StandaloneWindows64 等平台目录，48MB，重新 Build 就会再生成）
+AddressableAssetsData/Windows/
+AddressableAssetsData/Android/
+AddressableAssetsData/iOS/
+AddressableAssetsData/OSX/
+AddressableAssetsData/StandaloneWindows64/
+AddressableAssetsData/StandaloneLinux64/
+AddressableAssetsData/WebGL/
+AddressableAssetsData/ServerData/
+
+# ---------------------------------------------------------------- 构建产物（可再生成）
+# 验收图每次 Build 都会整套重写，入库会让仓库每轮暴涨（一轮 ~47MB）
+_preview_*.png
+_crop_*.png
+_cmp_*.png
+_d_*.png
+# 诊断输出与构建日志
+_*.log
+_*.txt

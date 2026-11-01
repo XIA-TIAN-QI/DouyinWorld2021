@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Label text="未检测到抖音虚拟资产调试器安装路径,请&#10;下载并安装后使用!" display-tooltip-when-elided="true" name="m_Message" style="-unity-text-align: upper-center; font-size: 15px; margin-top: 20px; -unity-font-style: normal; width: 316px; height: 58px; color: rgba(196, 196, 196, 255);" />
+    <ui:VisualElement name="VisualElement" style="flex-direction: row; justify-content: center; margin-top: 20px;">
+        <ui:Button text="取消" display-tooltip-when-elided="true" name="m_Cancel" style="width: 96px; height: 27px;" />
+        <ui:Button text="立即安装" display-tooltip-when-elided="true" name="m_Install" style="width: 96px; height: 27px; background-color: rgba(254, 44, 85, 255); margin-left: 20px;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="VisualElement" style="margin-top: 10px; margin-left: 10px; flex-direction: row;">
+        <ui:Label text="若已下载调试器，可配置路径后直接使用 前往配置" display-tooltip-when-elided="true" name="m_Tips" style="font-size: 10px; -unity-text-align: middle-center;" />
+        <ui:Button text="前往配置&gt;" display-tooltip-when-elided="true" name="m_GoSetting" style="background-color: rgba(88, 88, 88, 0); -unity-background-image-tint-color: rgba(255, 255, 255, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); color: rgba(0, 126, 255, 255); font-size: 10px;" />
+    </ui:VisualElement>
+</ui:UXML>

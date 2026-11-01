@@ -1,0 +1,7 @@
+{
+  "name": "com.douyin.services",
+  "description": "douyin sdk services",
+  "version": "0.0.1",
+  "unity": "2021.3",
+  "displayName": "com.douyin.services"
+}

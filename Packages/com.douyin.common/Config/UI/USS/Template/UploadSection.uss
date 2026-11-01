@@ -1,0 +1,131 @@
+
+:root {
+    --upload-font-size-1: 12px;
+    --upload-font-size-2: 12px;
+    --upload-font-size-3: 12px;
+    --upload-border-radius: 3px;
+    --upload-border-width: 1px;
+    --upload-border-color: rgb(25, 25, 25);
+    --upload-padding: 4px;
+    --upload-label-color: #C4C4C4;
+    --upload-bg-color: rgba(96, 96, 96, 0.2);
+    --upload-font-btn-color-1: #FFFFFF;
+    --upload-bg-btn-color-1: #676767;
+}
+
+.upload-section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-left-width: var(--upload-border-width);
+    border-right-width: var(--upload-border-width);
+    border-top-width: var(--upload-border-width);
+    border-bottom-width: var(--upload-border-width);
+    border-left-color: var(--upload-border-color);
+    border-right-color: var(--upload-border-color);
+    border-top-color: var(--upload-border-color);
+    border-bottom-color: var(--upload-border-color);
+    border-radius: var(--upload-border-radius);
+    padding: var(--upload-padding);
+    font-size: var(--upload-font-size-1);
+    white-space: normal;
+    background-color: var(--upload-bg-color);
+}
+
+.upload-section-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: var(--upload-padding);
+    margin: 6px 5px -5px 5px;
+}
+
+.upload-section-container1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0;
+    width: 100%;
+    padding: var(--upload-padding);
+    margin-top: 0;
+    margin-bottom: 5px;
+    border-left-width: var(--upload-border-width);
+    border-right-width: var(--upload-border-width);
+    border-top-width: var(--upload-border-width);
+    border-bottom-width: var(--upload-border-width);
+    border-left-color: var(--upload-border-color);
+    border-right-color: var(--upload-border-color);
+    border-top-color: var(--upload-border-color);
+    border-bottom-color: var(--upload-border-color);
+    border-radius: var(--upload-border-radius);
+    justify-content: space-between;
+}
+
+.label {
+    flex: 0 0 100px;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.textfield {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-right: -3px;
+}
+
+.textfield1 {
+    flex: 1 1 0;
+    margin-left: 50px;
+    min-width: 0;
+}
+
+.dropdown {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.button {
+    flex: 0 0 auto;
+    margin-left: 10px;
+}
+
+.label1 {
+    color: var(--upload-label-color);
+    font-size: var(--upload-font-size-1);
+}
+
+.label2 {
+    color: var(--upload-label-color);
+    font-size: var(--upload-font-size-2);
+}
+
+.radio-group {
+    margin-left: 0;
+}
+
+#updateObjectText {
+    font-size: var(--upload-font-size-3);
+}
+
+#uploadTypeText {
+    font-size: var(--upload-font-size-3);
+}
+
+#updateObject {
+    font-size: var(--upload-font-size-1);
+}
+
+.button1 {
+    font-size: var(--upload-font-size-1);
+    color: var(--upload-font-btn-color-1);
+    flex-basis: 10%;
+    align-self: flex-end; /* 确保按钮在父容器的右侧 */
+}
+
+.button1:hover {
+    background-color: var(--upload-bg-btn-color-1);
+}

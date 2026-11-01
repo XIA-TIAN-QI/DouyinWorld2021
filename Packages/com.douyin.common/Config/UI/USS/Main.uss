@@ -1,0 +1,120 @@
+.hyperlink-button {
+    color: rgb(76, 126, 255);
+    border-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.hyperlink-button:hover {
+    color: rgb(150, 195, 251);
+}
+
+TextField #unity-text-input.placeholder {
+    color: rgb(142, 142, 142);
+}
+
+.red-button {
+    border-color: rgba(0, 0, 0, 0);
+    background-color: rgb(254, 44, 85);
+}
+
+.red-button:hover {
+    border-color: rgba(0, 0, 0, 0);
+    background-color: rgb(239, 105, 131);
+}
+
+.size-14 {
+    font-size: 14px;
+}
+
+.size-11 {
+    font-size: 11px;
+}
+
+.content-item {
+    background-color: rgb(64, 64, 64);
+}
+
+.bold {
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+}
+
+.round-coner-8 {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.round-coner-6 {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.round-coner-3 {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.bg-color-303030 {
+    border-left-color: rgb(48, 48, 48);
+    border-right-color: rgb(48, 48, 48);
+    border-top-color: rgb(48, 48, 48);
+    border-bottom-color: rgb(48, 48, 48);
+    background-color: rgb(48, 48, 48);
+}
+
+.bg-color-383838 {
+    background-color: rgba(56, 56, 56, 255);
+}
+
+.bg-color-404040 {
+    background-color: rgb(64, 64, 64);
+}
+
+.border-color-191919 {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(25, 25, 25);
+    border-right-color: rgb(25, 25, 25);
+    border-top-color: rgb(25, 25, 25);
+    border-bottom-color: rgb(25, 25, 25);
+}
+
+.border-color-303030 {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(48, 48, 48);
+    border-right-color: rgb(48, 48, 48);
+    border-top-color: rgb(48, 48, 48);
+    border-bottom-color: rgb(48, 48, 48);
+}
+
+
+.SimulatorSettingToggle > .unity-label {
+    min-width: 102px;
+    color: white;
+}
+
+.radio-horizontal {
+    flex-direction: row !important;
+    align-items: center;
+}
+
+.radio-horizontal > .unity-content-container {
+    flex-direction: row !important;
+    align-items: center;
+}
+
+.radio-horizontal > .unity-content-container > RadioButton {
+    flex-direction: row;
+    margin-right: 0;
+}

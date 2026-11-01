@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
+  m_Name: AddressableAssetSettings
+  m_EditorClassIdentifier: 
+  m_DefaultGroup: 84b6d88b91029b94181a12626e5f86e1
+  m_CachedHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_OptimizeCatalogSize: 0
+  m_BuildRemoteCatalog: 1
+  m_BundleLocalCatalog: 0
+  m_CatalogRequestsTimeout: 0
+  m_DisableCatalogUpdateOnStart: 0
+  m_IgnoreUnsupportedFilesInBuild: 0
+  m_UniqueBundleIds: 0
+  m_NonRecursiveBuilding: 1
+  m_CCDEnabled: 0
+  m_maxConcurrentWebRequests: 3
+  m_ContiguousBundles: 1
+  m_StripUnityVersionFromBundleBuild: 0
+  m_DisableVisibleSubAssetRepresentations: 0
+  m_ShaderBundleNaming: 0
+  m_ShaderBundleCustomNaming: 
+  m_MonoScriptBundleNaming: 1
+  m_CheckForContentUpdateRestrictionsOption: 0
+  m_MonoScriptBundleCustomNaming: 
+  m_RemoteCatalogBuildPath:
+    m_Id: 
+  m_RemoteCatalogLoadPath:
+    m_Id: 
+  m_ContentStateBuildPathProfileVariableName: 
+  m_CustomContentStateBuildPath: D:\DouyinWorld2021\AddressableAssetsData\StandaloneWindows64\Campus
+  m_ContentStateBuildPath: D:\DouyinWorld2021\AddressableAssetsData\StandaloneWindows64\Campus
+  m_BuildAddressablesWithPlayerBuild: 0
+  m_overridePlayerVersion: 1.0
+  m_GroupAssets:
+  - {fileID: 11400000, guid: cd18e1921e315ae4387d2326f6128e7c, type: 2}
+  - {fileID: 11400000, guid: 86deaec0e18bdc940910997dcfb54db7, type: 2}
+  - {fileID: 11400000, guid: 5ef86100043530e4aa232fc48c186e7d, type: 2}
+  - {fileID: 11400000, guid: 90a38877e08cb1e4080abd1f90120049, type: 2}
+  m_BuildSettings:
+    m_CompileScriptsInVirtualMode: 0
+    m_CleanupStreamingAssetsAfterBuilds: 1
+    m_LogResourceManagerExceptions: 1
+    m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
+  m_ProfileSettings:
+    m_Profiles:
+    - m_InheritedParent: 
+      m_Id: 75e50c782b9cee44fb543ce403f6b106
+      m_ProfileName: Default
+      m_Values:
+      - m_Id: d4fcf9932fe76474a8c3f483ff62fb04
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: a7f65b32ec16ec2439614daf6c83ce1d
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: 382374bcb00d3a94583dbe00c23a442d
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 61ac5a3eed963c84e8f5fc5365d02758
+        m_Value: ServerData/[BuildTarget]
+      - m_Id: a429343bd9289154b9e9237ef4c41469
+        m_Value: http://[PrivateIpAddress]:[HostingServicePort]
+    - m_InheritedParent: 
+      m_Id: da99d308c035799468035f3fb78700ca
+      m_ProfileName: Debugger
+      m_Values:
+      - m_Id: d4fcf9932fe76474a8c3f483ff62fb04
+        m_Value: StandaloneWindows64
+      - m_Id: a7f65b32ec16ec2439614daf6c83ce1d
+        m_Value: D:\DouyinWorld2021\AddressableAssetsData\StandaloneWindows64\Campus
+      - m_Id: 382374bcb00d3a94583dbe00c23a442d
+        m_Value: '{SimulatorLocalLoadPath}'
+      - m_Id: 61ac5a3eed963c84e8f5fc5365d02758
+        m_Value: D:\DouyinWorld2021\AddressableAssetsData\StandaloneWindows64\Campus
+      - m_Id: a429343bd9289154b9e9237ef4c41469
+        m_Value: '{SimulatorLocalLoadPath}'
+    m_ProfileEntryNames:
+    - m_Id: d4fcf9932fe76474a8c3f483ff62fb04
+      m_Name: BuildTarget
+      m_InlineUsage: 0
+    - m_Id: a7f65b32ec16ec2439614daf6c83ce1d
+      m_Name: Local.BuildPath
+      m_InlineUsage: 0
+    - m_Id: 382374bcb00d3a94583dbe00c23a442d
+      m_Name: Local.LoadPath
+      m_InlineUsage: 0
+    - m_Id: 61ac5a3eed963c84e8f5fc5365d02758
+      m_Name: Remote.BuildPath
+      m_InlineUsage: 0
+    - m_Id: a429343bd9289154b9e9237ef4c41469
+      m_Name: Remote.LoadPath
+      m_InlineUsage: 0
+    m_ProfileVersion: 1
+  m_LabelTable:
+    m_LabelNames:
+    - default
+  m_SchemaTemplates: []
+  m_GroupTemplateObjects:
+  - {fileID: 11400000, guid: e407f132526a2ca45af1f8f94008244c, type: 2}
+  m_InitializationObjects: []
+  m_CertificateHandlerType:
+    m_AssemblyName: 
+    m_ClassName: 
+  m_ActivePlayerDataBuilderIndex: 3
+  m_DataBuilders:
+  - {fileID: 11400000, guid: 41f99eb2d57c0714db9d3ad5fd7964fe, type: 2}
+  - {fileID: 11400000, guid: 7a64036e78c2b3a4d848d5603ed96ab0, type: 2}
+  - {fileID: 11400000, guid: 8bbc5772286e1d245aba2f831471061a, type: 2}
+  - {fileID: 11400000, guid: aa39f6ca0c2331548ae2862d672f23f6, type: 2}
+  m_ActiveProfileId: da99d308c035799468035f3fb78700ca
+  m_HostingServicesManager:
+    m_HostingServiceInfos: []
+    m_Settings: {fileID: 11400000}
+    m_NextInstanceId: 0
+    m_RegisteredServiceTypeRefs: []

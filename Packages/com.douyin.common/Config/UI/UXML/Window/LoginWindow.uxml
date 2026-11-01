@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/LoginWindow.uss?fileID=7433441132597879392&amp;guid=e534479c31d154a409448565b3665917&amp;type=3#LoginWindow" />
+    <ui:VisualElement style="width: 520px; height: 449px; display: flex; position: absolute;" />
+    <ui:VisualElement styleSheets="styles/login.uss" class="login-container" style="justify-content: center; align-items: center; flex-grow: 1; background-color: rgb(0, 0, 0); display: flex; position: absolute; height: 449px; width: 520px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+        <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/sdk_login_title.png?fileID=2800000&amp;guid=e13229c8ae676854390370354152268c&amp;type=3#sdk_login_title&apos;); width: 411px; height: 55px; position: absolute; display: flex; align-items: center; justify-content: flex-start; top: 80px;" />
+        <ui:VisualElement class="phone-input-container" style="top: 175px;">
+            <ui:VisualElement name="RegionSelector" class="region-selector">
+                <ui:Label name="regionCodeLabel" text="+86" class="region-selector-label" style="font-size: 12px;" />
+                <ui:VisualElement class="region-selector-arrow" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Texture/img_fold.png?fileID=2800000&amp;guid=62bdc1bd0371911498d69004f52f9bdb&amp;type=3#img_fold&apos;); -unity-background-image-tint-color: rgb(0, 0, 0); width: 7px; height: 4px;" />
+            </ui:VisualElement>
+            <ui:VisualElement class="separator" />
+            <ui:TextField name="phoneNumberField" placeholder-text="请输入手机号" class="phone-input-field" />
+        </ui:VisualElement>
+        <ui:VisualElement class="round-coner-8" style="flex-direction: row; height: 36px; width: 269px; margin-bottom: 0; position: absolute; top: 233px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; overflow: hidden; background-color: rgb(255, 255, 255); display: flex;">
+            <ui:TextField name="verificationCodeField" class="input-field" style="flex-grow: 1; margin-left: 10px; margin-right: 0; margin-top: 0; margin-bottom: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; display: flex;" />
+            <ui:Button text="获取验证码" name="getVerificationButton" style="position: relative; background-color: rgba(255, 255, 255, 0); justify-content: flex-start; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; color: rgb(82, 82, 82); -unity-font-style: normal; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 20px; margin-top: 0; margin-bottom: 0;" />
+        </ui:VisualElement>
+        <ui:Button text="登录" name="loginButton" class="red-button round-coner-6" style="width: 228px; height: 28px; margin-bottom: 0; position: absolute; top: 329px; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 0;" />
+        <ui:VisualElement style="flex-direction: column; -unity-text-align: upper-left; align-items: stretch; justify-content: flex-start; position: absolute; top: 369px;">
+            <ui:VisualElement style="flex-direction: row; flex-shrink: 0;">
+                <ui:RadioButton name="RadioButton" focusable="false" text="登录即表明同意" style="flex-direction: row-reverse; align-items: center; justify-content: center; flex-shrink: 0; left: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+                <ui:Button text="《抖音虚拟创作管理平台服务协议》" display-tooltip-when-elided="true" name="linkButton1" class="hyperlink-button" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;" />
+                <ui:Label text="、" display-tooltip-when-elided="true" class="bottom-label" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; margin-left: 18px; flex-shrink: 0;">
+                <ui:Button text="《抖音隐私政策》" display-tooltip-when-elided="true" name="linkButton2" class="hyperlink-button" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;" />
+                <ui:Label text="、" display-tooltip-when-elided="true" class="bottom-label" />
+                <ui:Button text="《像塑服务协议》" display-tooltip-when-elided="true" name="linkButton3" class="hyperlink-button" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;" />
+                <ui:Label text="、" display-tooltip-when-elided="true" class="bottom-label" />
+                <ui:Button text="《像塑隐私政策》" display-tooltip-when-elided="true" name="linkButton4" class="hyperlink-button" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

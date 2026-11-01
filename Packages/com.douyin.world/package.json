@@ -1,0 +1,10 @@
+{
+  "name": "com.douyin.world",
+  "description": "douyin sdk world",
+  "version": "0.0.1",
+  "unity": "2021.3",
+  "displayName": "com.douyin.world",
+  "dependencies": {
+    "com.unity.addressables": "1.20.5"
+  }
+}

@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <ui:VisualElement style="border-top-width: 30px;">
+        <ui:Image name="qrcodeimg" style="height: 195px; border-top-width: 20px; width: 521px;" />
+    </ui:VisualElement>
+    <ui:VisualElement style="border-top-width: 10px; font-size: 14px; -unity-font-style: normal;">
+        <ui:Label text="打开抖音App" display-tooltip-when-elided="true" name="tips" class="bold" style="-unity-text-align: middle-center; height: 30px; color: rgb(238, 238, 238); margin-top: 5px; -unity-font-style: normal;" />
+        <ui:VisualElement style="flex-direction: row; justify-content: center; margin-top: 7px; color: rgb(202, 202, 202);">
+            <ui:Label text="在首页左上角“" display-tooltip-when-elided="true" style="font-size: 12px; color: rgb(196, 196, 196); -unity-font-style: normal;" />
+            <ui:Image name="menuimg" style="--unity-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/douyin_menu.png?fileID=21300000&amp;guid=8bb17e1f5dbcbc04792aa5b9de4917e2&amp;type=3#douyin_menu&apos;); width: 20px; height: 20px;" />
+            <ui:Label text="”中使用" display-tooltip-when-elided="true" style="font-size: 12px; color: rgb(196, 196, 196); -unity-font-style: normal;" />
+            <ui:Label text="“扫一扫”" display-tooltip-when-elided="true" style="color: rgb(254, 44, 85); font-size: 12px;" />
+            <ui:Label text="功能" display-tooltip-when-elided="true" style="font-size: 12px; color: rgb(196, 196, 196); -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

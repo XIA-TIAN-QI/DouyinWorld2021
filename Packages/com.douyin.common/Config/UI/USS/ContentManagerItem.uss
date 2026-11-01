@@ -1,0 +1,70 @@
+.bottom-btn {
+    width: 73px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    -unity-font-style: normal;
+    height: 21px;
+    border-left-color: rgb(25, 25, 25);
+    border-right-color: rgb(25, 25, 25);
+    border-top-color: rgb(25, 25, 25);
+    border-bottom-color: rgb(25, 25, 25);
+    margin-left: 0;
+    margin-right: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.test-btn {
+    background-color: rgba(244, 188, 2, 255);
+}
+
+.test-btn:hover {
+    background-color: rgb(243, 212, 108);
+}
+
+.publish-btn {
+    background-color: rgb(7, 200, 99);
+}
+
+.publish-btn:hover {
+    background-color: rgb(105, 239, 169);
+}
+
+.arrow-fold {
+    rotate: -90deg;
+}
+
+.avatar-state-yellow {
+    background-color: rgba(240, 177, 20, 0.06);
+    color: rgb(240, 177, 20);
+}
+
+.avatar-state-red {
+    color: rgb(254, 44, 85);
+    background-color: rgba(254, 44, 85, 0.06);
+}
+
+.avatar-state-green {
+    color: rgb(59, 179, 70);
+    background-color: rgba(59, 179, 70, 0.06);
+}
+
+.copyId-button {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.copyId-button:hover {
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.49);
+}
+
+.copyId-button:active {
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.8);
+}

@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <ui:VisualElement name="FoldoutWithButton" focusable="true" style="flex-direction: row;">
+        <ui:Foldout text="Foldout" style="flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" style="position: absolute; right: 0; top: 0; margin-top: 1px; margin-bottom: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,16 @@
+{
+    "name": "DouyinScripts",
+    "rootNamespace": "",
+    "references": [
+        "GUID:234dcc9a4ef884d329e7f0d240b374fb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,311 @@
+"""
+CampusStar.lua（黄思诚）逻辑测试 —— 不需要 Unity 运行时。
+
+用 lupa 起真实 Lua 5.4 + 假引擎，重点验证她的行为跟路人 NPC 不一样的地方：
+  - 没人时站在待机点不动（不巡逻）
+  - 玩家在 NOTICE(14m) 外：不理（防止远处一进来就冲过去）
+  - 玩家进入 14m：主动迎上来，停在 1.9m，不贴脸
+  - 停下后说话、按间隔换句、气泡到点收
+  - 玩家在 3~14m 之间移动：她跟着走（这是"跟着你"的核心）
+  - 玩家上楼（高度差 > 1m）：放弃，回原位（她没有寻路能力，硬追会贴墙）
+  - 玩家跑到活动范围外：走到范围边界停下等，不会一路蹭墙
+  - 玩家消失 / 走太远：回待机点
+  - 卡帧 dt 截断
+
+只验证 Lua 逻辑，不覆盖 XLua 绑定与引擎事件派发。
+"""
+import pathlib
+import sys
+
+import lupa
+
+HERE = pathlib.Path(__file__).resolve().parent
+SCRIPT = HERE.parent / "Assets" / "Campus" / "Lua" / "CampusStar.lua"
+
+HARNESS = r"""
+log = {}
+print = function(...)
+    local parts = {}
+    for i = 1, select('#', ...) do parts[#parts + 1] = tostring(select(i, ...)) end
+    log[#log + 1] = table.concat(parts, " ")
+end
+
+now = 0.0
+dt = 0.0
+
+local V3 = {}
+V3.__index = function(t, k)
+    if k == "sqrMagnitude" then return t.x * t.x + t.y * t.y + t.z * t.z end
+    if k == "magnitude" then return math.sqrt(t.x * t.x + t.y * t.y + t.z * t.z) end
+    return rawget(t, k)
+end
+function V3.__sub(a, b) return setmetatable({ x = a.x - b.x, y = a.y - b.y, z = a.z - b.z }, V3) end
+function V3.__add(a, b) return setmetatable({ x = a.x + b.x, y = a.y + b.y, z = a.z + b.z }, V3) end
+local function v3(x, y, z) return setmetatable({ x = x or 0, y = y or 0, z = z or 0 }, V3) end
+local Vector3 = setmetatable({}, { __call = function(_, x, y, z) return v3(x, y, z) end })
+
+lookCalls = 0
+local Quaternion = {}
+Quaternion.identity = { identity = true }
+function Quaternion.Euler(x, y, z) return { euler = { x, y, z } } end
+function Quaternion.LookRotation(v) lookCalls = lookCalls + 1; return { look = v } end
+function Quaternion.Slerp(a, b, t) return b end
+
+local function new_t(name)
+    local t = { name = name, children = {}, childList = {}, childCount = 0 }
+    t.position = v3(0, 0, 0)
+    t.rotation = { rot = true }
+    t.localPosition = v3(0, 0, 0)
+    t.localRotation = { rot = true }
+    t.gameObject = {
+        name = name,
+        active = true,
+        SetActive = function(self, v) t.gameObject.active = v end,
+    }
+    function t:Find(path)
+        local cur = self
+        for part in string.gmatch(path, "[^/]+") do
+            if cur == nil then return nil end
+            cur = cur.children[part]
+        end
+        return cur
+    end
+    function t:GetChild(i) return self.childList[i + 1] end
+    return t
+end
+
+local function add_child(parent, t)
+    parent.children[t.name] = t
+    parent.childCount = parent.childCount + 1
+    parent.childList[parent.childCount] = t
+end
+
+-- ================= 场景：NPC_08 黄思诚 =================
+root = new_t("NPC_08")
+root.position = v3(1.5, 0, -5.8)          -- StarHome
+local model = new_t("Model")
+add_child(root, model)
+local armL, armR, legL, legR = new_t("ArmL"), new_t("ArmR"), new_t("LegL"), new_t("LegR")
+add_child(model, armL); add_child(model, armR); add_child(model, legL); add_child(model, legR)
+
+labelNode = new_t("Label")
+add_child(root, labelNode)
+bubbleNode = new_t("Bubble")
+add_child(labelNode, bubbleNode)
+for i = 1, 8 do
+    add_child(bubbleNode, new_t(string.format("Line_%02d", i)))
+end
+bubbleNode.childList[2], bubbleNode.childList[7] = bubbleNode.childList[7], bubbleNode.childList[2]
+
+local path = new_t("Path")
+add_child(root, path)
+local home = new_t("Waypoint_01")
+home.position = v3(1.5, 0, -5.8)
+add_child(path, home)
+
+playerPos = nil
+cameraAvailable = true
+
+CS = {
+    UnityEngine = {
+        Vector3 = Vector3,
+        Quaternion = Quaternion,
+        Time = setmetatable({}, {
+            __index = function(_, k)
+                if k == "time" then return now end
+                if k == "deltaTime" then return dt end
+            end,
+        }),
+        Camera = setmetatable({}, {
+            __index = function(_, k)
+                if k ~= "main" then return nil end
+                if not cameraAvailable then return nil end
+                return { transform = { position = v3(0, 2, -30) } }
+            end,
+        }),
+    },
+    DouyinActorService = {
+        GetLocalActor = function()
+            if playerPos == nil then return nil end
+            return { gameObject = { transform = { position = playerPos } } }
+        end,
+    },
+}
+
+self = { transform = root, gameObject = root.gameObject }
+testVec3 = v3
+"""
+
+
+def new_state():
+    lt = lupa.LuaRuntime(unpack_returned_tuples=True)
+    lt.execute(HARNESS)
+    lt.execute(SCRIPT.read_text(encoding="utf-8"))
+    lt.execute("Awake()")
+    return lt
+
+
+def step(lt, frames=1, dt=1 / 60):
+    g = lt.globals()
+    for _ in range(frames):
+        g.dt = dt
+        g.now = g.now + dt
+        lt.execute("Update()")
+
+
+def pos(lt):
+    p = lt.eval("root.position")
+    return (p.x, p.y, p.z)
+
+
+def player_at(lt, x, y, z):
+    lt.globals().playerPos = lt.eval("testVec3(%f, %f, %f)" % (x, y, z))
+
+
+def bubble_active(lt):
+    return lt.eval("bubbleNode.gameObject.active")
+
+
+def active_line(lt):
+    n = lt.eval("bubbleNode.childCount")
+    for i in range(1, n + 1):
+        if lt.eval("bubbleNode.childList[%d].gameObject.active" % i):
+            return lt.eval("bubbleNode.childList[%d].name" % i)
+    return None
+
+
+def dist_xz(a, b):
+    return ((a[0] - b[0]) ** 2 + (a[2] - b[2]) ** 2) ** 0.5
+
+
+def main():
+    ok = True
+
+    def check(cond, msg):
+        nonlocal ok
+        if cond:
+            print("  ✓ " + msg)
+        else:
+            print("  ✗ " + msg)
+            ok = False
+
+    lt = new_state()
+    g = lt.globals()
+
+    print("[1] 初始化")
+    check(g.log[1].find("lines=8") != -1, "读到 8 句台词：" + g.log[1])
+    check(g.log[1].find("home") != -1 and g.log[1].find("home=nil") == -1, "读到待机点")
+    check(bubble_active(lt) is False, "初始气泡关闭")
+
+    print("[2] 没有玩家：站在待机点不动")
+    home = pos(lt)
+    step(lt, 120)
+    p = pos(lt)
+    check(dist_xz(p, home) < 0.01, "原地不动（位移 %.3f）" % dist_xz(p, home))
+
+    print("[3] 玩家在 NOTICE 外（18m）：不理")
+    player_at(lt, 1.5, 0, 12.2)          # 距她 18m
+    step(lt, 60)
+    p = pos(lt)
+    check(dist_xz(p, home) < 0.05, "没有冲过去（位移 %.3f）" % dist_xz(p, home))
+
+    print("[4] 玩家进入 10m：主动迎上来")
+    player_at(lt, 1.5, 0, 4.2)
+    step(lt, 60 * 5)
+    p = pos(lt)
+    d = dist_xz(p, (1.5, 0, 4.2))
+    check(p[2] > home[2] + 2.0, "朝玩家方向移动了 %.1fm" % (p[2] - home[2]))
+    check(1.5 < d < 2.6, "停在 1.9m 左右，没有贴脸（实际 %.2fm）" % d)
+
+    print("[5] 停下后开口")
+    check(bubble_active(lt) is True, "气泡亮起")
+    first = active_line(lt)
+    check(first is not None, "有台词被打开：" + str(first))
+
+    print("[6] 按间隔换句（她话密，4.6s 一句）")
+    g.dt = 1 / 60
+    for _ in range(int(60 * 5)):
+        g.now = g.now + g.dt
+        lt.execute("Update()")
+    second = active_line(lt)
+    check(second != first, "换到了下一句：%s → %s" % (first, second))
+
+    print("[7] 气泡到点会收（4.5s），下一句（4.6s）才补上")
+    last = bubble_active(lt)
+    t0 = g.now
+    off_at = None
+    for _ in range(int(60 * 6)):
+        g.now = g.now + g.dt
+        lt.execute("Update()")
+        cur = bubble_active(lt)
+        if last and not cur:
+            off_at = g.now - t0
+            break
+        last = cur
+    check(off_at is not None and off_at < 5.0,
+          "气泡在 %.2fs 时收掉" % (off_at if off_at else -1))
+
+    print("[8] 玩家走开 11m：她跟上来（不是原地等）")
+    p0 = pos(lt)
+    player_at(lt, 1.5, 0, p0[2] + 11.0)
+    step(lt, 60 * 6)
+    p1 = pos(lt)
+    check(dist_xz(p1, p0) > 3.0, "跟了 %.1fm" % dist_xz(p1, p0))
+    d = dist_xz(p1, (1.5, 0, p0[2] + 11.0))
+    check(d < 4.0, "追到玩家附近（还差 %.2fm）" % d)
+
+    print("[9] 玩家上楼（y=5.5）：放弃并回原位")
+    cur = pos(lt)
+    player_at(lt, cur[0], 5.5, cur[2] + 1.0)
+    step(lt, 60 * 8)
+    p = pos(lt)
+    check(abs(p[1]) < 0.01, "高度没被拉上去（y=%.2f）" % p[1])
+    check(dist_xz(p, home) < 1.2, "回到待机点附近（差 %.2fm）" % dist_xz(p, home))
+
+    print("[10] 玩家跑到活动范围外（x=20）：走到边界就停")
+    player_at(lt, 6.0, 0, -5.8)          # 先靠近，触发 engaged
+    step(lt, 60)
+    player_at(lt, 20.0, 0, -5.8)         # 再横移到框外
+    step(lt, 60 * 8)
+    p = pos(lt)
+    check(p[0] <= 13.15, "没有越过活动边界（x=%.2f）" % p[0])
+
+    print("[11] 玩家走太远（>22m）：不追")
+    player_at(lt, 1.5, 0, 30.0)
+    step(lt, 60 * 8)
+    p = pos(lt)
+    check(dist_xz(p, home) < 1.5, "已放弃并回到待机点（差 %.2fm）" % dist_xz(p, home))
+
+    print("[12] 没有本地玩家 / 没有相机都不崩")
+    g.playerPos = None
+    try:
+        step(lt, 30)
+        check(True, "playerPos=nil 正常跑")
+    except Exception as e:
+        check(False, "playerPos=nil 抛异常：" + str(e))
+    g.cameraAvailable = False
+    try:
+        step(lt, 30)
+        check(True, "Camera.main=nil 正常跑")
+    except Exception as e:
+        check(False, "Camera.main=nil 抛异常：" + str(e))
+    g.cameraAvailable = True
+
+    print("[13] 卡帧 dt 截断")
+    player_at(lt, 1.5, 0, 5.0)
+    step(lt, 60)
+    cur = pos(lt)
+    g.dt = 5.0
+    g.now = g.now + g.dt
+    lt.execute("Update()")
+    after = pos(lt)
+    jump = dist_xz(after, cur)
+    check(jump < 0.6, "卡 5 秒只走 %.2fm（截断到 0.2s）" % jump)
+
+    print()
+    print("全部通过" if ok else "有失败项")
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

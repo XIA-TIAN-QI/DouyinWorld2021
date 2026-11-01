@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="GenerationPreviewImage" src="project://database/Packages/com.douyin.common/Config/UI/UXML/Template/GenerationPreviewImage.uxml?fileID=9197481963319205126&amp;guid=a4ebd7c6812bf6e4fa017b6583775400&amp;type=3#GenerationPreviewImage" />
+    <ui:VisualElement name="GridItem" style="max-width: 170px; max-height: 170px; min-width: 170px; min-height: 170px; width: 170px; height: 170px; margin-right: 5px; margin-left: 0; margin-top: 0; margin-bottom: 5px; justify-content: flex-start;">
+        <ui:Instance template="GenerationPreviewImage" name="GenerationPreviewImage" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

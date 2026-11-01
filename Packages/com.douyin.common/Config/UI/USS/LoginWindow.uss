@@ -1,0 +1,151 @@
+TextField #unity-text-input.placeholder {
+    border-width: 0;
+    color: rgb(142, 142, 142);
+    background-color: rgb(255, 255, 255);
+    padding-top: 0;
+}
+
+TextField #unity-text-input {
+    border-width: 0;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding-top: 0;
+}
+
+RadioButton Label {
+    min-width: 0;
+    padding-right: 0;
+    margin-right: 0;
+    margin-left: 4px;
+}
+
+.bottom-button {
+    border-color: rgba(0, 0, 0, 0);
+    width: 200px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 47px;
+    border-top-left-radius: 7.5px;
+    border-bottom-left-radius: 7.5px;
+    border-top-right-radius: 7.5px;
+    border-bottom-right-radius: 7.5px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    color: rgb(255, 255, 255);
+}
+
+.bottom-label {
+    border-color: rgba(0, 0, 0, 0);
+    -unity-text-align: middle-left;
+}
+
+/* 手机号输入框的整体容器 */
+.phone-input-container {
+    flex-direction: row;
+    align-items: center;
+    width: 269px;
+    height: 36px;
+    background-color: white;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgb(217, 217, 217);
+    padding: 0 10px;
+    position: absolute;
+}
+
+/* 区号选择器（模拟的下拉框按钮） */
+.region-selector {
+    flex-direction: row;
+    align-items: center;
+    cursor: text;
+    padding: 5px;
+}
+
+.region-selector-label {
+    font-size: 14px;
+    color: black;
+}
+
+.region-selector-arrow {
+    width: 12px;
+    height: 12px;
+}
+
+/* 中间的垂直分割线 */
+.separator {
+    width: 1px;
+    height: 16px;
+    background-color: rgb(221, 221, 221);
+    /*margin-left: 10px;*/
+    /*margin-right: 10px;*/
+}
+
+/* 手机号输入框本身 */
+.phone-input-field {
+    flex-grow: 1;
+    height: 100%;
+    border-width: 0;
+    background-color: rgba(0,0,0,0);
+}
+
+/* --- 下拉列表的样式 --- */
+.region-list-view {
+    position: absolute;
+    background-color: white;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgb(221, 221, 221);
+}
+
+/* 列表中的每一行（由C#创建的容器） */
+.region-item-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+}
+
+.region-item-name {
+    color: black;
+}
+
+.region-item-code {
+    color: rgb(140, 140, 140);
+}
+
+/* 【核心】正确设置选中项和悬停项的样式 */
+
+.region-list-view .unity-list-view__item:hover,
+.region-list-view .unity-list-view__item--selected {
+    background-color: #007AFF !important; /* 使用图片中的蓝色 */
+}
+
+
+.region-list-view .unity-list-view__item:checked,
+.region-list-view .unity-list-view__item--selected {
+    background-color: #007AFF !important; /* 使用图片中的蓝色 */
+}
+
+.unity-list-view__item:hover .region-item-name,
+.unity-list-view__item:hover .region-item-code,
+.unity-list-view__item--selected .region-item-name,
+.unity-list-view__item--selected .region-item-code {
+    color: white !important; /* 确保文字在深色背景上是白色 */
+}
+
+
+.unity-list-view__item:checked .region-item-name,
+.unity-list-view__item:checked .region-item-code,
+.unity-list-view__item--selected .region-item-name,
+.unity-list-view__item--selected .region-item-code {
+    color: white !important; /* 确保文字在深色背景上是白色 */
+}
+

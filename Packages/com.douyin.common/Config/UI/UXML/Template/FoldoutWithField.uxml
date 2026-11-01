@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <ui:VisualElement name="FoldoutWithField" focusable="true">
+        <ui:Foldout text="Foldout" style="flex-grow: 1;" />
+        <uie:ObjectField name="ObjectField" style="position: absolute; left: 137px; right: 0; top: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

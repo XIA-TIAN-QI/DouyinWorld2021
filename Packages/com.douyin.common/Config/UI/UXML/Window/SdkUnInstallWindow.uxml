@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <ui:VisualElement styleSheets="styles/login.uss" class="login-container" style="justify-content: flex-start; align-items: center; flex-grow: 1; display: flex; position: absolute; height: auto; width: 260px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; min-height: auto;">
+        <ui:Label text="确定卸载【抖音虚拟创作SDK】 -合养精灵SDK相关功能？" display-tooltip-when-elided="true" name="MessageLabel" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 10px; margin-left: 15px; margin-right: 15px; white-space: normal; -unity-text-align: middle-center; justify-content: flex-start; height: auto; color: rgb(196, 196, 196); margin-bottom: 0;" />
+        <ui:Toggle name="PetSDKToggle" value="true" style="flex-direction: row-reverse; left: -30px; padding-bottom: 0; padding-top: 10px;" />
+        <ui:Toggle name="WorldSDKToggle" value="true" style="flex-direction: row-reverse; left: -41.5px; padding-top: 10px;" />
+        <ui:VisualElement style="flex-direction: row; position: relative; bottom: 0; padding-top: 10px;">
+            <ui:Button text="取消" display-tooltip-when-elided="true" name="CancelButton" class="round-coner-6" style="height: 27px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 5px; margin-right: 5px; margin-top: 0; margin-bottom: 0; width: 109px; position: relative; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; display: flex;" />
+            <ui:Button text="确定" display-tooltip-when-elided="true" name="OkButton" class="size-26 red-button round-coner-6" style="height: 27px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 5px; margin-right: 5px; margin-top: 0; margin-bottom: 0; width: 109px; position: relative; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

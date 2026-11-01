@@ -1,0 +1,107 @@
+/* Style for the main scroll view container */
+.world-list-scrollview {
+    flex-grow: 1; /* Take available space */
+}
+
+/* Style for the container holding all items */
+.world-list-container {
+    /* Add padding if desired */
+    padding: 10px 15px 15px 15px;
+}
+
+
+/* Style for each individual world item */
+.world-item {
+    flex-direction: row; /* Arrange image and details horizontally */
+    border-width: 1px;
+    border-color: rgb(0, 0, 0);
+    padding: 0px;
+    margin-bottom: 10px;
+    background-color: rgb(56, 56, 56); /* Dark theme background */
+}
+
+/* Style for the world image placeholder */
+.world-item-image {
+    width: 160px; /* Adjust as needed */
+    height: 90px; /* Adjust as needed */
+    background-color: rgb(40, 40, 40); /* Placeholder color */
+    margin-right: 10px;
+    flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+/* Style for the container holding text details and buttons */
+.world-item-details {
+    flex-grow: 1; /* Take remaining horizontal space */
+    flex-direction: column; /* Stack labels vertically */
+    position: relative; /* Needed for absolute positioning of children */
+}
+
+/* Common style for labels */
+.world-item-details-word {
+    margin-bottom: 3px;
+
+    
+    font-size: 12px;
+    letter-spacing: 0px;
+    /* Unity 特殊属性补充 */
+    -unity-font-style: normal; 
+    color: #C4C4C4;
+}
+
+/* Specific style for the World Name */
+.world-name-label {
+    color: #EEEEEE;
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin-top:5px;
+    margin-bottom: 7px;
+}
+
+/* Container for absolutely positioned elements */
+.absolute-controls {
+    position: absolute; /* Position relative to '.world-item-details' */
+    top: 5px;         /* Offset from the top */
+    right: 5px;        /* Offset from the right */
+    align-items: flex-end; /* Align items (label, button) to the right */
+    /* width: 120px; /* Optional: Set a fixed width if needed */
+}
+
+/* Style for the world state label */
+.world-state-label {
+    background-color: rgba(21, 212, 106, 0.0588);
+    color: #15D46A;
+    padding: 2px 5px;
+    margin-top: 12px;
+    margin-bottom: 15px; /* Space between state and button */
+    border-radius: 3px;
+    font-size: 14px;
+    width: 70px;
+    height: 21px;
+    -unity-text-align: middle-center;
+}
+
+/* Style for the select button */
+.select-button {
+    /* Standard button styling is usually okay */
+    /* width: 80px; /* Optional: fixed width */
+    background-color: #FE2C55;
+    border-radius: 3px;
+    width: 50px;
+    height: 21px;
+    font-size: 12px;
+}
+
+.avatar-state-yellow {
+    background-color: rgba(240, 177, 20, 0.06);
+    color: rgb(240, 177, 20);
+}
+
+.avatar-state-red {
+    color: rgb(254, 44, 85);
+    background-color: rgba(254, 44, 85, 0.06);
+}
+
+.avatar-state-green {
+    color: rgb(59, 179, 70);
+    background-color: rgba(59, 179, 70, 0.06);
+}

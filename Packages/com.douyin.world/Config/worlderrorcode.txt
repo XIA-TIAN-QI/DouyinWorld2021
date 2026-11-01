@@ -1,0 +1,16 @@
+errorcode	condition	suggestion
+1	Trying to update the managed reference registry with invalid propertyPath\(likely caused by a missing reference instance\)'managedReferences\[(\d+)\]\.Data', with value '([^']*)'	检测到修改预制体内DouyinScript自定义参数的名称或类型（通过---@var/varSync定义的参数）。请排查符合条件的预制体，删除并重新添加后，保存场景重试。
+2	^Shader error in .*$	shader编译错误，请根据错误信息检查处理。
+3	^RenderSettings customReflection texture has invalid type, .+? given while only CUBE is supported\. Custom reflection texture will not be used$	反射贴图格式设置错误，请将反射贴图纹理设置为Cubemap 或 Cube 维度的 RenderTexture。
+4	^Problem detected while opening the Scene file: '([\w\/\d_\.]+)'\.?$	场景资源存在错误，请尝试保存场景重新上传或联系官方处理。
+5	(?s)^Problem detected while importing the Prefab file: '([^']+)'.*$	预制体资源存在错误，请根据错误提示检查处理。
+6	^Error: Global Illumination requires a graphics device to render albedo\.$	当前版本不允许使用实时全局光照渲染，请前往 Window->Rendering->Lighting 中关闭实时全局光照渲染（Realtime Global Illumination）。
+7	^Error while saving Prefab: '([^']+)'\. You are trying to save a Prefab with a missing script\. This is not allowed\.\r?	预制体上存在脚本错误，请根据错误提示检查处理；暂不支持使用自定义C#组件，请使用官方提供组件。
+8	^Error in Shader Graph :Graph is generating too many variants\. Either delete Keywords, reduce Keyword variants or increase the Shader Variant Limit in Preferences > Shader Graph\.$	当前版本的Shader Variant变体数量不能超过128，请检查shader中的关键字数量。
+9	^Error in Graph at ([\w\/\d_\.\s]+) on line (\d+): Couldn't open include file '([^']+)'	Shader Graph存在编译错误，请根据错误提示检查处理。
+10	^Could not create asset from ([\w\/\d_\.\s]+): File could not be read$	资源读取发生错误，请根据错误提示检查处理。
+11	^Broken text PPtr in file\(([\w\/\d_\.\s\(\)]+)\)\. Local file identifier \((\d+)\) doesn't exist!$	资源关联发生错误，请根据提示尝试重新导入资源。
+12	^Errors during import of AudioClip.*$	暂不支持该格式资源，支持的资源格式请前往官网wiki查看。
+13	^Error while reading movie: ([\w\/:\.\s]+)$	视频资源暂不支持该格式资源,请使用官网指定视频播放组件。
+14	^ImportFBX Errors:.*$	FBX资源导入失败，请根据错误提示检查处理。
+15	^DXT3\|BC2 compressed textures are not supported when publishing to .+$	纹理压缩格式在对应平台不支持，请尝试修改压缩格式。

@@ -1,0 +1,41 @@
+# 统一换行：Windows 上如果不锁定，Unity 的 YAML 会在提交和检出之间反复改写，
+# diff 里全是没有意义的整行变化
+* text=auto
+
+*.cs      text eol=lf
+*.shader  text eol=lf
+*.hlsl    text eol=lf
+*.lua     text eol=lf
+*.py      text eol=lf
+*.md      text eol=lf
+*.json    text eol=lf
+*.asmdef  text eol=lf
+
+# Unity 序列化资产：按文本存（能看 diff），但不要做换行转换
+*.unity   text eol=lf
+*.prefab  text eol=lf
+*.asset   text eol=lf
+*.mat     text eol=lf
+*.meta    text eol=lf
+*.controller text eol=lf
+*.anim    text eol=lf
+*.physicMaterial text eol=lf
+
+# 真二进制
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.tga     binary
+*.psd     binary
+*.exr     binary
+*.fbx     binary
+*.obj     binary
+*.dll     binary
+*.so      binary
+*.bundle  binary
+*.wav     binary
+*.mp3     binary
+*.ogg     binary
+*.ttf     binary
+*.otf     binary
+*.zip     binary

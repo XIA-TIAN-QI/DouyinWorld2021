@@ -1,0 +1,385 @@
+{
+  "LODDisplayNames": "str_worldSDK_resourceCheck_title",
+  "Checks": [
+    {
+      "Type": "PackageSizeValidator",
+      "Name": "str_worldSDK_resourceCheck_packageSize_title",
+      "DisplayName": "str_worldSDK_resourceCheck_packageSize_title",
+      "SortOrder": 1,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_packageSize_size_title",
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_packageSize_size_title",
+              "Message": "str_worldSDK_resourceCheck_packageSize_size_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_packageSize_size_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_packageSize_size_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_packageSize_size_title",
+            "Message": "str_worldSDK_resourceCheck_packageSize_size_text"
+          }
+        }
+      ]
+    },
+    {
+      "Type": "MeshValidator",
+      "Name": "str_worldSDK_resourceCheck_mesh_title",
+      "SortOrder": 2,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_mesh_meshQuantity_title",
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_mesh_meshQuantity_title",
+              "Message": "str_worldSDK_resourceCheck_mesh_meshQuantity_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_mesh_meshQuantity_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_mesh_meshQuantity_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_mesh_meshQuantity_title",
+            "Message": "str_worldSDK_resourceCheck_mesh_meshQuantity_text"
+          }
+        },
+        {
+          "Name": "str_worldSDK_resourceCheck_mesh_triangleQuantity_title",
+          "SortOrder": 2,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_mesh_triangleQuantity_title",
+              "Message": "str_worldSDK_resourceCheck_mesh_triangleQuantity_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_mesh_triangleQuantity_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_mesh_triangleQuantity_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_mesh_triangleQuantity_title",
+            "Message": "str_worldSDK_resourceCheck_mesh_triangleQuantity_text"
+          }
+        }
+      ]
+    },
+    {
+      "Type": "MaterialValidator",
+      "Name": "str_worldSDK_resourceCheck_material_title",
+      "SortOrder": 3,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_material_materialQuantity_title",
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_material_materialQuantity_title",
+              "Message": "str_worldSDK_resourceCheck_material_materialQuantity_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_material_materialQuantity_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_material_materialQuantity_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_material_materialQuantity_title",
+            "Message": "str_worldSDK_resourceCheck_material_materialQuantity_text"
+          }
+        }
+      ]
+    },
+    {
+      "Type": "SceneShaderValidator",
+      "Name": "str_worldSDK_resourceCheck_shader_title",
+      "SortOrder": 4,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_shader_shaderQuantity_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_shader_shaderQuantity_title",
+              "Message": "str_worldSDK_resourceCheck_shader_shaderQuantity_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_shader_shaderQuantity_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_shader_shaderQuantity_oversize_error_text",
+              "StyleType": 1
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_shader_shaderError_error_title",
+              "Message": "str_worldSDK_resourceCheck_shader_shaderError_error_text",
+              "StyleType": 1,
+              "FixAction": "打开Shader Converter工具"
+            }
+          ],
+          "Warnings": [
+            {
+              "Title": "str_worldSDK_resourceCheck_shader_unURP_warning_title",
+              "Message": "str_worldSDK_resourceCheck_shader_unURP_warning_text",
+              "StyleType": 2,
+              "FixAction": "打开Shader Converter工具"
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_shader_shaderLost_warning_title",
+              "Message": "str_worldSDK_resourceCheck_shader_shaderLost_warning_text",
+              "StyleType": 2
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_shader_version_outofrange_error_title",
+              "Message": "str_worldSDK_resourceCheck_shader_version_outofrange_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_shader_shaderQuantity_title",
+            "Message": "str_worldSDK_resourceCheck_shader_shaderQuantity_text"
+          }
+        }
+      ]
+    },
+    {
+      "Type": "TextureValidator",
+      "Name": "str_worldSDK_resourceCheck_texture_title",
+      "SortOrder": 5,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_texture_textureQuantity_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_texture_textureQuantity_title",
+              "Message": "str_worldSDK_resourceCheck_texture_textureQuantity_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_texture_textureQuantity_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_texture_textureQuantity_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_texture_textureQuantity_title",
+            "Message": "str_worldSDK_resourceCheck_texture_textureQuantity_text"
+          }
+        },
+        {
+          "Name": "str_worldSDK_resourceCheck_texture_textureSize_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_texture_textureSize_title",
+              "Message": "str_worldSDK_resourceCheck_texture_textureSize_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_texture_textureSize_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_texture_textureSize_oversize_error_text",
+              "StyleType": 1
+            }
+          ,
+            {
+              "Title": "需要检查的纹理",
+              "Message": "{0}",
+              "StyleType": 2
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_texture_textureSize_title",
+            "Message": "str_worldSDK_resourceCheck_texture_textureSize_text"
+          }
+        },
+        {
+          "Name": "str_worldSDK_resourceCheck_texture_allTextureSize_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_texture_allTextureSize_title",
+              "Message": "str_worldSDK_resourceCheck_texture_allTextureSize_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_texture_allTextureSize_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_texture_allTextureSize_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_texture_allTextureSize_title",
+            "Message": "str_worldSDK_resourceCheck_texture_allTextureSize_text"
+          }
+        }
+      ]
+    },
+    {
+      "Type": "SceneLightAndShadowValidator",
+      "Name": "str_worldSDK_resourceCheck_light_title",
+      "SortOrder": 6,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_light_lightQuantity_directLight_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_directLight_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_directLight_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_directLight_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_directLight_oversize_error_text",
+              "StyleType": 1
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_light_reflectionProbe_error_title",
+              "Message": "str_worldSDK_resourceCheck_light_reflectionProbe_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_light_lightQuantity_directLight_title",
+            "Message": "str_worldSDK_resourceCheck_light_lightQuantity_directLight_text"
+          }
+        },
+        {
+          "Name": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeLight_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeLight_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeLight_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeLight_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeLight_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeLight_title",
+            "Message": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeLight_text"
+          }
+        },
+        {
+          "Name": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeShadow_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeShadow_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeShadow_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeShadow_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeShadow_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeShadow_title",
+            "Message": "str_worldSDK_resourceCheck_light_lightQuantity_realtimeShadow_text"
+          }
+        },
+        {
+          "Name": "str_worldSDK_resourceCheck_light_lightQuantity_lightMap_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_lightMap_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_lightMap_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightQuantity_lightMap_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightQuantity_lightMap_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_light_lightQuantity_lightMap_title",
+            "Message": "str_worldSDK_resourceCheck_light_lightQuantity_lightMap_text"
+          }
+        },
+        {
+          "Name": "str_worldSDK_resourceCheck_light_lightTextureSize_lightMap_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightTextureSize_lightMap_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightTextureSize_lightMap_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_light_lightTextureSize_lightMap_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_light_lightTextureSize_lightMap_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_light_lightTextureSize_lightMap_title",
+            "Message": "str_worldSDK_resourceCheck_light_lightTextureSize_lightMap_text"
+          }
+        }
+      ]
+    },
+    {
+      "Type": "SceneParticleSystemValidator",
+      "Name": "str_worldSDK_resourceCheck_particleSystem_title",
+      "SortOrder": 7,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_particleSystem_particleQuantity_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_particleSystem_particleQuantity_title",
+              "Message": "str_worldSDK_resourceCheck_particleSystem_particleQuantity_error_text",
+              "StyleType": 0
+            },
+            {
+              "Title": "str_worldSDK_resourceCheck_particleSystem_particleQuantity_oversize_error_title",
+              "Message": "str_worldSDK_resourceCheck_particleSystem_particleQuantity_oversize_error_text",
+              "StyleType": 1
+            }
+          ],
+          "Success": {
+            "Title": "str_worldSDK_resourceCheck_particleSystem_particleQuantity_title",
+            "Message": "str_worldSDK_resourceCheck_particleSystem_particleQuantity_text"
+          }
+        }
+      ]
+    },
+    {
+      "Type": "MissingAssetValidator",
+      "Name": "str_worldSDK_resourceCheck_Asset_title",
+      "SortOrder": 8,
+      "SubChecks": [
+        {
+          "Name": "str_worldSDK_resourceCheck_Asset_title",
+          "SortOrder": 1,
+          "Errors": [
+            {
+              "Title": "str_worldSDK_resourceCheck_Asset_missing_error_title",
+              "Message": "str_worldSDK_resourceCheck_Asset_missing_error_text",
+              "StyleType": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

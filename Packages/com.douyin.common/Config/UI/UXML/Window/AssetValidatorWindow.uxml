@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
+         MemoryProfiler="Unity.MemoryProfiler.Editor"
+         noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main"/>
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/AssetValidatorWindow.uss?fileID=7433441132597879392&amp;guid=9747906f8f67d4ca5a429b1813b55613&amp;type=3#AssetValidatorWindow"/>
+    <ui:VisualElement class="container" style="flex-direction: column; height: 100%; width: 100%;">
+        <ui:VisualElement name="upload-section-template" class="sub-container"
+                          style="flex-grow: 0; padding: 10px; flex-shrink: 0;"/>
+        <ui:VisualElement name="quality-section-template" class="sub-container"/>
+        <ui:VisualElement name="lod-section-template" style="flex-grow: 1;"/>
+        <ui:VisualElement name="buttonContainer" class="button-container"
+                          style="flex-direction: row; justify-content: center; padding: 4px; flex-shrink: 0; position: relative;">
+            <ui:Button name="refreshButton" text="刷新检査"/>
+            <ui:Button name="nextButton" text="下一步"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:Label text="叼着奶嘴的独角兽宝宝" display-tooltip-when-elided="true" name="msg-label" style="margin-top: 0; -unity-text-align: middle-center; margin-left: 16px; margin-right: 16px; white-space: normal; display: flex; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 14px; top: 12px;" />
+        <ui:VisualElement name="msg-root" style="display: none;">
+            <ui:VisualElement name="msg-frame" style="width: 175px; height: 172px; max-width: none; min-width: 175px; max-height: none; min-height: 172px; left: 43px; top: 12px; display: flex; flex-direction: row; align-items: auto; background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/pet_frame.png?fileID=2800000&amp;guid=ba799be6af784264aba9b025917f0be4&amp;type=3#pet_frame&apos;); background-color: rgb(48, 48, 48);">
+                <ui:Image name="msg-img" class="bg-color-303030 border-color-191919" style="margin-top: 0; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 0; margin-right: 0; margin-bottom: 0; background-image: none; -unity-background-image-tint-color: rgb(255, 255, 255); overflow: hidden; flex-grow: 1; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; display: flex;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

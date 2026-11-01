@@ -1,0 +1,51 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/ContentManagerWindow.uss?fileID=7433441132597879392&amp;guid=2c67d5d867383d941b1a4d5e74ad86fe&amp;type=3#ContentManagerWindow" />
+    <ui:VisualElement style="position: absolute; flex-grow: 0; width: 520px; height: 801px; display: none;" />
+    <ui:VisualElement style="margin-left: 12px; margin-right: 12px; flex-grow: 1;">
+        <ui:VisualElement style="margin-top: 11px; flex-shrink: 0;">
+            <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center;">
+                <ui:Label text="欢迎回来！" display-tooltip-when-elided="true" name="TitleLabel" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                <ui:VisualElement style="flex-direction: row; align-items: center;">
+                    <ui:Image name="AccountImage" style="height: 16px; width: 16px; border-top-left-radius: 13px; border-bottom-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; overflow: hidden; margin-right: 4px;" />
+                    <ui:Label text="西伯利亚鼯..." display-tooltip-when-elided="true" name="AccountNameLabel" style="color: rgb(255, 255, 255); margin-right: 4px; -unity-text-align: middle-left;" />
+                    <ui:Button display-tooltip-when-elided="true" name="ShowLogoutButton" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/arrowdown.png?fileID=2800000&amp;guid=3c64062599e3dac43abcd09520a04426&amp;type=3#arrowdown&apos;); width: 12px; height: 12px; background-color: rgba(88, 88, 88, 0); border-right-width: 0; border-left-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: 0; margin-right: 1px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; margin-top: 14px; height: 19px; visibility: visible; align-items: stretch; display: flex;">
+                <ui:TextField picking-mode="Ignore" name="SearchTextField" text="搜索" is-delayed="false" style="flex-grow: 1; margin-left: 0; margin-right: 2px; margin-top: 0; margin-bottom: 0; visibility: visible;" />
+                <ui:Label text="0/20" display-tooltip-when-elided="true" name="SearchCharCountLabel" style="-unity-text-align: middle-right; position: absolute; flex-direction: column; justify-content: flex-start; top: 2px; width: 61px; right: 108px;" />
+                <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/search.png?fileID=2800000&amp;guid=676a7b372c01d2547ba784cce153f971&amp;type=3#search&apos;); width: 12px; height: 12px; justify-content: flex-start; position: absolute; top: 4px; left: 5px;" />
+                <ui:Button text="重置" display-tooltip-when-elided="true" name="ResetButton" class="up-btn" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 4px; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 49px;" />
+                <ui:Button text="搜索" display-tooltip-when-elided="true" name="SearchButton" class="up-btn" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 4px; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 49px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Tabs" style="flex-direction: row; display: flex; margin-top: 9px;">
+            <ui:Button text="虚拟形象" display-tooltip-when-elided="true" name="Tab1Button" style="width: 65px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 19px;" />
+            <ui:Button text="合养精灵" display-tooltip-when-elided="true" name="Tab2Button" style="margin-left: 3px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 65px; height: 19px;" />
+            <ui:Button text="虚拟世界" display-tooltip-when-elided="true" name="Tab3Button" style="margin-left: 3px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 65px; height: 19px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:ListView focusable="false" fixed-item-height="52" virtualization-method="DynamicHeight" selection-type="None" style="flex-grow: 1; margin-top: 0; padding-top: 4px;" />
+            <ui:VisualElement style="position: absolute; align-items: center; left: 50%; top: 50%;">
+                <ui:VisualElement name="Loading" style="flex-direction: row; align-items: center; position: absolute; display: flex;">
+                    <ui:VisualElement name="LoadingIcon" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/loading.png?fileID=2800000&amp;guid=36544a0ad3f5d0040afc90f2a6f7370c&amp;type=3#loading&apos;); width: 12px; height: 12px; margin-right: 4px;" />
+                    <ui:Label text="加载中..." display-tooltip-when-elided="true" name="LoadingLabel" />
+                </ui:VisualElement>
+                <ui:Label text="暂无内容" display-tooltip-when-elided="true" name="EmptyLabel" style="display: flex; position: absolute;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-shrink: 0; align-items: stretch;">
+            <ui:Button text="点击加载更多" display-tooltip-when-elided="true" name="MoreButton" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgba(88, 88, 88, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; justify-content: flex-start; display: flex; visibility: visible;" />
+            <ui:VisualElement name="MoreLoading" style="flex-direction: row; align-items: center; position: absolute; justify-content: flex-start; -unity-text-align: middle-center; display: flex; left: 50%; translate: -50% 0;">
+                <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/loading.png?fileID=2800000&amp;guid=36544a0ad3f5d0040afc90f2a6f7370c&amp;type=3#loading&apos;); width: 12px; height: 12px; margin-right: 4px;" />
+                <ui:Label text="加载中..." display-tooltip-when-elided="true" name="MoreLoadingLabel" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; display: flex;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="-unity-text-align: upper-left; flex-direction: row; align-items: center; justify-content: flex-end; margin-bottom: 20px; margin-right: 0; flex-shrink: 0;">
+            <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/doc_icon.png?fileID=2800000&amp;guid=92b9b870d52b00d47920ffa95d85dfe7&amp;type=3#doc_icon&apos;); width: 9px; height: 10.5px; padding-top: 0; margin-top: 2px;" />
+            <ui:Button text="合养精灵创作帮助文档" display-tooltip-when-elided="true" name="LinkButton" class="hyperlink-button" style="align-items: auto; -unity-text-align: middle-right; margin-left: 5.5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+        </ui:VisualElement>
+        <ui:Button text="退出登录" display-tooltip-when-elided="true" name="LogoutButton" class="logout-btn" style="position: absolute; top: 36px; height: 28px; padding-left: 12px; padding-right: 12px; padding-top: 4px; padding-bottom: 4px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left-color: rgb(25, 25, 25); border-right-color: rgb(25, 25, 25); border-top-color: rgb(25, 25, 25); border-bottom-color: rgb(25, 25, 25); right: 0; display: flex; width: 77px;" />
+    </ui:VisualElement>
+</ui:UXML>

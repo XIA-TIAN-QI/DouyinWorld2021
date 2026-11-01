@@ -1,0 +1,205 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Effect_ENDZone_caizhi
+  m_Shader: {fileID: 4800000, guid: 20ea9bde43ea3954483445719ce71449, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _ALPHABLEND_ON
+  - _KEYWORD2_TEXTURE
+  - _KEYWORD4_SOFT
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseTex:
+        m_Texture: {fileID: 2800000, guid: cfccabeca9e25254a9fba67ed460f073, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Basecolor:
+        m_Texture: {fileID: 2800000, guid: fc889383b2da2db439ea6a25ba1b4f9b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: fc889383b2da2db439ea6a25ba1b4f9b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask2UV2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask_Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample13:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample6:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample7:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample8:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texturemm:
+        m_Texture: {fileID: 2800000, guid: fc889383b2da2db439ea6a25ba1b4f9b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _AlphaFix: 2
+    - _Atmosphere: 0
+    - _BaseTex_Strength: 2
+    - _BaseTex_U_Speed: 0
+    - _BaseTex_V_Speed: 0
+    - _BlendOp: 0
+    - _Blend_Mode: 1
+    - _BumpScale: 1
+    - _CameraFadingEnabled: 0
+    - _CameraFarFadeDistance: 2
+    - _CameraNearFadeDistance: 1
+    - _ColorMode: 0
+    - _Cull: 2
+    - _CullMode: 0
+    - _Cutoff: 0.5
+    - _DepthFadeDistance: 0.1
+    - _DisappearDistance: 5
+    - _Dissolve_Tex_U_Speed: 0
+    - _Dissolve_Tex_V_Speed: 0
+    - _DistortionBlend: 0.5
+    - _DistortionEnabled: 0
+    - _DistortionStrength: 1
+    - _DistortionStrengthScaled: 0
+    - _Disturbance_Tex_Rotation: 0
+    - _Disturbance_Tex_U_Speed: 0
+    - _Disturbance_Tex_V_Speed: 0
+    - _DstBlend: 10
+    - _EmissionEnabled: 0
+    - _FlipbookMode: 0
+    - _Float0: 0
+    - _Float1: 0
+    - _Float10: 0
+    - _Float11: 1
+    - _Float12: 0
+    - _Float14: 0
+    - _Float19: 0.5
+    - _Float20: 0
+    - _Float21: 0
+    - _Float23: 0
+    - _Float24: 0
+    - _Float25: 0
+    - _Float26: 0
+    - _Float28: 0
+    - _Float29: 0
+    - _Float3: 0
+    - _Float32: 0
+    - _Float33: 0
+    - _Float34: 1
+    - _Float39: 0
+    - _Float4: 0
+    - _Float43: 0
+    - _Float45: 0
+    - _Float64: 0
+    - _Float67: 0
+    - _Float68: 0
+    - _Float7: 0
+    - _Float75: 0
+    - _Float78: 1
+    - _Float8: 0
+    - _FresnelWidth: 2.5
+    - _Fresnel_Strength: 0
+    - _InvFade: 1
+    - _Keyword0: 0
+    - _Keyword1: 0
+    - _Keyword2: 1
+    - _Keyword3: 0
+    - _Keyword4: 0
+    - _Keyword5: 0
+    - _Keyword6: 0
+    - _Keyword9: 0
+    - _LightingEnabled: 0
+    - _Mask1Power: 0
+    - _Mask2Power: 0
+    - _Mode: 2
+    - _Open_Model_Softedge: 0
+    - _SoftParticlesEnabled: 0
+    - _SoftParticlesFarFadeDistance: 1
+    - _SoftParticlesNearFadeDistance: 0
+    - _SrcBlend: 5
+    - _UseMask1: 0
+    - _UseMask2: 0
+    - _Vertex_Offset_Strength: 0
+    - _ZWrite: 0
+    m_Colors:
+    - _BaseColorSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColorTilling: {r: 1, g: 1, b: 0, a: 0}
+    - _BaseTexSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseTexTilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Base_Tex_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
+    - _Color: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
+    - _Color0: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 1, g: 1, b: 1, a: 1}
+    - _Color2: {r: 1, g: 1, b: 1, a: 1}
+    - _Color3: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Mask1Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Tilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Mask2Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Tilling: {r: 1, g: 1, b: 0, a: 0}
+    - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _Vector11: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector8: {r: 0, g: 0, b: 0, a: 0}
+    - _Vertex_Offset_XYZ: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []

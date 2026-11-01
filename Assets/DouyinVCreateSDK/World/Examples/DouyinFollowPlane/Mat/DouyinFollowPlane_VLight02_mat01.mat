@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DouyinFollowPlane_VLight02_mat01
+  m_Shader: {fileID: 4800000, guid: 50f4ea230489f8a4eb76937eb8347ba0, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 2800000, guid: a87aff050bdc69c448f2fe223e16ebed, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask2UV2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _AlphaFix: 1
+    - _CullMode: 2
+    - _DepthFadeDistance: 0.2
+    - _DisappearDistance: 5
+    - _FresnelPower: 0.25
+    - _FresnelWidth: 1.3
+    - _Keyword0: 0
+    - _LightPower: 1.01
+    - _LightRange: 0.7
+    - _Mask1Power: 0
+    - _Mask2Power: 0
+    - _MaskIntensity: 1
+    - _RimIntensity: 0
+    - _RimPower: 6.15
+    - _RimScale: 1
+    - _UseMask1: 0
+    - _UseMask2: 0
+    - _UseRimColor: 0
+    - _UseTex: 0
+    m_Colors:
+    - _BaseTexSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseTexTilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _LightColor: {r: 0, g: 0.3028021, b: 1, a: 0}
+    - _Mask1Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Tilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Mask2Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Tilling: {r: 1, g: 1, b: 0, a: 0}
+    - _MaskSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []

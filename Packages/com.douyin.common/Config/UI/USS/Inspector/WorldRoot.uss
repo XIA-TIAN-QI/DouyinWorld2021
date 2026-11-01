@@ -1,0 +1,248 @@
+:root {
+    --worldRoot-font-size-1: 12px;
+    --worldRoot-text-color-1: #C4C4C4;
+    --worldRoot-text-color-2: #EDEDED;
+    --worldRoot-bg-color-1: rgb(48, 48, 48);
+    --worldRoot-color-1: rgb(196, 196, 196);
+    --worldRoot-flodout-bg-color-1: #404040;
+    --worldRoot-hyper-link-color: #4C7EFF;
+    --worldRoot-border-radius: 3px;
+    --worldRoot-border-width: 1px;
+    --worldRoot-border-color: rgb(25, 25, 25);
+
+    --worldRoot-help-bg-color: #C4C4C4;
+    --worldRoot-help-color: #000000;
+    --worldRoot-help-hover-bg-color: #A29F9F;
+    --worldRoot-help-hover-color: #161616;
+    --worldRoot-dark-bg: #373737;
+    --worldRoot-text-gray: #CACACA;
+    --worldRoot-link-blue: #569CD6;
+}
+
+
+.unity-foldout--depth-0 > .unity-foldout__toggle {
+    background-color: var(--worldRoot-bg-color-1);
+    margin: 2px -6px -2px -12px;
+    border-radius: 0;
+    border-left-width: 15px;
+    border-right-width: 0;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    font-size: var(--worldRoot-font-size-1);
+    color: var(--worldRoot-color-1);
+}
+
+.unity-foldout--depth-0 > .unity-foldout__content {
+    margin-bottom: 4px;
+    margin-top: 4px;
+    font-size: var(--worldRoot-font-size-1);
+    color: var(--worldRoot-color-1);
+    -unity-font-style: normal;
+}
+
+.unity-foldout--depth-1 > .unity-foldout__toggle {
+    background-color: var(--worldRoot-bg-color-1);
+    border-radius: var(--worldRoot-border-radius);
+    margin: 0;
+    padding: 2px 4px 2px;
+}
+
+.unity-foldout--depth-1 > .unity-foldout__toggle:enabled {
+}
+
+.unity-foldout--depth-1 > .unity-foldout__toggle:checked {
+    /*margin-bottom: 2px;*/
+    border-radius: 3px 3px 0 0;
+}
+
+.unity-foldout--depth-2 > .unity-foldout__toggle {
+    background-color: rgb(81, 81, 81);
+    border-radius: var(--worldRoot-border-radius);
+    padding: 2px 4px 3px;
+    margin: 0;
+    font-size: var(--worldRoot-font-size-1);
+    color: var(--worldRoot-color-1);
+}
+
+.unity-foldout--depth-2 > .unity-foldout__toggle:enabled {
+}
+
+.unity-foldout--depth-2 > .unity-foldout__toggle:checked {
+    border-radius: 3px 3px 0 0;
+    margin-bottom: 2px;
+}
+
+.unity-help-box {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.unity-help-box .unity-label {
+    font-size: var(--worldRoot-font-size-1);
+    color: rgb(202, 202, 202);
+    white-space: normal;
+    -unity-text-align: upper-left;
+    padding-left: 1px;
+    padding-right: 2px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0;
+}
+
+.unity-help-box .unity-button {
+    font-size: var(--worldRoot-font-size-1);
+    color: rgb(138, 138, 138);
+    -unity-text-align: upper-left;
+    white-space: normal;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.hyperlink-button:enabled {
+    border-color: rgba(0, 0, 0, 0);
+    color: rgb(76, 126, 255);
+    background-color: rgba(0, 0, 0, 0);
+    font-size: var(--worldRoot-font-size-1);
+}
+
+.hyperlink-button:hover {
+    color: rgb(150, 195, 251);
+}
+
+.group {
+    border-left-color: var(--worldRoot-border-color);
+    border-right-color: var(--worldRoot-border-color);
+    border-top-color: var(--worldRoot-border-color);
+    border-bottom-color: var(--worldRoot-border-color);
+    border-left-width: var(--worldRoot-border-width);
+    border-right-width: var(--worldRoot-border-width);
+    border-top-width: var(--worldRoot-border-width);
+    border-bottom-width: var(--worldRoot-border-width);
+    border-radius: var(--worldRoot-border-radius);
+    margin: 3px 3px 3px -8px;
+    padding: 0;
+    font-size: var(--worldRoot-font-size-1);
+    -unity-font-style: normal;
+}
+
+.group-space {
+    margin-left: 2px;
+    margin-right: 3px;
+}
+
+.unity-base-field-unused {
+    margin: 1px 3px;
+    border-left-width: var(--worldRoot-border-width);
+    border-right-width: var(--worldRoot-border-width);
+    border-top-width: var(--worldRoot-border-width);
+    border-bottom-width: var(--worldRoot-border-width);
+    color: var(--worldRoot-color-1);
+    font-size: var(--worldRoot-font-size-1);
+    -unity-font-style: normal;
+}
+
+.title-2 {
+    margin: 4px;
+}
+
+.bottom {
+    margin-bottom: -8px;
+}
+
+.unity-button2 {
+    margin-left: -3px;
+    margin-right: 3px;
+}
+
+.config-section {
+    margin-top: 0;
+    margin-left: -10px;
+    /*padding: 5px;*/
+}
+
+.config-property {
+    margin: 3px 0;
+    margin-left: -10px;
+    border-radius: var(--worldRoot-border-radius);
+}
+
+.config-property > label {
+    color: #C0C0C0;
+    font-size: var(--worldRoot-font-size-1);
+}
+
+/* Foldout 样式 */
+Foldout {
+    color: #E0E0E0;
+    font-size: var(--worldRoot-font-size-1);
+    /*padding: 5px 0;*/
+}
+
+Foldout > Toggle {
+    background-color: var(--worldRoot-flodout-bg-color-1);
+    padding: 3px 5px;
+    border-radius: var(--worldRoot-border-radius);
+}
+
+/* 帮助提示样式 */
+HelpBox {
+    margin: 5px 0;
+    padding: 4px;
+    border-radius: var(--worldRoot-border-radius);
+}
+
+/* 属性字段统一宽度 */
+UnityEditor.UIElements.PropertyField {
+    min-width: 300px;
+}
+
+/* 帮助按钮样式 ? */
+.help-button {
+    background-color: var(--worldRoot-help-bg-color);
+    border-radius: 8px;
+    color: var(--worldRoot-help-color);
+    border-left-width: var(--worldRoot-border-width);
+    border-right-width: var(--worldRoot-border-width);
+    border-top-width: var(--worldRoot-border-width);
+    border-bottom-width: var(--worldRoot-border-width);
+    -unity-font-style: bold;
+}
+
+.help-button:hover {
+    background-color: var(--worldRoot-help-hover-bg-color);
+    color: var(--worldRoot-help-hover-color);
+}
+
+.help-box {
+    background-color: var(--worldRoot-dark-bg);
+}
+
+.help-label {
+    color: var(--worldRoot-text-gray);
+}
+
+.custom-unity-base-field {
+    margin-left: 22px;
+    margin-bottom: 4px;
+}
+
+.unity-base-field__input {
+    /*margin-left: -40;*/
+    min-width: 50px;
+    -unity-font-style: normal;
+    font-size: var(--worldRoot-font-size-1);
+}
+
+.network-content-group {
+    margin-left: -15px;
+    padding: 0;
+    font-size: var(--worldRoot-font-size-1);
+}
+

@@ -1,0 +1,692 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6779088235328059957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6779088235328059958}
+  - component: {fileID: 6836964406842384777}
+  - component: {fileID: 6586334533438262223}
+  - component: {fileID: 2297388704783776643}
+  - component: {fileID: 2297388704783776645}
+  - component: {fileID: 7711200837912535514}
+  m_Layer: 0
+  m_Name: DouyinPickupGlass
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6779088235328059958
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779088235328059957}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6457759066903327835}
+  - {fileID: 6457759067304023485}
+  - {fileID: 6457759067955750723}
+  - {fileID: 7096524019590949051}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6836964406842384777
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779088235328059957}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.1, y: 0.2, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6586334533438262223
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779088235328059957}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &2297388704783776643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779088235328059957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 540439951, guid: 3ead8c7f8efe8473b8d110669e8128d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetGUID:
+    n1: 16309227835147942739
+    n2: 10583341945732500760
+--- !u!114 &2297388704783776645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779088235328059957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1992658528, guid: 3ead8c7f8efe8473b8d110669e8128d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eNetState: 0
+--- !u!114 &7711200837912535514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779088235328059957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -413692930, guid: c1a957cff7a534cbab677bbff81abab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eNetState: 0
+  ScriptAsset: {fileID: -4320198879241519195, guid: 457c65510a55d504d85a4192153de48d,
+    type: 3}
+  ParaLuaBindingData:
+  - rid: 3149488488535818529
+  - rid: 3149488488535818530
+  - rid: 3149488488535818531
+  - rid: 3149488488535818532
+  - rid: 3149488488535818533
+  - rid: 3149488488535818534
+  - rid: 3149488488535818535
+  - rid: 3149488488535818536
+  - rid: 3149488488535818537
+  - rid: 3149488488535818538
+  - rid: 3149488488535818539
+  - rid: 3149488488535818540
+  - rid: 3149488488535818541
+  - rid: 3149488488535818542
+  - rid: 3149488488535818543
+  - rid: 3149488488535818544
+  - rid: 3149488488535818545
+  - rid: 3149488488535818546
+  IsManualedVar: 1
+  autoUpdate: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 3149488488535818529
+      type: {class: DouyinLuaDataEnum, ns: , asm: com.douyin.script}
+      data:
+        varName: InteractionType
+        varType: InteractionType
+        EnumStr: Range
+        eData:
+          rid: 3149488489348202827
+    - rid: 3149488488535818530
+      type: {class: DouyinLuaDataFloat, ns: , asm: com.douyin.script}
+      data:
+        varName: InteractionRange
+        Data: 1.5
+    - rid: 3149488488535818531
+      type: {class: DouyinLuaDataUObject, ns: , asm: com.douyin.script}
+      data:
+        varName: InteractionArea
+        Data: {fileID: 0}
+        varType: UnityEngine.Collider
+    - rid: 3149488488535818532
+      type: {class: DouyinLuaDataEnum, ns: , asm: com.douyin.script}
+      data:
+        varName: InteractionMode
+        varType: Interaction3DType
+        EnumStr: Click
+        eData:
+          rid: 3149488488535818548
+    - rid: 3149488488535818533
+      type: {class: DouyinLuaDataSObject, ns: , asm: com.douyin.script}
+      data:
+        varName: HandButton
+        Data:
+          rid: 3149488488535818549
+        varType: DouyinButton
+    - rid: 3149488488535818534
+      type: {class: DouyinLuaDataEnum, ns: , asm: com.douyin.script}
+      data:
+        varName: PickupType
+        varType: PickupType
+        EnumStr: Any
+        eData:
+          rid: 3149488489348202828
+    - rid: 3149488488535818535
+      type: {class: DouyinLuaDataUObject, ns: , asm: com.douyin.script}
+      data:
+        varName: RightLocation
+        Data: {fileID: 7096524019590949051}
+        varType: UnityEngine.Transform
+    - rid: 3149488488535818536
+      type: {class: DouyinLuaDataVarBoolean, ns: , asm: com.douyin.script}
+      data:
+        varName: AllowDrop
+        Data: 1
+    - rid: 3149488488535818537
+      type: {class: DouyinLuaDataVarBoolean, ns: , asm: com.douyin.script}
+      data:
+        varName: AllowTheft
+        Data: 0
+    - rid: 3149488488535818538
+      type: {class: DouyinLuaDataVarBoolean, ns: , asm: com.douyin.script}
+      data:
+        varName: DropDestroy
+        Data: 1
+    - rid: 3149488488535818539
+      type: {class: DouyinLuaDataFloat, ns: , asm: com.douyin.script}
+      data:
+        varName: DestroyTime
+        Data: 5
+    - rid: 3149488488535818540
+      type: {class: DouyinLuaDataEnum, ns: , asm: com.douyin.script}
+      data:
+        varName: MainButtonType
+        varType: MainInteractButtonType
+        EnumStr: Button
+        eData:
+          rid: 3149488488535818551
+    - rid: 3149488488535818541
+      type: {class: DouyinLuaDataVarBoolean, ns: , asm: com.douyin.script}
+      data:
+        varName: IsShowMainButton
+        Data: 0
+    - rid: 3149488488535818542
+      type: {class: DouyinLuaDataSObject, ns: , asm: com.douyin.script}
+      data:
+        varName: MainButton
+        Data:
+          rid: 3149488488535818552
+        varType: DouyinButton
+    - rid: 3149488488535818543
+      type: {class: DouyinLuaDataSObject, ns: , asm: com.douyin.script}
+      data:
+        varName: MainJoyStick
+        Data:
+          rid: 3149488488535818553
+        varType: DouyinJoyStick
+    - rid: 3149488488535818544
+      type: {class: DouyinLuaDataSObject, ns: , asm: com.douyin.script}
+      data:
+        varName: WaveJoyStick
+        Data:
+          rid: 3149488488535818554
+        varType: DouyinJoyStick
+    - rid: 3149488488535818545
+      type: {class: DouyinLuaDataVarBoolean, ns: , asm: com.douyin.script}
+      data:
+        varName: IsShowFirstSubButton
+        Data: 0
+    - rid: 3149488488535818546
+      type: {class: DouyinLuaDataSObject, ns: , asm: com.douyin.script}
+      data:
+        varName: FirstSubButton
+        Data:
+          rid: 3149488488535818555
+        varType: DouyinButton
+    - rid: 3149488488535818548
+      type: {class: Interaction3DType, ns: , asm: com.douyin.world}
+      data:
+        value__: 0
+    - rid: 3149488488535818549
+      type: {class: DouyinButton, ns: , asm: com.douyin.script}
+      data:
+        Param:
+          ButtonVarName: HandButton
+          Title: "\u62FE\u53D6\u6309\u94AE\u8BBE\u7F6E"
+          ButtonFlags: 1
+          DefaultText: "\u62FE\u53D6"
+          DefaultTextColor: {r: 0.03137255, g: 0.023529412, b: 0.13725491, a: 1}
+          TextLimitCharCount: 10
+          NormalImageText: "\u6309\u94AE\u56FE\u6807"
+          NormalImageTooltip: "\u63A8\u8350\u5C3A\u5BF872*72"
+          NormalBackgroundImageText: "\u6309\u94AE\u5E95\u677F"
+          NormalBackgroundImageTooltip: "\u63A8\u8350\u5C3A\u5BF8369*90"
+          TextColorDesc: "\u6587\u672C\u989C\u8272"
+          TextDesc: "\u6309\u94AE\u6587\u672C"
+        Transition: 1
+        Colors:
+          normalColor: {r: 1, g: 1, b: 1, a: 1}
+          pressedColor: {r: 0, g: 0, b: 0, a: 0}
+          disabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+        SpriteState:
+          Param:
+            ButtonVarName: HandButton
+            Title: "\u62FE\u53D6\u6309\u94AE\u8BBE\u7F6E"
+            ButtonFlags: 1
+            DefaultText: "\u62FE\u53D6"
+            DefaultTextColor: {r: 0.03137255, g: 0.023529412, b: 0.13725491, a: 1}
+            TextLimitCharCount: 10
+            NormalImageText: "\u6309\u94AE\u56FE\u6807"
+            NormalImageTooltip: "\u63A8\u8350\u5C3A\u5BF872*72"
+            NormalBackgroundImageText: "\u6309\u94AE\u5E95\u677F"
+            NormalBackgroundImageTooltip: "\u63A8\u8350\u5C3A\u5BF8369*90"
+            TextColorDesc: "\u6587\u672C\u989C\u8272"
+            TextDesc: "\u6309\u94AE\u6587\u672C"
+          normalImage: {fileID: 0}
+          normalBackgroundImage: {fileID: 0}
+        ButtonText: 1
+        Text: "\u62FE\u53D6"
+        TextSize: 26
+        TextColor: {r: 0.03137255, g: 0.023529412, b: 0.13725491, a: 1}
+        ButtonActions: []
+    - rid: 3149488488535818551
+      type: {class: MainInteractButtonType, ns: , asm: com.douyin.world}
+      data:
+        value__: 0
+    - rid: 3149488488535818552
+      type: {class: DouyinButton, ns: , asm: com.douyin.script}
+      data:
+        Param:
+          ButtonVarName: 
+          Title: 
+          ButtonFlags: 0
+          DefaultText: 
+          DefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+          TextLimitCharCount: 0
+          NormalImageText: 
+          NormalImageTooltip: 
+          NormalBackgroundImageText: 
+          NormalBackgroundImageTooltip: 
+          TextColorDesc: 
+          TextDesc: 
+        Transition: 1
+        Colors:
+          normalColor: {r: 1, g: 1, b: 1, a: 1}
+          pressedColor: {r: 0, g: 0, b: 0, a: 0}
+          disabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+        SpriteState:
+          Param:
+            ButtonVarName: 
+            Title: 
+            ButtonFlags: 0
+            DefaultText: 
+            DefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+            TextLimitCharCount: 0
+            NormalImageText: 
+            NormalImageTooltip: 
+            NormalBackgroundImageText: 
+            NormalBackgroundImageTooltip: 
+            TextColorDesc: 
+            TextDesc: 
+          normalImage: {fileID: 0}
+          normalBackgroundImage: {fileID: 0}
+        ButtonText: 0
+        Text: 
+        TextSize: 26
+        TextColor: {r: 1, g: 1, b: 1, a: 0.99607843}
+        ButtonActions: []
+    - rid: 3149488488535818553
+      type: {class: DouyinJoyStick, ns: , asm: com.douyin.world}
+      data:
+        interactable: 0
+        backgroundImage: {fileID: 0}
+        frontgroundImage: {fileID: 0}
+    - rid: 3149488488535818554
+      type: {class: DouyinJoyStick, ns: , asm: com.douyin.world}
+      data:
+        interactable: 0
+        backgroundImage: {fileID: 0}
+        frontgroundImage: {fileID: 0}
+    - rid: 3149488488535818555
+      type: {class: DouyinButton, ns: , asm: com.douyin.script}
+      data:
+        Param:
+          ButtonVarName: 
+          Title: 
+          ButtonFlags: 0
+          DefaultText: 
+          DefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+          TextLimitCharCount: 0
+          NormalImageText: 
+          NormalImageTooltip: 
+          NormalBackgroundImageText: 
+          NormalBackgroundImageTooltip: 
+          TextColorDesc: 
+          TextDesc: 
+        Transition: 1
+        Colors:
+          normalColor: {r: 1, g: 1, b: 1, a: 1}
+          pressedColor: {r: 0, g: 0, b: 0, a: 0}
+          disabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+        SpriteState:
+          Param:
+            ButtonVarName: 
+            Title: 
+            ButtonFlags: 0
+            DefaultText: 
+            DefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+            TextLimitCharCount: 0
+            NormalImageText: 
+            NormalImageTooltip: 
+            NormalBackgroundImageText: 
+            NormalBackgroundImageTooltip: 
+            TextColorDesc: 
+            TextDesc: 
+          normalImage: {fileID: 0}
+          normalBackgroundImage: {fileID: 0}
+        ButtonText: 0
+        Text: 
+        TextSize: 26
+        TextColor: {r: 1, g: 1, b: 1, a: 0.99607843}
+        ButtonActions: []
+    - rid: 3149488489348202827
+      type: {class: InteractionType, ns: , asm: com.douyin.world}
+      data:
+        value__: 0
+    - rid: 3149488489348202828
+      type: {class: PickupType, ns: , asm: com.douyin.world}
+      data:
+        value__: 1
+--- !u!1 &8965575276494720269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7096524019590949051}
+  m_Layer: 0
+  m_Name: Location
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7096524019590949051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8965575276494720269}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.073, y: -0.042, z: 0.000019997358}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6779088235328059958}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6779088234999840936
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6779088235328059958}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1091
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 67aea4abd28546349a05b91ee8777167, type: 2}
+    - target: {fileID: 919132149155446097, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_Name
+      value: Glass_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3fc5835056d143f4cac02304facb7f35,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fc5835056d143f4cac02304facb7f35, type: 3}
+--- !u!4 &6457759067955750723 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3fc5835056d143f4cac02304facb7f35,
+    type: 3}
+  m_PrefabInstance: {fileID: 6779088234999840936}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6779088235685196374
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6779088235328059958}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1091
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8df6e6abca9bcac41be900cb136c505f, type: 2}
+    - target: {fileID: 919132149155446097, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_Name
+      value: Glass_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bb6b83941368767499ef22fc31bb7822,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bb6b83941368767499ef22fc31bb7822, type: 3}
+--- !u!4 &6457759067304023485 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bb6b83941368767499ef22fc31bb7822,
+    type: 3}
+  m_PrefabInstance: {fileID: 6779088235685196374}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6779088236094018480
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6779088235328059958}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1091
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4c3f642887c21e542974a3437b434d8a, type: 2}
+    - target: {fileID: 919132149155446097, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_Name
+      value: Glass_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8b672dc095227934cab656ec9d2fca7f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8b672dc095227934cab656ec9d2fca7f, type: 3}
+--- !u!4 &6457759066903327835 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8b672dc095227934cab656ec9d2fca7f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6779088236094018480}
+  m_PrefabAsset: {fileID: 0}

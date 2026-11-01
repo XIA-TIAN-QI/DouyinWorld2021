@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" MemoryProfiler="Unity.MemoryProfiler.Editor" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Template/QualitySection.uss?fileID=7433441132597879392&amp;guid=5a46742287b5a45a0b1066467e1cffbc&amp;type=3#QualitySection" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <ui:VisualElement class="quality-container">
+        <ui:Label display-tooltip-when-elided="true" name="title1" class="title1" />
+        <ui:VisualElement class="q-buttons-container">
+            <ui:Label text="形象分级" name="levelTitle" class="levelTitle" />
+            <ui:VisualElement class="radio-buttons-container">
+                <ui:RadioButton text="普通形象" name="normalOption" class="quality-title" />
+                <ui:RadioButton text="高级形象" name="advancedOption" class="quality-title" />
+                <ui:RadioButton text="稀有形象" name="rareOption" class="quality-title" />
+                <ui:RadioButton text="至臻形象" name="epicOption" class="quality-title" />
+            </ui:VisualElement>
+            <ui:VisualElement name="qualityWarningContainer" class="quality-warning-box" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

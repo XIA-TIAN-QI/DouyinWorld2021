@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 154b912940faf4f0fba65751f4da1856
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _BaseTex_AMeta: {fileID: 2800000, guid: 4a0c19d74416a4bbe8b460e85746ea0a, type: 3}
+  - _RGNormalBSmoothAAO: {fileID: 2800000, guid: de3b29cdb444e4e319afdec44a02d0e1,
+      type: 3}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

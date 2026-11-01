@@ -1,0 +1,104 @@
+
+:root {
+    --upload-select-res-font-size-3: 12px;
+    --upload-select-res-font-size-1: 12px;
+    --upload-select-res-font-size-2: 12px;
+    --upload-select-font-color: #C4C4C4;
+    --upload-select-font-color-1: #C4C4C4;
+    --upload-select-font-color-2: #C4C4C4;
+    --upload-select-btn-font-color: #FFFFFF;
+    --upload-select-btn-color: #FE2C55;
+    --upload-select-btn-bg-hover-color: rgb(239, 105, 131);
+    --upload-select-container-color: #444;
+
+    --upload--border-width: 1px;
+    --upload--border-color: rgb(25, 25, 25);
+    --upload--border-radius: 3px;
+    --upload--border-btn-radius: 6px;
+}
+
+#UploadSelectResourcePanel {
+    padding: 5px;
+}
+
+#VisualElementContent {
+    padding: 0 5px 20px 15px;
+    margin-top: -5px;
+}
+
+#NextButton {
+    background-color: var(--upload-select-btn-color);
+    color: var(--upload-select-btn-font-color);
+    border-radius: var(--upload--border-btn-radius);
+    padding: 6px;
+    height: 32px;
+    font-size: var(--upload-select-res-font-size-1);
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    margin-bottom: 20px;
+    max-width: 228px;
+}
+
+#NextButton:hover {
+    border-color: rgba(0, 0, 0, 0);
+    background-color: rgb(239, 105, 131);
+}
+
+#Title {
+    color: var(--upload-select-font-color-1);
+    font-size: var(--upload-select-res-font-size-1);
+    padding: 10px;
+}
+
+.title-label {
+    color: var(--upload-select-font-color-2);
+    font-size: var(--upload-select-res-font-size-1);
+    margin: 10px 5px 5px 5px;
+}
+
+.radio-container1 {
+    background-color: var(--upload-select-container-color);
+    padding: 5px;
+    margin: 4px 4px;
+    height: 100%;
+    border-radius: var(--upload--border-radius);
+    border-left-width: var(--upload--border-width);
+    border-right-width: var(--upload--border-width);
+    border-top-width: var(--upload--border-width);
+    border-bottom-width: var(--upload--border-width);
+    border-left-color: var(--upload--border-color);
+    border-right-color: var(--upload--border-color);
+    border-top-color: var(--upload--border-color);
+    border-bottom-color: var(--upload--border-color);
+    justify-content: space-between; /* 确保子元素之间有空间 */
+}
+
+.radio-button1 {
+    --unity-radio-check-color: transparent; /* 选中状态的颜色设为透明 */
+    --unity-radio-box-background-color: transparent; /* 未选中状态的颜色设为透明 */
+    --unity-radio-checkmark-background-color: transparent; /* 选中标记背景色设为透明 */
+}
+
+/* 取消选中状态的背景和边框 */
+.radio-button:checked {
+    background-color: rgba(0, 0, 0, 0); /* 保持背景透明 */
+    border-color: var(--upload--border-color); /* 保持边框颜色为黑色 */
+}
+
+/* 去掉悬停效果 */
+.radio-button:hover {
+    background-color: rgba(0, 0, 0, 0) !important; /* 背景透明 */
+    border-color: rgba(0, 0, 0, 0) !important; /* 边框透明 */
+}
+
+/* 选中的项样式 */
+.unity-collection-view__item--selected {
+    background-color: rgba(0, 0, 0, 0) !important; /* 选中的项背景透明 */
+}
+
+#UploadSelectPrompt {
+    color: var(--upload-select-font-color);
+    font-size: var(--upload-select-res-font-size-3);
+    padding: 10px 5px 10px 10px;
+}

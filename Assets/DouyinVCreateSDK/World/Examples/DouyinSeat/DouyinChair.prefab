@@ -1,0 +1,405 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &68101045095986550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 68101045095986551}
+  m_Layer: 9
+  m_Name: Seat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &68101045095986551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68101045095986550}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.57, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 68101046298920951}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &68101045711453892
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 68101045711453893}
+  m_Layer: 9
+  m_Name: Exit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &68101045711453893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68101045711453892}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.525, y: 0.132, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 68101046298920951}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &68101046298920950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 68101046298920951}
+  - component: {fileID: 68101046298920946}
+  - component: {fileID: 68101046298920948}
+  - component: {fileID: 3804511576491008352}
+  m_Layer: 9
+  m_Name: DouyinChair
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &68101046298920951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68101046298920950}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3571728567362466708}
+  - {fileID: 68101045095986551}
+  - {fileID: 68101045711453893}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &68101046298920946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68101046298920950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 540439951, guid: 3ead8c7f8efe8473b8d110669e8128d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetGUID:
+    n1: 8348799061809271574
+    n2: 5798938161332687148
+--- !u!135 &68101046298920948
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68101046298920950}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Center: {x: 0.15, y: 0.4, z: -0.01}
+--- !u!114 &3804511576491008352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68101046298920950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -413692930, guid: c1a957cff7a534cbab677bbff81abab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScriptAsset: {fileID: -4320198879241519195, guid: ceb26a9b3b4fd8f4fa6617032178eaec,
+    type: 3}
+  ParaLuaBindingData:
+  - rid: 3149488489348203404
+  - rid: 3149488489348203405
+  - rid: 3149488489348203406
+  - rid: 3149488489348203407
+  - rid: 3149488489348203408
+  - rid: 3149488489348203409
+  - rid: 3149488489348203410
+  - rid: 3149488489348203411
+  - rid: 3149488489348203412
+  IsManualedVar: 1
+  eNetState: 0
+  autoUpdate: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 3149488489348203404
+      type: {class: DouyinLuaDataEnum, ns: , asm: com.douyin.script}
+      data:
+        varName: InteractionType
+        varType: InteractionType
+        EnumStr: Range
+        eData:
+          rid: 3149488489697903532
+    - rid: 3149488489348203405
+      type: {class: DouyinLuaDataFloat, ns: , asm: com.douyin.script}
+      data:
+        varName: InteractionRange
+        Data: 1.5
+    - rid: 3149488489348203406
+      type: {class: DouyinLuaDataUObject, ns: , asm: com.douyin.script}
+      data:
+        varName: InteractionArea
+        Data: {fileID: 0}
+        varType: UnityEngine.Collider
+    - rid: 3149488489348203407
+      type: {class: DouyinLuaDataSObject, ns: , asm: com.douyin.script}
+      data:
+        varName: DownButton
+        Data:
+          rid: 3149488489348203414
+        varType: DouyinButton
+    - rid: 3149488489348203408
+      type: {class: DouyinLuaDataUObject, ns: , asm: com.douyin.script}
+      data:
+        varName: PlayerEnterLocation
+        Data: {fileID: 68101045095986551}
+        varType: UnityEngine.Transform
+    - rid: 3149488489348203409
+      type: {class: DouyinLuaDataUObject, ns: , asm: com.douyin.script}
+      data:
+        varName: PlayerExitLocation
+        Data: {fileID: 68101045711453893}
+        varType: UnityEngine.Transform
+    - rid: 3149488489348203410
+      type: {class: DouyinLuaDataVarBoolean, ns: , asm: com.douyin.script}
+      data:
+        varName: SwitchSeatFromSeat
+        Data: 0
+    - rid: 3149488489348203411
+      type: {class: DouyinLuaDataUObject, ns: , asm: com.douyin.script}
+      data:
+        varName: CustomSittingAnimation
+        Data: {fileID: 0}
+        varType: UnityEngine.AnimationClip
+    - rid: 3149488489348203412
+      type: {class: DouyinLuaDataSObject, ns: , asm: com.douyin.script}
+      data:
+        varName: StandButton
+        Data:
+          rid: 3149488489348203415
+        varType: DouyinButton
+    - rid: 3149488489348203414
+      type: {class: DouyinButton, ns: , asm: com.douyin.script}
+      data:
+        Param:
+          ButtonVarName: DownButton
+          Title: "\u5750\u4E0B\u6309\u94AE\u8BBE\u7F6E"
+          ButtonFlags: 1
+          DefaultText: "\u5750\u4E0B"
+          DefaultTextColor: {r: 0.03137255, g: 0.023529412, b: 0.13725491, a: 1}
+          TextLimitCharCount: 10
+          NormalImageText: "\u6309\u94AE\u56FE\u6807"
+          NormalImageTooltip: "\u63A8\u8350\u5C3A\u5BF872*72"
+          NormalBackgroundImageText: "\u6309\u94AE\u5E95\u677F"
+          NormalBackgroundImageTooltip: "\u63A8\u8350\u5C3A\u5BF8369*90"
+          TextColorDesc: "\u6587\u672C\u989C\u8272"
+          TextDesc: "\u6309\u94AE\u6587\u672C"
+          Index: 0
+        Transition: 1
+        Colors:
+          normalColor: {r: 1, g: 1, b: 1, a: 1}
+          pressedColor: {r: 0, g: 0, b: 0, a: 0}
+          disabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+        SpriteState:
+          Param:
+            ButtonVarName: DownButton
+            Title: "\u5750\u4E0B\u6309\u94AE\u8BBE\u7F6E"
+            ButtonFlags: 1
+            DefaultText: "\u5750\u4E0B"
+            DefaultTextColor: {r: 0.03137255, g: 0.023529412, b: 0.13725491, a: 1}
+            TextLimitCharCount: 10
+            NormalImageText: "\u6309\u94AE\u56FE\u6807"
+            NormalImageTooltip: "\u63A8\u8350\u5C3A\u5BF872*72"
+            NormalBackgroundImageText: "\u6309\u94AE\u5E95\u677F"
+            NormalBackgroundImageTooltip: "\u63A8\u8350\u5C3A\u5BF8369*90"
+            TextColorDesc: "\u6587\u672C\u989C\u8272"
+            TextDesc: "\u6309\u94AE\u6587\u672C"
+            Index: 0
+          normalImage: {fileID: 0}
+          normalBackgroundImage: {fileID: 0}
+        ButtonText: 1
+        Text: "\u5750\u4E0B"
+        TextSize: 26
+        TextColor: {r: 0.03137255, g: 0.023529412, b: 0.13725491, a: 1}
+        ButtonActions: []
+    - rid: 3149488489348203415
+      type: {class: DouyinButton, ns: , asm: com.douyin.script}
+      data:
+        Param:
+          ButtonVarName: 
+          Title: 
+          ButtonFlags: 0
+          DefaultText: 
+          DefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+          TextLimitCharCount: 0
+          NormalImageText: 
+          NormalImageTooltip: 
+          NormalBackgroundImageText: 
+          NormalBackgroundImageTooltip: 
+          TextColorDesc: 
+          TextDesc: 
+          Index: 0
+        Transition: 1
+        Colors:
+          normalColor: {r: 1, g: 1, b: 1, a: 1}
+          pressedColor: {r: 0, g: 0, b: 0, a: 0}
+          disabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+        SpriteState:
+          Param:
+            ButtonVarName: 
+            Title: 
+            ButtonFlags: 0
+            DefaultText: 
+            DefaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+            TextLimitCharCount: 0
+            NormalImageText: 
+            NormalImageTooltip: 
+            NormalBackgroundImageText: 
+            NormalBackgroundImageTooltip: 
+            TextColorDesc: 
+            TextDesc: 
+            Index: 0
+          normalImage: {fileID: 0}
+          normalBackgroundImage: {fileID: 0}
+        ButtonText: 0
+        Text: 
+        TextSize: 26
+        TextColor: {r: 1, g: 1, b: 1, a: 0.99607843}
+        ButtonActions: []
+    - rid: 3149488489697903532
+      type: {class: InteractionType, ns: , asm: com.douyin.world}
+      data:
+        value__: 0
+--- !u!1 &4240847795301476654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3571728567362466708}
+  - component: {fileID: 449954930372787249}
+  - component: {fileID: 2439395094187395323}
+  - component: {fileID: 4240847795301476655}
+  m_Layer: 9
+  m_Name: Chair01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3571728567362466708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4240847795301476654}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 68101046298920951}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!33 &449954930372787249
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4240847795301476654}
+  m_Mesh: {fileID: 2136306600352423492, guid: f52f8c7c3cda22b49a9528b4eb1fbb07, type: 3}
+--- !u!23 &2439395094187395323
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4240847795301476654}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 850e2f3c7e755364f938e98b66819835, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4240847795301476655
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4240847795301476654}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2136306600352423492, guid: f52f8c7c3cda22b49a9528b4eb1fbb07, type: 3}

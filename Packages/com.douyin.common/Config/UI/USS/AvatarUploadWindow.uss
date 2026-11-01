@@ -1,0 +1,28 @@
+.text-gray {
+    color: rgb(136, 136, 136);
+}
+
+TextField #unity-text-input {
+    border-width: 0;
+    background-color: rgb(48, 48, 48);
+    padding-left: 8px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(36, 36, 36);
+    border-right-color: rgb(36, 36, 36);
+    border-top-color: rgb(36, 36, 36);
+    border-bottom-color: rgb(36, 36, 36);
+}
+
+RadioButton Label {
+    min-width: 0;
+    margin-left: 8px;
+}
+
+.multi-line-text-input #unity-text-input {
+    padding-top: 4px;
+    padding-left: 8px;
+    background-color: rgb(48, 48, 48);
+}

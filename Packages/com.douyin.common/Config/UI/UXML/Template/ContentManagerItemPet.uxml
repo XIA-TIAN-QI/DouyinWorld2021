@@ -1,0 +1,44 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="Image" src="project://database/Packages/com.douyin.common/Config/UI/UXML/Template/Image.uxml?fileID=9197481963319205126&amp;guid=5dcb75aae2ff1407a974a5bcbf6429c8&amp;type=3#Image" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/ContentManagerItem.uss?fileID=7433441132597879392&amp;guid=b8bc32e90c63c5d4a8a0ca24cc5e36f3&amp;type=3#ContentManagerItem" />
+    <ui:VisualElement name="ContentManagerItem" style="margin-top: 0; margin-bottom: 8px;">
+        <ui:VisualElement style="position: absolute; width: 496px; height: 145px; display: none;" />
+        <ui:VisualElement class="content-item border-color-191919" style="overflow: hidden; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; margin-right: 1px; background-color: rgba(64, 64, 64, 0); border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;">
+            <ui:VisualElement style="flex-direction: row; margin-top: 0; height: 119px;">
+                <ui:VisualElement style="width: 119px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; background-color: rgb(53, 53, 53);">
+                    <ui:Instance template="Image" name="Image" class="bg-color-404040" style="flex-grow: 1; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; overflow: hidden;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="margin-left: 12px; flex-grow: 1; margin-right: 8px; margin-bottom: 12px; margin-top: 12px; flex-direction: column; justify-content: flex-end;">
+                    <ui:Label text="Avatar001" display-tooltip-when-elided="true" name="NameLabel" class="size-14" style="padding-top: 0; padding-left: 0; padding-right: 0; padding-bottom: 0; margin-top: 0; margin-left: 0; margin-bottom: 12px;" />
+                    <ui:VisualElement name="State" class="avatar-state-yellow" style="position: absolute; top: 0; right: 0; flex-direction: row; justify-content: flex-start; align-items: center; margin-left: 0; margin-right: 0; padding-left: 4px; padding-right: 4px;">
+                        <ui:Label text="云处理中" display-tooltip-when-elided="true" name="StateLabel" style="white-space: nowrap; -unity-text-align: middle-center; justify-content: flex-start; position: relative; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); margin-right: 0;" />
+                        <ui:Button display-tooltip-when-elided="true" name="StateHelpButton" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/state_help.png?fileID=2800000&amp;guid=e95a0dabb82321341b49ce59f96b3a4b&amp;type=3#state_help&apos;); background-color: rgba(88, 88, 88, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); width: 11px; height: 11px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 2px; margin-right: 0; margin-top: 1px; margin-bottom: 0; display: flex;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="justify-content: center; margin-bottom: 4px;">
+                        <ui:VisualElement style="flex-direction: row; align-items: center;">
+                            <ui:Label text="ID：0111000001" display-tooltip-when-elided="true" name="IDLabel" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                            <ui:Button display-tooltip-when-elided="true" name="CopyIdButton" class="copyId-button" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/copy.png?fileID=21300000&amp;guid=e989202ea9c484f4f963aa18d2a1dc4e&amp;type=3#copy&apos;); width: 16px; height: 16px; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; margin-left: 4px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; visibility: visible;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; justify-content: space-between; flex-grow: 0; align-items: flex-start; position: relative; margin-bottom: 8px;">
+                        <ui:Label text="更新时间：" display-tooltip-when-elided="true" name="UpdateTimeLabel" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 0;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; align-items: stretch; margin-bottom: 0; display: flex;">
+                        <ui:Button text="扫码测试" display-tooltip-when-elided="true" name="TestButton" class="bottom-btn test-btn" style="display: flex; color: rgba(56, 56, 56, 255);" />
+                        <ui:Button text="前往查看" display-tooltip-when-elided="true" name="ViewButton" class="bottom-btn" style="display: flex;" />
+                        <ui:Button text="前往发布" display-tooltip-when-elided="true" name="PublishButton" class="bottom-btn publish-btn" style="margin-top: 0; display: flex; opacity: 1; color: rgba(56, 56, 56, 255);" />
+                    </ui:VisualElement>
+                    <ui:Label text="本作品已通过上架审核，暂未上架到商城，请耐心等待工作人员处理" display-tooltip-when-elided="true" name="HelpInfoLabel" class="border-color-191919" style="border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; position: absolute; width: 227px; white-space: normal; left: 54px; top: 7px; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; -unity-text-align: upper-left; background-color: rgb(56, 56, 56); display: flex;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; margin-top: 1px;">
+                <ui:VisualElement class="bg-color-303030" style="flex-direction: row; height: 26px; align-items: center; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; visibility: visible; margin-left: 0; padding-left: 8px;">
+                    <ui:VisualElement name="HistoryArrow" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/arrowdown.png?fileID=2800000&amp;guid=3c64062599e3dac43abcd09520a04426&amp;type=3#arrowdown&apos;); width: 10px; height: 10px; position: absolute; left: 96px;" />
+                    <ui:Button text="近期云处理记录" display-tooltip-when-elided="true" name="HistoryButton" class="size-18" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgba(88, 88, 88, 0); width: 120px; -unity-text-align: middle-left; flex-grow: 0;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ListViewContainer" class="bg-color-303030" style="padding-left: 8px; padding-right: 8px; padding-bottom: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

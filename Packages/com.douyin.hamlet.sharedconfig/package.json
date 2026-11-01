@@ -1,0 +1,7 @@
+{
+  "name": "com.douyin.hamlet.sharedconfig",
+  "displayName": "com.douyin.hamlet.sharedconfig",
+  "version": "0.0.1",
+  "unity": "2021.3",
+  "description": "Shared configuration for Hamlet projects"
+}

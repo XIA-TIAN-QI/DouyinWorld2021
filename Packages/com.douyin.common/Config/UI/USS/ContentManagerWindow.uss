@@ -1,0 +1,66 @@
+.up-btn {
+    color: rgb(255, 255, 255);
+    width: 49px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    -unity-font-style: normal;
+    border-left-color: rgb(48, 48, 48);
+    border-right-color: rgb(48, 48, 48);
+    border-top-color: rgb(48, 48, 48);
+    border-bottom-color: rgb(48, 48, 48);
+}
+
+.tab-selected {
+    border-left-color: rgb(48, 48, 48);
+    border-right-color: rgb(48, 48, 48);
+    border-top-color: rgb(48, 48, 48);
+    border-bottom-color: rgb(48, 48, 48);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    background-color: rgb(56, 56, 56);
+}
+
+.tab-unselected {
+    border-left-color: rgb(48, 48, 48);
+    border-right-color: rgb(48, 48, 48);
+    border-top-color: rgb(48, 48, 48);
+    border-bottom-color: rgb(48, 48, 48);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+TextField #unity-text-input {
+    border-width: 0;
+    background-color: rgb(48, 48, 48);
+    padding-left: 19px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgb(36, 36, 36);
+    border-right-color: rgb(36, 36, 36);
+    border-top-color: rgb(36, 36, 36);
+    border-bottom-color: rgb(36, 36, 36);
+}
+
+.unity-list-view__item:hover {
+    background-color: transparent;
+}
+
+.unity-list-view__empty-label {
+    display: none;
+}
+
+.logout-btn {
+    background-color: rgba(48, 48, 48, 255);
+}
+
+.logout-btn:hover {
+    background-color: rgba(103, 103, 103, 255);
+}

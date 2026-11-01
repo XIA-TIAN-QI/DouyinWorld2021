@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="Image" src="project://database/Packages/com.douyin.common/Config/UI/UXML/Template/Image.uxml?fileID=9197481963319205126&amp;guid=5dcb75aae2ff1407a974a5bcbf6429c8&amp;type=3#Image" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/ContentManagerItem.uss?fileID=7433441132597879392&amp;guid=b8bc32e90c63c5d4a8a0ca24cc5e36f3&amp;type=3#ContentManagerItem" />
+    <ui:VisualElement name="ContentHistoryItem" style="height: 62px; margin-top: 0; margin-bottom: 8px;">
+        <ui:VisualElement style="position: absolute; width: 480px; height: 62px; display: none;" />
+        <ui:VisualElement class="bg-color-383838 border-color-191919 round-coner-3" style="flex-direction: row; display: flex; flex-grow: 1; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-width: 0.5px; border-right-width: 0.5px; border-top-width: 0.5px; border-bottom-width: 0.5px;">
+            <ui:VisualElement style="width: 62px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; background-color: rgb(53, 53, 53);">
+                <ui:Instance template="Image" name="Image" class="bg-color-404040" style="flex-grow: 1; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; overflow: hidden;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; margin-left: 0; padding-left: 8px;">
+                <ui:Label text="Name" display-tooltip-when-elided="true" name="NameLabel" class="size-14" style="margin-top: 8px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                <ui:Label text="更新时间：" display-tooltip-when-elided="true" name="UpdateTimeLabel" style="margin-top: 8px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                <ui:VisualElement name="State" style="position: absolute; top: 8px; right: 8px; flex-direction: row; justify-content: flex-start; align-items: center; padding-left: 4px; padding-right: 4px;">
+                    <ui:Label text="云处理中" display-tooltip-when-elided="true" name="StateLabel" style="white-space: nowrap; -unity-text-align: middle-center; font-size: 11px; justify-content: flex-start; position: relative; height: 19px; align-items: center; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); margin-right: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                    <ui:Button display-tooltip-when-elided="true" name="StateHelpButton" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/state_help.png?fileID=2800000&amp;guid=e95a0dabb82321341b49ce59f96b3a4b&amp;type=3#state_help&apos;); background-color: rgba(88, 88, 88, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); width: 12px; height: 12px; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; display: flex; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                </ui:VisualElement>
+                <ui:Label text="本作品已通过上架审核，暂未上架到商城，请耐心等待工作人员处理" display-tooltip-when-elided="true" name="HelpInfoLabel" class="round-coner-3 bg-color-383838 border-color-191919" style="position: absolute; width: 227px; white-space: normal; left: 153px; top: 13px; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; -unity-text-align: upper-left; display: flex;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

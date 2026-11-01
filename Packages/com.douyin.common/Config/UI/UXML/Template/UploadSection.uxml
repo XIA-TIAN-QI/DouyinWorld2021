@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" MemoryProfiler="Unity.MemoryProfiler.Editor" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Template/UploadSection.uss?fileID=7433441132597879392&amp;guid=73c07d29050f1408391feaf362c01a2e&amp;type=3#UploadSection" />
+    <ui:VisualElement class="upload-section">
+        <ui:VisualElement class="upload-section-container">
+            <ui:Label text="上传对象" name="updateObjectText" class="label" />
+            <ui:TextField name="objectField" class="textfield" />
+            <ui:Button name="updateObject" text="更换" class="button" />
+        </ui:VisualElement>
+        <ui:VisualElement class="upload-section-container">
+            <ui:Label text="上传类型" name="uploadTypeText" class="label" />
+            <ui:VisualElement style="flex-direction: row;" />
+            <ui:RadioButtonGroup value="-1" class="radio-group">
+                <ui:RadioButton text="上传新资产" name="newOption" value="true" class="quality-title" />
+                <ui:RadioButton text="更新资产" name="updateOption" class="quality-title" style="border-left-width: 10px;" />
+            </ui:RadioButtonGroup>
+            <ui:DropdownField name="uploadType" class="dropdown" style="display: none;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="worldSubTypeContainer" class="upload-section-container" style="display: none;">
+            <ui:Label text="世界类型" name="worldSubTypeText" class="label" />
+            <ui:RadioButtonGroup value="-1" class="radio-group">
+                <ui:RadioButton text="火人世界" name="huorenOption" value="true" class="quality-title" />
+                <ui:RadioButton text="仔仔世界" name="zaiziOption" class="quality-title" style="border-left-width: 10px;" />
+            </ui:RadioButtonGroup>
+        </ui:VisualElement>
+        <ui:VisualElement name="dynamicContainer" class="upload-section-container" />
+    </ui:VisualElement>
+</ui:UXML>

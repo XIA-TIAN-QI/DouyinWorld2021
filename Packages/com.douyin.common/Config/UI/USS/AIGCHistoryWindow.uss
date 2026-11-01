@@ -1,0 +1,7 @@
+#History-Scroll-View .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*justify-content: flex-start;*/
+    /*!* Padding around the entire grid of items *!*/
+    /*padding: 15px;*/
+}

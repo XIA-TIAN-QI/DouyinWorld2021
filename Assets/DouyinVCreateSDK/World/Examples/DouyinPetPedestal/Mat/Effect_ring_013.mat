@@ -1,0 +1,210 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Effect_ring_013
+  m_Shader: {fileID: 4800000, guid: 20ea9bde43ea3954483445719ce71449, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _KEYWORD2_TEXTURE
+  - _KEYWORD4_SOFT
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseTex:
+        m_Texture: {fileID: 2800000, guid: aa78388d40b9ae34d9e217453d21c561, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask2UV2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask_Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample13:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample6:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample7:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample8:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texturemm:
+        m_Texture: {fileID: 2800000, guid: aa78388d40b9ae34d9e217453d21c561, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _AlphaFix: 1
+    - _BaseTex_Strength: 2
+    - _BaseTex_U_Speed: 0
+    - _BaseTex_V_Speed: 0
+    - _Blend_Mode: 1
+    - _BumpScale: 1
+    - _CullMode: 0
+    - _Cutoff: 0.5
+    - _DepthFadeDistance: 0.1
+    - _DetailNormalMapScale: 1
+    - _DisappearDistance: 5
+    - _Dissolve_Tex_U_Speed: 0
+    - _Dissolve_Tex_V_Speed: 0
+    - _Disturbance_Tex_Rotation: 0
+    - _Disturbance_Tex_U_Speed: 0
+    - _Disturbance_Tex_V_Speed: 0
+    - _DstBlend: 0
+    - _Float0: 0
+    - _Float1: 0
+    - _Float10: 0
+    - _Float11: 1
+    - _Float12: 0
+    - _Float14: 0
+    - _Float19: 0.1
+    - _Float20: 0
+    - _Float21: 0
+    - _Float23: 0
+    - _Float24: 0
+    - _Float25: 0
+    - _Float26: 0
+    - _Float28: 0
+    - _Float29: 0
+    - _Float3: 0
+    - _Float32: 0
+    - _Float33: 0
+    - _Float34: 1
+    - _Float39: 0
+    - _Float4: 0
+    - _Float43: 0
+    - _Float45: 0
+    - _Float64: 0
+    - _Float67: 0
+    - _Float68: 0
+    - _Float7: 0
+    - _Float75: 0
+    - _Float78: 1
+    - _Float8: 0
+    - _FresnelWidth: 0
+    - _Fresnel_Strength: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Keyword0: 0
+    - _Keyword1: 0
+    - _Keyword2: 1
+    - _Keyword3: 0
+    - _Keyword4: 0
+    - _Keyword5: 0
+    - _Keyword6: 0
+    - _Keyword9: 0
+    - _Mask1Power: 0
+    - _Mask2Power: 0
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Open_Model_Softedge: 0
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _UseMask1: 0
+    - _UseMask2: 0
+    - _Vertex_Offset_Strength: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseTexSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseTexTilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Base_Tex_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 4, g: 4, b: 4, a: 1}
+    - _Color0: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 1, g: 1, b: 1, a: 1}
+    - _Color2: {r: 1, g: 1, b: 1, a: 1}
+    - _Color3: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Mask1Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Tilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Mask2Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Tilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector11: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector8: {r: 0, g: 0, b: 0, a: 0}
+    - _Vertex_Offset_XYZ: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []

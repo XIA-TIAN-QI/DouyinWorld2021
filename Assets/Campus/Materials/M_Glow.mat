@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_Glow
+  m_Shader: {fileID: 4800000, guid: 20ea9bde43ea3954483445719ce71449, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseTex:
+        m_Texture: {fileID: 2800000, guid: e36278d2ea52cd54390a5f6cda1ea84d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask2UV2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _AlphaFix: 1
+    - _CullMode: 2
+    - _DepthFadeDistance: 0.002
+    - _DisappearDistance: 1
+    - _FresnelWidth: 1.8
+    - _Mask1Power: 0
+    - _Mask2Power: 0
+    - _UseMask1: 0
+    - _UseMask2: 0
+    m_Colors:
+    - _BaseTexSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseTexTilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Color: {r: 2.4, g: 1.82, b: 0.99, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Mask1Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask1Tilling: {r: 1, g: 1, b: 0, a: 0}
+    - _Mask2Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask2Tilling: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []

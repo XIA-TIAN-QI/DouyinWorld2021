@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/Main.uss?fileID=7433441132597879392&amp;guid=5a13fde3b7f6c43a0a1297a9827d08c3&amp;type=3#Main" />
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/ContentSelectWindow.uss?fileID=7433441132597879392&amp;guid=07f62f3e197f4bb4cb261f65606be8fc&amp;type=3#ContentSelectWindow" />
+    <ui:VisualElement style="width: 520px; height: 462px; position: absolute; display: none;" />
+    <ui:VisualElement style="margin-left: 12px; flex-grow: 1; margin-right: 12px;">
+        <ui:VisualElement style="justify-content: space-between; flex-direction: row; align-items: center; padding-top: 0; margin-top: 11px; flex-shrink: 0;">
+            <ui:Label text="请选择一个资产进行更新" display-tooltip-when-elided="true" name="TitleLabel" class="size-28" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+            <ui:Button text="如何更新虚拟形象？" display-tooltip-when-elided="true" name="LinkButton" class="hyperlink-button size-20" style="margin-left: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-right: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:ListView focusable="true" fixed-item-height="52" virtualization-method="DynamicHeight" selection-type="None" style="flex-grow: 1; margin-right: 0; margin-top: 11px; padding-top: 0; margin-bottom: 11px; display: flex; background-image: none;" />
+            <ui:VisualElement style="position: absolute; top: 50%; left: 50%; translate: -50% -50%;">
+                <ui:VisualElement name="Loading" style="flex-direction: row; align-items: center; position: absolute; display: flex;">
+                    <ui:VisualElement name="LoadingIcon" style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/loading.png?fileID=2800000&amp;guid=36544a0ad3f5d0040afc90f2a6f7370c&amp;type=3#loading&apos;); width: 12px; height: 12px; margin-right: 4px;" />
+                    <ui:Label text="加载中..." display-tooltip-when-elided="true" name="LoadingLabel" class="size-24" />
+                </ui:VisualElement>
+                <ui:Label text="暂无内容" display-tooltip-when-elided="true" name="EmptyLabel" class="size-24" style="display: flex;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-shrink: 0; align-items: stretch;">
+            <ui:Button text="点击加载更多" display-tooltip-when-elided="true" name="MoreButton" class="size-24" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgba(88, 88, 88, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+            <ui:VisualElement name="MoreLoading" style="flex-direction: row; align-items: center; position: absolute; justify-content: flex-start; -unity-text-align: middle-center; left: 50%; display: flex; translate: -50% 0;">
+                <ui:VisualElement style="background-image: url(&apos;project://database/Packages/com.douyin.common/Config/UI/Icons/loading.png?fileID=2800000&amp;guid=36544a0ad3f5d0040afc90f2a6f7370c&amp;type=3#loading&apos;); width: 12px; height: 12px; margin-right: 4px;" />
+                <ui:Label text="加载中..." display-tooltip-when-elided="true" name="MoreLoadingLabel" class="size-24" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

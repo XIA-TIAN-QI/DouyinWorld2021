@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.douyin.common/Config/UI/USS/AIGCHistoryWindow.uss?fileID=7433441132597879392&amp;guid=192c53a0c81d42189ba88d2f6200bbdc&amp;type=3#AIGCHistoryWindow" />
+    <ui:VisualElement name="HistoryViewRoot" style="flex-grow: 1;">
+        <ui:Label text="历史记录" display-tooltip-when-elided="true" name="Title" style="color: rgb(141, 141, 141); margin-left: 12px; margin-right: 12px; margin-top: 12px;" />
+        <ui:ScrollView vertical-page-size="-1" horizontal-page-size="-1" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" name="History-Scroll-View" style="flex-direction: column; flex-wrap: nowrap; flex-grow: 1; align-items: stretch; justify-content: flex-start; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 0; padding-top: 16px; padding-bottom: 0; visibility: visible; display: none;" />
+        <ui:Label text="暂无记录" display-tooltip-when-elided="true" name="EmptyText" style="overflow: visible; display: flex; visibility: visible; flex-basis: auto; position: relative; top: auto; left: auto; font-size: 28px; color: rgb(141, 141, 141); -unity-text-align: upper-center; flex-shrink: 0; margin-top: 220px;" />
+    </ui:VisualElement>
+</ui:UXML>
