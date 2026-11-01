@@ -234,6 +234,12 @@ local function Restore()
 
     print(string.format("[CampusCollect] 存档恢复 %d 枚（共 %d/%d, quest=%s, stage=%s）",
         restored, doneCount, TOTAL, tostring(questAccepted), stage))
+
+    -- ⚠️ 必须回写一次。读档比 Awake 晚十几帧，玩家可能已经在这期间捡了校徽；
+    -- 那次 SyncSave 因为 ready=false 被存档层挡掉了。如果这里不补写，内存位图会
+    -- 停在"存档值"，而定期写又因为"内容没变化"直接跳过 —— 那枚就永久丢了。
+    -- 内容真的一致时 WriteNow 会自己短路，不会白写一次。
+    SyncSave()
 end
 
 function SyncSave()

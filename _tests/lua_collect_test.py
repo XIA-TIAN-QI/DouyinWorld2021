@@ -336,6 +336,54 @@ check(saveMock.emblems == "01000000", "入柜后位图没写回：" .. tostring(
 check(saveMock.quest == 1, "入柜后任务位没写回")
 check(saveMock.flushes >= 1, "入柜后没有触发 Flush")
 
+-- 存档到达前就捡了一枚：恢复时必须并集回写，否则那枚永久丢失
+_G["CampusSave"] = nil
+for i = 1, 8 do
+    scene.items[i].script.enabled = true
+    scene.glows[i].active = false
+    scene.rewardKids[i].active = false
+end
+
+-- 模拟"存档层已存在但还没就绪"。
+-- 注意要分两层：emblems = 服务端值，pendingVals = 内存里待写的值。
+-- 真实 CampusSave 在 ready=false 时 Set 只改内存、Flush 直接返回，不会碰服务端。
+lazySave = { emblems = "00000000", quest = 0, flushes = 0, pendingVals = {} }
+function lazySave.Get(key, def)
+    if not lazySave.isReady then return def end
+    local v = lazySave[key]
+    if v == nil then return def end
+    return v
+end
+function lazySave.Set(key, v) lazySave.pendingVals[key] = v end
+function lazySave.Flush(force)
+    if not lazySave.isReady then return end
+    for k, v in pairs(lazySave.pendingVals) do lazySave[k] = v end
+    lazySave.pendingVals = {}
+    lazySave.flushes = lazySave.flushes + 1
+end
+function lazySave.Ready() return lazySave.isReady == true end
+function lazySave.OnReady(fn) lazySave.pending = fn end
+_G["CampusSave"] = lazySave
+
+Awake()
+q = _G["CampusQuest"]
+
+-- 存档还没到，玩家已经捡了第 4 枚
+actor.held = scene.items[4].go
+OnPlayerTriggerEnter(scene.player)
+check(q:Count() == 1, "存档到达前先捡一枚")
+check(lazySave.emblems == "00000000", "未就绪时不落盘（没污染服务端）")
+
+-- 存档到达：里面只有第 1 枚
+lazySave.emblems = "10000000"
+lazySave.quest = 1
+lazySave.isReady = true
+lazySave.pending()      -- 触发 Restore，内部会补写一次
+
+check(q:Count() == 2, "合并后应为 2 枚，实际 " .. q:Count())
+check(lazySave.emblems == "10010000",
+    "恢复后必须回写并集，否则第 4 枚永久丢失：" .. tostring(lazySave.emblems))
+
 result = { failures = failures, log = log }
 """
 

@@ -39,12 +39,14 @@ CS.DouyinPlayerService = nil
 storeValue = nil          -- nil 表示这个玩家还没有数据
 failGet = false
 failSet = false
+hangGet = false           -- true 表示回调永远不回来（模拟 DATASTORE 队列没被驱动）
 getCalls = {}
 setCalls = {}
 
 manager = {}
 function manager.GetData(store, scope, key, cb)
     getCalls[#getCalls + 1] = { store = store, scope = scope, key = key }
+    if hangGet then return end
     if failGet then cb(false, "network error", nil); return end
     if storeValue == nil then cb(true, "New Data", {}); return end
     cb(true, "Success", storeValue)
@@ -237,6 +239,20 @@ def main():
     lt.execute("Advance(5.0)")
     check(count_set(lt) == 2, "失败后下个周期自动重试，不需要调用方介入")
     check(last_set_value(lt) == "v1;e=00000000;q=0;a=50", "重试带上的是最新值")
+
+    # ---------------------------------------------------------------- 11
+    print()
+    print("[11] 读档回调不返回：必须超时兜底，不能永久卡死")
+    lt = new_state()
+    lt.execute("hangGet = true")
+    lt.execute("Advance(0.1)")
+    check(count_get(lt) == 1, "发出了第一次读档请求")
+    check(call(lt, "CampusSave.Ready()") is False, "回调没回来时不能算就绪")
+    lt.execute("Advance(9.0)")          # 越过 LOAD_TIMEOUT=8
+    lt.execute("Advance(21.0)")         # 越过 RETRY_GAP=20，应当重新发起
+    check(count_get(lt) >= 2,
+          "超时后会重新读档（不会永久卡在 loading），实际次数=" + str(count_get(lt)))
+    check(count_set(lt) == 0, "始终没就绪，就不能写盘")
 
     print()
     if ok_all:

@@ -28,11 +28,13 @@ local EMBLEM_BITS   = 8           -- 必须和 CampusCollect.lua 的 TOTAL 一�
 local WRITE_GAP     = 4.0         -- 两次写盘的最小间隔（秒）
 local LOAD_RETRIES  = 3           -- 读档最多试几次
 local RETRY_GAP     = 20.0        -- 读档失败后隔多久再试（秒）
+local LOAD_TIMEOUT  = 8.0         -- 单个读档请求多久没回来算超时（见 TryLoad 注释）
 
 local manager = nil               -- DouyinDataStoreManager（SDK prefab 上的脚本）
 local openID = nil                -- 当前玩家的 openID，同时充当 store 的 scope
 local ready = false               -- 存档是否已成功读到（未 ready 时禁止写）
 local loading = false
+local loadingAt = 0               -- 本次读档发起的时间，用来判超时
 local failedTries = 0
 local nextRetryAt = 0
 
@@ -187,6 +189,11 @@ local function TryLoad()
     if manager == nil or openID == nil then return end
 
     loading = true
+    loadingAt = Now()
+    -- ⚠️ 回调可能永远不回来：manager 内部是 DATASTORE(function() ... end)，
+    -- 如果那个队列没被引擎驱动（或服务端无响应），loading 会一直挂着，
+    -- TryLoad 再也进不来，结果就是"整局都不 ready、也不写盘"——
+    -- 看起来像存档接好了，其实一个字都没存。Tick 里有超时兜底。
     local ok, err = pcall(function()
         manager.GetData(STORE_NAME, openID, DATA_KEY, function(code, message, value)
             loading = false
@@ -301,6 +308,14 @@ local function Tick()
     if manager == nil then return end
 
     if not ready then
+        -- 读档超时：回调没回来就当作失败，否则会永久卡在 loading=true
+        if loading and Now() - loadingAt > LOAD_TIMEOUT then
+            loading = false
+            failedTries = failedTries + 1
+            nextRetryAt = Now() + RETRY_GAP
+            print(string.format("[CampusSave] 读档超时(%d/%d)，%0.f 秒无响应",
+                failedTries, LOAD_RETRIES, LOAD_TIMEOUT))
+        end
         if not loading and failedTries < LOAD_RETRIES and Now() >= nextRetryAt then
             TryLoad()
         end
