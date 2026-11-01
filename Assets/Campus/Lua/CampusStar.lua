@@ -541,12 +541,12 @@ local function Tick(dt, source)
         d = Dist(root.position, playerPos)
     end
 
-    -- 名牌正对玩家（而非 Camera.main）：真机相机未必打 MainCamera 标签拿不到，
-    -- 玩家位置脚本本就依赖（追人/距离判断），一定可用。玩家在相机旁，朝向一致。
+    -- 名牌正对玩家。quad 正向面（文字不镜像的那面）朝 +Z，所以让 +Z 指向玩家：
+    -- LookRotation(playerPos - label.position)。用玩家位置而非 Camera.main（真机拿不到）。
     if label ~= nil and playerPos ~= nil then
-        local away = label.position - playerPos
-        if away.sqrMagnitude > 0.0001 then
-            label.rotation = Q.LookRotation(away)
+        local toPlayer = playerPos - label.position
+        if toPlayer.sqrMagnitude > 0.0001 then
+            label.rotation = Q.LookRotation(toPlayer)
         end
     end
 

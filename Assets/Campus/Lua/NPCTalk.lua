@@ -400,14 +400,13 @@ local function Tick(dt, source)
         d = Dist(root.position, playerPos)
     end
 
-    -- 名牌正对玩家：quad 正面朝 -Z，LookRotation(away) 让 +Z 背向玩家、正面朝向玩家。
-    -- 用玩家位置而不是 Camera.main —— 真机上相机未必打 MainCamera 标签、拿不到，
-    -- 而玩家位置是脚本本来就依赖的（距离判断/追人都靠它），一定可用。
-    -- 玩家就在相机旁边，名牌朝玩家 = 朝相机，观感一致。
+    -- 名牌正对玩家。quad 的正向面（文字不镜像的那面）朝 +Z，所以要让 +Z 指向玩家：
+    -- LookRotation(playerPos - label.position) 让 +Z 从名牌指向玩家。
+    -- 用玩家位置而不是 Camera.main（真机相机未必打 MainCamera 标签拿不到）。
     if label ~= nil and playerPos ~= nil then
-        local away = label.position - playerPos
-        if away.sqrMagnitude > 0.0001 then
-            label.rotation = CS.UnityEngine.Quaternion.LookRotation(away)
+        local toPlayer = playerPos - label.position
+        if toPlayer.sqrMagnitude > 0.0001 then
+            label.rotation = CS.UnityEngine.Quaternion.LookRotation(toPlayer)
         end
     end
 
