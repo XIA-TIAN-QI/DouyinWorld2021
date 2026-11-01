@@ -71,6 +71,15 @@ local finalePose = false
 local SaveAffinity
 local saveHooked = false
 
+-- 毕业典礼：集齐八枚后 CampusCeremony 会调 OnCeremony()，她会放下一切走向广场。
+-- 第 4 档最后一句是典礼专用（"典礼开始了，别站那么远"），不在日常轮播里出现 ——
+-- 否则玩家在好感刚满时就听完了，真到典礼反而没话说。
+local ceremonyMode = false
+local ceremonySaid = false
+local ceremonyQuad = nil
+local CEREMONY_X, CEREMONY_Z = 0.0, 0.0
+local CEREMONY_SPEED = 2.2      -- 从校门口跑到广场有 20m，按常速要 9 秒，会错过烟花
+
 -- ---------------------------------------------------------------- 小工具
 
 local function FindChild(parent, path)
@@ -133,10 +142,15 @@ end
 local function SayFromTier(t)
     local list = TierList(t)
     if #list == 0 then return end
+    -- 第 4 档最后一句是典礼专用，日常轮播只在前 n-1 句里转
+    local maxIdx = #list
+    if t >= 4 and ceremonyQuad ~= nil and maxIdx > 1 then
+        maxIdx = maxIdx - 1
+    end
     local idx = tierCursor[t] or 1
-    if idx < 1 or idx > #list then idx = 1 end
+    if idx < 1 or idx > maxIdx then idx = 1 end
     ShowQuad(list[idx])
-    tierCursor[t] = idx % #list + 1
+    tierCursor[t] = idx % maxIdx + 1
 end
 
 local function TierFor(a)
@@ -223,6 +237,14 @@ function StarApi.IsMax() return tier >= 4 end
 function StarApi.Tier() return tier end
 function StarApi.Affinity() return math.floor(affinity) end
 
+-- 由 CampusCeremony 在毕业典礼开始时调用：她放下手头的事，走向广场。
+-- 这一步让第 4 档那句"毕业典礼那天，我陪你去"真的兑现，而不只是句台词。
+function StarApi.OnCeremony()
+    ceremonyMode = true
+    ceremonySaid = false
+    print("[CampusStar] 典礼开始，她动身去广场")
+end
+
 -- 只说不动：是否走到位由 Tick 里的 stopDist 判断，两个距离不能混用
 local function TrySay()
     local now = CS.UnityEngine.Time.time
@@ -290,7 +312,7 @@ local function ClampTarget(p)
     return V(x, root.position.y, z)
 end
 
-local function MoveTo(target, dt, stopAt)
+local function MoveTo(target, dt, stopAt, speedScale)
     local pos = root.position
     local dx, dz = target.x - pos.x, target.z - pos.z
     local d = math.sqrt(dx * dx + dz * dz)
@@ -299,7 +321,7 @@ local function MoveTo(target, dt, stopAt)
         return true
     end
 
-    local step = SPEED * dt
+    local step = SPEED * (speedScale or 1) * dt
     if step > d - stopAt then step = math.max(0, d - stopAt) end
     if step <= 0 then
         PoseIdle(CS.UnityEngine.Time.time)
@@ -369,6 +391,14 @@ function Awake()
         end
     end
 
+    -- 第 4 档的最后一句留给典礼（见 SayFromTier 的排除逻辑）。
+    -- 只有一句的时候不排除，否则日常就没话说了。
+    ceremonyQuad = nil
+    local l4 = tierLines[4]
+    if l4 ~= nil and #l4 >= 2 then
+        ceremonyQuad = l4[#l4]
+    end
+
     local pathRoot = FindChild(root, "Path")
     if pathRoot ~= nil and pathRoot.childCount > 0 then
         home = pathRoot:GetChild(0).position
@@ -383,6 +413,8 @@ function Awake()
     finalePlayed = false
     finalePose = false
     saveHooked = false
+    ceremonyMode = false
+    ceremonySaid = false
     HideBubble()
     _G["CampusStar"] = StarApi
     TryHookSave()          -- 存档若已就绪会立刻把好感度抬回来
@@ -449,6 +481,24 @@ local function Tick(dt, source)
 
     if tickCount <= 2 or (tickCount % 300 == 0) then
         Diag(tickCount <= 2 and "启动" or "周期", playerPos, d, dt)
+    end
+
+    -- 毕业典礼：走向广场。不看玩家在哪 —— 典礼时玩家可能正在别处逛，
+    -- 她答应的是"来参加典礼"，不是"跟着你"。
+    if ceremonyMode then
+        local target = V(CEREMONY_X, root.position.y, CEREMONY_Z)
+        if MoveTo(target, dt, 1.0, CEREMONY_SPEED) then
+            FaceTo(0, 1, dt)
+            PoseFinale(now)
+            if not ceremonySaid then
+                ceremonySaid = true
+                if ceremonyQuad ~= nil then
+                    ShowQuad(ceremonyQuad)
+                    print("[CampusStar] 典礼台词：" .. ceremonyQuad.name)
+                end
+            end
+        end
+        return
     end
 
     if playerPos == nil then

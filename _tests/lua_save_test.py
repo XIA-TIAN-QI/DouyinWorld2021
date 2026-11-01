@@ -131,7 +131,7 @@ def main():
     # 下一帧才写（TryLoad 那一帧直接 return）
     lt.execute("Advance(0.1)")
     check(count_set(lt) == 1, "新玩家建立了一条初始记录")
-    check(last_set_value(lt) == "v1;e=00000000;q=0;a=0", "初始串格式正确：" + str(last_set_value(lt)))
+    check(last_set_value(lt) == "v1;e=00000000;q=0;a=0;c=0", "初始串格式正确：" + str(last_set_value(lt)))
 
     # ---------------------------------------------------------------- 2
     print()
@@ -182,7 +182,7 @@ def main():
     check(count_set(lt) == base, "4 秒内连改两次都没落盘（被节流）")
     lt.execute("Advance(3.0)")          # t=5.2，距上次 5.0s
     check(count_set(lt) == base + 1, "超过间隔后落盘一次")
-    check(last_set_value(lt) == "v1;e=00000000;q=0;a=30", "落盘的是最新值")
+    check(last_set_value(lt) == "v1;e=00000000;q=0;a=30;c=0", "落盘的是最新值")
 
     # ---------------------------------------------------------------- 6
     print()
@@ -238,7 +238,7 @@ def main():
     lt.execute("failSet = false")
     lt.execute("Advance(5.0)")
     check(count_set(lt) == 2, "失败后下个周期自动重试，不需要调用方介入")
-    check(last_set_value(lt) == "v1;e=00000000;q=0;a=50", "重试带上的是最新值")
+    check(last_set_value(lt) == "v1;e=00000000;q=0;a=50;c=0", "重试带上的是最新值")
 
     # ---------------------------------------------------------------- 11
     print()
@@ -253,6 +253,18 @@ def main():
     check(count_get(lt) >= 2,
           "超时后会重新读档（不会永久卡在 loading），实际次数=" + str(count_get(lt)))
     check(count_set(lt) == 0, "始终没就绪，就不能写盘")
+
+    # ---------------------------------------------------------------- 12
+    print()
+    print("[12] 典礼标记（c 字段）")
+    lt = new_state()
+    lt.execute("storeValue = 'v1;e=11111111;q=1;a=42'")   # 旧格式，没有 c
+    lt.execute("Advance(0.1)")
+    check(call(lt, "CampusSave.Get('ceremony', -1)") == 0,
+          "旧存档没有 c 字段时按 0 处理（会补播一次典礼）")
+    lt.execute("CampusSave.Set('ceremony', 1)")
+    lt.execute("Advance(5.0)")
+    check(";c=1" in (last_set_value(lt) or ""), "典礼标记能写回：" + str(last_set_value(lt)))
 
     print()
     if ok_all:

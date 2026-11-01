@@ -227,7 +227,8 @@ actor.held = scene.items[8].go
 OnActorTriggerEnter(actor)
 check(countLog("已入柜") == 8, "第 8 枚没入柜")
 
--- 集齐
+-- 集齐：光柱是逐个亮的（灯光秀），要把整个序列跑完再断言
+for i = 1, 45 do Update() end
 local lit = 0
 for i = 1, 8 do if scene.rewardKids[i].active then lit = lit + 1 end end
 check(lit == 8, "奖励子物体点亮 " .. lit .. "/8")
@@ -311,6 +312,7 @@ Update()
 
 check(q:Count() == 8, "满档存档恢复后应为 8，实际 " .. q:Count())
 check(q:IsComplete() == true and q:Stage() == "done", "满档存档没标记完成")
+for i = 1, 45 do Update() end          -- 重进世界也会把灯光秀演一遍
 local lit2 = 0
 for i = 1, 8 do if scene.rewardKids[i].active then lit2 = lit2 + 1 end end
 check(lit2 == 8, "满档存档没点亮广场地标（" .. lit2 .. "/8）")

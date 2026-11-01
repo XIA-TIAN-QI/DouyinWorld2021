@@ -102,7 +102,15 @@ function QuestApi.HintLine(self, npcId)
     return HINT_LINE[npcId]
 end
 
--- 奖励根节点保持激活（否则 Find 不到），子物体才是真正点亮的部分
+-- 奖励根节点保持激活（否则 Find 不到），子物体才是真正点亮的部分。
+--
+-- 不一次全亮，而是排队逐个点 —— 6 根光柱 + 顶环 + 光球，每 REWARD_STEP 秒亮一个，
+-- 全程约 2.2 秒。集齐那一刻的"仪式感"全在这里，比瞬间刷出 8 个亮块强得多。
+-- 队列由文件末尾的 Tick 驱动（本脚本原本没有帧循环，为了存档补挂加了一个，正好复用）。
+local rewardQueue = {}
+local rewardNextAt = 0
+local REWARD_STEP = 0.28
+
 local function ShowReward()
     local reward = FindGo(REWARD_NAME)
     if reward == nil then
@@ -110,9 +118,15 @@ local function ShowReward()
         return
     end
     local t = reward.transform
+    rewardQueue = {}
     for i = 0, t.childCount - 1 do
-        t:GetChild(i).gameObject:SetActive(true)
+        local go = t:GetChild(i).gameObject
+        -- 先熄掉：存档恢复时可能上次已经亮过，重新演一遍才看得出"亮起来"这个动作
+        go:SetActive(false)
+        rewardQueue[#rewardQueue + 1] = go
     end
+    rewardNextAt = CS.UnityEngine.Time.time
+    print("[CampusCollect] 奖励开始逐个点亮，" .. #rewardQueue .. " 个")
 end
 
 -- 冻结并摆到槽位：用世界坐标，不做 SetParent（避开 XLua 对 SetParent 重载的解析差异）
@@ -317,6 +331,16 @@ local function Tick()
     if f == lastFrame then return end
     lastFrame = f
     TryHookSave()
+
+    -- 灯光秀：奖励子物体逐个点亮
+    if #rewardQueue > 0 then
+        local now = CS.UnityEngine.Time.time
+        if now >= rewardNextAt then
+            local go = table.remove(rewardQueue, 1)
+            if go ~= nil then go:SetActive(true) end
+            rewardNextAt = now + REWARD_STEP
+        end
+    end
 end
 
 function Update()     Tick() end

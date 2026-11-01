@@ -124,6 +124,7 @@ public static class DouyinCampusBuilder
         BuildCollection(collect);
         BuildNPCs(npc);
         BuildDataStore(campus);     // 存档：官方 DataStore 预制体 + CampusSave 宿主
+        BuildCeremony(campus);      // 毕业典礼：烟花节点池 + CampusCeremony 宿主
 
         // 拾取物都建完了，统一玻璃材质（省 2 个额度给女主角用）
         UnifyGlassSceneWide();
@@ -1438,6 +1439,60 @@ public static class DouyinCampusBuilder
             if (rb != null) UnityEngine.Object.DestroyImmediate(rb);
             Debug.Log("[Campus] 存档业务宿主 CampusSave 已建成");
         }
+    }
+
+    /// <summary>
+    /// 毕业典礼的烟花节点池：1 个升空弹 + 12 个爆散火星，**循环复用**。
+    ///
+    /// 为什么不给 4 发各配一套：4×13=52 个节点，多出来的 39 个只占 Renderer 永远用不上。
+    /// 这里 13 个就是全部，每发重新给它们定位置和初速度。
+    ///
+    /// ⚠️ 父节点 Fireworks 必须常驻 active。Lua 里 GameObject.Find **不返回** inactive 物体，
+    ///    所以只能先 Find 到 active 的父节点，再 Transform:Find 拿隐藏的子物体
+    ///    （Transform.Find 是能找到 inactive 子物体的）。
+    ///
+    /// 不占材质额度：全部复用 M_Glow（VFX_Add01 加法），网格是 80 面 icosphere。
+    /// 火星用 uvU=0.5 取贴图中心（最亮），路灯球用的是 0.75（暗一档）。
+    /// </summary>
+    static void BuildFireworks(Transform parent)
+    {
+        var root = new GameObject("Fireworks").transform;
+        root.SetParent(parent, false);
+        root.position = Vector3.zero;
+
+        var sparkMesh  = GetMesh("Glow_Ball_0p30", () => BuildGlowBall(0.30f, 0.50f));
+        var rocketMesh = GetMesh("Glow_Ball_0p38", () => BuildGlowBall(0.38f, 0.50f));
+
+        var rocket = new GameObject("Firework_Rocket");
+        rocket.transform.SetParent(root, false);
+        rocket.AddComponent<MeshFilter>().sharedMesh = rocketMesh;
+        rocket.AddComponent<MeshRenderer>().sharedMaterial = _mats["M_Glow"];
+        rocket.layer = LayerCameraNoCollision;
+        rocket.SetActive(false);      // 构建时就熄掉，Lua 靠 Transform:Find 找
+
+        for (int i = 1; i <= 12; i++)
+        {
+            var s = new GameObject("Firework_Spark" + i.ToString("00"));
+            s.transform.SetParent(root, false);
+            s.AddComponent<MeshFilter>().sharedMesh = sparkMesh;
+            s.AddComponent<MeshRenderer>().sharedMaterial = _mats["M_Glow"];
+            s.layer = LayerCameraNoCollision;
+            s.SetActive(false);
+        }
+
+        Debug.Log("[Campus] 烟花节点池：1 火箭 + 12 火星");
+    }
+
+    /// <summary>毕业典礼：烟花节点 + 演出脚本宿主。</summary>
+    static void BuildCeremony(Transform parent)
+    {
+        BuildFireworks(parent);
+        var host = CreateNpcHost(parent, "CampusCeremony", Vector3.zero,
+            "Assets/Campus/Lua/CampusCeremony.lua");
+        if (host == null) return;
+        var rb = host.GetComponent<Rigidbody>();
+        if (rb != null) UnityEngine.Object.DestroyImmediate(rb);
+        Debug.Log("[Campus] 典礼宿主 CampusCeremony 已建成");
     }
 
     /// <summary>
@@ -3054,7 +3109,7 @@ public static class DouyinCampusBuilder
     /// UV 全钉在 (0.5,0.5) 是为了让贴图恒为径向衰减的中心值 —— 球面 UV 是经纬展开的，
     /// 直接用会缠出一条条纬线。
     /// </remarks>
-    static Mesh BuildGlowBall(float r)
+    static Mesh BuildGlowBall(float r, float uvU = 0.75f)
     {
         var src = GetMesh("Ico_1", () => BuildIcoSphere(1));
         var sv = src.vertices;
@@ -3072,7 +3127,8 @@ public static class DouyinCampusBuilder
             // 不取贴图正中心（值 0.85），取半径 0.5 处（约 0.35）：光球要比光池暗一档，
             // 否则叠在已经接近纯白的灯罩上会糊成一个白球，灯型直接消失。
             // 一个材质同时伺候光球和光池，靠的就是这处 UV 偏移来分配亮度。
-            uv.Add(new Vector2(0.75f, 0.5f));
+            // 烟花火星要反过来 —— 它就该是最亮的，所以调用时传 uvU=0.5。
+            uv.Add(new Vector2(uvU, 0.5f));
         }
         return FinishGlow(v, uv, new List<int>(src.triangles), n);
     }

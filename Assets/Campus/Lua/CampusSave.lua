@@ -18,8 +18,10 @@
 --      dkjson 文件（是引擎注入的），为了少一个不确定项，这里自己写扁平串行化。
 --
 -- 存储格式（单键，避免多个脚本 read-modify-write 互相覆盖）：
---   v1;e=10110010;q=1;a=42
---   e = 8 枚校徽（1 已入柜 / 0 未拾取），q = 是否接过任务，a = 好感度（整数）
+--   v1;e=10110010;q=1;a=42;c=0
+--   e = 8 枚校徽（1 已入柜 / 0 未拾取），q = 是否接过任务，
+--   a = 好感度（整数），c = 毕业典礼是否已经播过（0/1）
+-- 旧存档没有 c 字段，解析时保持默认 0 —— 也就是"还没看过典礼"，会补播一次。
 
 local VERSION       = "v1"
 local STORE_NAME    = "campus"    -- store 名
@@ -41,7 +43,7 @@ local nextRetryAt = 0
 local lastWriteAt = -9999
 local lastSaved = nil             -- 上一次成功写盘的内容，用来跳过无变化的写
 
-local data = { emblems = "00000000", quest = 0, affinity = 0 }
+local data = { emblems = "00000000", quest = 0, affinity = 0, ceremony = 0 }
 local waiters = {}                -- 数据到达后要通知的回调
 
 -- ---------------------------------------------------------------- 小工具
@@ -63,11 +65,12 @@ local function PadEmblems(s)
 end
 
 local function Serialize()
-    return string.format("%s;e=%s;q=%d;a=%d",
+    return string.format("%s;e=%s;q=%d;a=%d;c=%d",
         VERSION,
         PadEmblems(data.emblems),
         math.floor(tonumber(data.quest) or 0),
-        math.floor(tonumber(data.affinity) or 0))
+        math.floor(tonumber(data.affinity) or 0),
+        math.floor(tonumber(data.ceremony) or 0))
 end
 
 -- 返回 true 表示确实从存档里解出了东西（新玩家拿到空表时返回 false）
@@ -83,6 +86,9 @@ local function Deserialize(raw)
             hit = true
         elseif k == "a" then
             data.affinity = tonumber(v) or 0
+            hit = true
+        elseif k == "c" then
+            data.ceremony = tonumber(v) or 0
             hit = true
         end
     end
@@ -264,7 +270,7 @@ function Awake()
     nextRetryAt = 0
     lastWriteAt = -9999
     lastSaved = nil
-    data = { emblems = "00000000", quest = 0, affinity = 0 }
+    data = { emblems = "00000000", quest = 0, affinity = 0, ceremony = 0 }
     waiters = {}
     _G["CampusSave"] = Api
     print("[CampusSave] init, manager=" .. tostring(manager ~= nil))
