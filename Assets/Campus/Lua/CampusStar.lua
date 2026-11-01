@@ -28,8 +28,9 @@ local STOP_AT    = 1.9    -- 追到离玩家这么近就停（不贴脸）
 local FINALE_AT  = 1.35   -- 满好感后她会站得更近一点
 local SPEED      = 2.10   -- 比普通 NPC 快一点，否则跟不上走路的玩家
 local TURN_RATE  = 8.0
-local TALK_GAP   = 4.6    -- 两句之间的间隔（她话密，比路人快）
-local BUBBLE_TIME= 4.5
+local TALK_GAP   = 6.1    -- 两句之间的间隔。配音上线后改宽：日语语音最长 5.6s，
+                          -- 气泡 4.5s 就收会把声音切断（气泡隐藏会停掉身上的音源）
+local BUBBLE_TIME= 6.0
 local ARRIVE_EPS = 0.35
 local LEVEL_EPS  = 1.0    -- 高度差超过这个就算"换了楼层"，不追
 

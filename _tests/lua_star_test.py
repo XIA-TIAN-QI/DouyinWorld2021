@@ -256,11 +256,11 @@ def main():
     second = active_line(lt)
     check(second != first, "换到了下一句：%s → %s" % (first, second))
 
-    print("[7] 气泡到点会收（4.5s），下一句（4.6s）才补上")
+    print("[7] 气泡到点会收（6.0s，配音上线后放宽），下一句（6.1s）才补上")
     last = bubble_active(lt)
     t0 = g.now
     off_at = None
-    for _ in range(int(60 * 6)):
+    for _ in range(int(60 * 8)):
         g.now = g.now + g.dt
         lt.execute("Update()")
         cur = bubble_active(lt)
@@ -268,7 +268,7 @@ def main():
             off_at = g.now - t0
             break
         last = cur
-    check(off_at is not None and off_at < 5.0,
+    check(off_at is not None and off_at < 6.5,
           "气泡在 %.2fs 时收掉" % (off_at if off_at else -1))
 
     print("[8] 玩家走开 11m：她跟上来（不是原地等）")
