@@ -1154,7 +1154,7 @@ public static class DouyinCampusBuilder
         int nameCell = nameCells.ContainsKey(id) ? nameCells[id] : 0;
         var cells = lineCellsByNpc.ContainsKey(id) ? lineCellsByNpc[id] : new[] { 0 };
         var tiers = (lineTiersByNpc != null && lineTiersByNpc.ContainsKey(id)) ? lineTiersByNpc[id] : null;
-        BuildNpcLabel(host.transform, nameCell, cells, tiers);
+        BuildNpcLabel(host.transform, nameCell, cells, tiers, id);
 
         // 待机点：Lua 用 Path/Waypoint_01 作为"回家"的坐标（她不像别人那样沿路点巡逻）
         var pathRoot = new GameObject("Path").transform;
@@ -1186,7 +1186,7 @@ public static class DouyinCampusBuilder
     /// 而 quad + World_Lit 和校名牌是同一条已验证的管线，截图和真机都能看到。
     /// 代价是台词要预先画进图集 —— 所以每句话一个 quad，Lua 只负责切显隐。
     /// </summary>
-    static void BuildNpcLabel(Transform root, int nameCell, int[] lineCells, int[] lineTiers = null)
+    static void BuildNpcLabel(Transform root, int nameCell, int[] lineCells, int[] lineTiers = null, string npcId = null)
     {
         var pivot = new GameObject("Label").transform;
         pivot.SetParent(root, false);
@@ -1228,8 +1228,74 @@ public static class DouyinCampusBuilder
             mr.shadowCastingMode = ShadowCastingMode.Off;
             mr.receiveShadows = false;
             go.isStatic = false;
+
+            // 台词配音：AudioSource 直接挂在 quad 上。气泡隐藏（SetActive(false)）时
+            // Unity 会自动停掉它身上的声音 —— "话没说完人走开了"正好符合直觉，
+            // 不需要 Lua 管停。文件按 NPC 分目录：Voice/<npcId>/<quadName>.ogg
+            // —— 不同 NPC 的 quad 名会重名（都是 Line_01...），扁平命名必撞车。
+            if (npcId != null)
+            {
+                var vclip = LoadVoiceClip(npcId + "/" + quadName);
+                if (vclip != null)
+                {
+                    var vs = go.AddComponent<AudioSource>();
+                    vs.clip = vclip;
+                    vs.playOnAwake = false;
+                    vs.loop = false;
+                    vs.spatialBlend = 0f;   // 2D：跟着 NPC 走，不随距离衰减
+                    vs.volume = 0.9f;
+                }
+            }
         }
         bubble.gameObject.SetActive(false);
+    }
+
+    /// <summary>语音片段：Voice/<NPC>/<quad>.ogg|.wav|.mp3。短语音不设 Streaming，走默认导入。</summary>
+    static AudioClip LoadVoiceClip(string relPath)
+    {
+        foreach (var ext in new[] { ".ogg", ".wav", ".mp3" })
+        {
+            var path = "Assets/Campus/Audio/Voice/" + relPath + ext;
+            if (!File.Exists(path)) continue;
+            return AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 生成台词配音清单 Assets/Campus/Audio/Voice/_manifest.txt：
+    /// 每行「NPC/文件名(不含扩展名)|台词文本」，配音的人照着这个列表做文件。
+    /// 命名必须与 BuildNpcLabel 生成 quad 的规则完全一致 —— 清单和 quad 名字对不上，
+    /// 配了音也对不上嘴。注意两个调用点的不对称：只有 BuildStar 给 NPC_08 传档位，
+    /// 其余 NPC 走扁平 Line_01 —— 这里必须复刻同样的规则，否则清单全是错名。
+    /// </summary>
+    static void WriteVoiceManifest(Dictionary<string, string[]> lineTexts,
+                                   Dictionary<string, int[]> lineTiersByNpc)
+    {
+        if (lineTexts == null || lineTexts.Count == 0) return;
+
+        var dir = "Assets/Campus/Audio/Voice";
+        Directory.CreateDirectory(dir);
+        var sb = new StringBuilder();
+        sb.AppendLine("# 台词配音清单：把配音存成 Voice/<NPC>/文件名.ogg/.wav/.mp3，重建场景即生效");
+        sb.AppendLine("# 目前只有 NPC_08（黄思诚）的台词会播配音；其他 NPC 配了音源也不会响");
+        sb.AppendLine("# 格式：NPC编号/文件名|台词文本");
+        foreach (var kv in lineTexts)
+        {
+            var texts = kv.Value;
+            // 与 BuildNPCs（不传档位）/ BuildStar（只给 NPC_08 传）的调用方式保持一致
+            var tiers = (kv.Key == "NPC_08" && lineTiersByNpc.ContainsKey(kv.Key))
+                ? lineTiersByNpc[kv.Key] : null;
+            for (int i = 0; i < texts.Length; i++)
+            {
+                string quadName = (tiers != null && i < tiers.Length)
+                    ? "Line_" + tiers[i] + "_" + (i + 1).ToString("00")
+                    : "Line_" + (i + 1).ToString("00");
+                sb.AppendLine(kv.Key + "/" + quadName + "|" + texts[i]);
+            }
+        }
+        File.WriteAllText(dir + "/_manifest.txt", sb.ToString(), new UTF8Encoding(false));
+        Debug.Log("[Campus] 台词配音清单已更新：" + dir + "/_manifest.txt");
     }
 
     /// <summary>
@@ -1239,11 +1305,13 @@ public static class DouyinCampusBuilder
     /// </summary>
     static void LoadNpcLineCells(out Dictionary<string, int> nameCells,
                                  out Dictionary<string, int[]> lineCells,
-                                 out Dictionary<string, int[]> lineTiers)
+                                 out Dictionary<string, int[]> lineTiers,
+                                 out Dictionary<string, string[]> lineTexts)
     {
         nameCells = new Dictionary<string, int>();
         lineCells = new Dictionary<string, int[]>();
         lineTiers = new Dictionary<string, int[]>();
+        lineTexts = new Dictionary<string, string[]>();
 
         const string path = "Assets/Campus/NpcLines.txt";
         if (!File.Exists(path))
@@ -1255,6 +1323,7 @@ public static class DouyinCampusBuilder
         var nameOrder = new List<string>();
         var ids = new List<string>();        // 每句台词属于谁，按文件出现顺序
         var tierOfLine = new List<int>();    // 与 ids 一一对应
+        var textOfLine = new List<string>(); // 与 ids 一一对应（配音清单用）
 
         foreach (var raw in File.ReadAllLines(path))
         {
@@ -1271,6 +1340,7 @@ public static class DouyinCampusBuilder
                 if (t < 1) t = 1;
                 ids.Add(who);
                 tierOfLine.Add(t);
+                textOfLine.Add(parts[2].Trim());
             }
         }
 
@@ -1281,6 +1351,7 @@ public static class DouyinCampusBuilder
         foreach (var who in ids)
         {
             int t = tierOfLine[k++];
+            string txt = textOfLine[k - 1];
             if (lineCells.ContainsKey(who))
             {
                 var old = lineCells[who];
@@ -1294,11 +1365,18 @@ public static class DouyinCampusBuilder
                 oldT.CopyTo(grownT, 0);
                 grownT[oldT.Length] = t;
                 lineTiers[who] = grownT;
+
+                var oldX = lineTexts[who];
+                var grownX = new string[oldX.Length + 1];
+                oldX.CopyTo(grownX, 0);
+                grownX[oldX.Length] = txt;
+                lineTexts[who] = grownX;
             }
             else
             {
                 lineCells[who] = new[] { cell++ };
                 lineTiers[who] = new[] { t };
+                lineTexts[who] = new[] { txt };
             }
         }
 
@@ -1368,7 +1446,8 @@ public static class DouyinCampusBuilder
 
     static void BuildNPCs(Transform parent)
     {
-        LoadNpcLineCells(out var nameCells, out var lineCellsByNpc, out var lineTiersByNpc);
+        LoadNpcLineCells(out var nameCells, out var lineCellsByNpc, out var lineTiersByNpc,
+                         out var lineTextsByNpc);
 
         for (int i = 0; i < NpcSpecs.Length; i++)
         {
@@ -1381,7 +1460,7 @@ public static class DouyinCampusBuilder
             BuildNpcFigure(host.transform, spec);
             int nameCell = nameCells.ContainsKey(id) ? nameCells[id] : 0;
             var lineCells = lineCellsByNpc.ContainsKey(id) ? lineCellsByNpc[id] : new[] { 0 };
-            BuildNpcLabel(host.transform, nameCell, lineCells);
+            BuildNpcLabel(host.transform, nameCell, lineCells, null, id);
 
             // 路点：空物体存世界坐标，Lua 直接读 position
             var pathRoot = new GameObject("Path").transform;
@@ -1397,6 +1476,9 @@ public static class DouyinCampusBuilder
         Debug.Log("[Campus] NPC = " + NpcSpecs.Length);
 
         BuildStar(parent, nameCells, lineCellsByNpc, lineTiersByNpc);
+
+        // 台词配音清单：quad 名 ↔ 台词文本。配音的人照着这个列表提供文件。
+        WriteVoiceManifest(lineTextsByNpc, lineTiersByNpc);
     }
 
     /// <summary>

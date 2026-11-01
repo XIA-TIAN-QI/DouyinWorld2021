@@ -80,6 +80,15 @@ local function HideBubble()
     end
 end
 
+-- 台词配音：音源直接挂在 quad 上（构建脚本按 Voice/<NPC>/<quad>.ogg 有文件才挂），
+-- 气泡隐藏时 Unity 自动停声。全程 pcall：音频在真机上未验证，缺什么都不拖垮气泡。
+local function PlayVoice(q)
+    pcall(function()
+        local src = q.gameObject:GetComponent(typeof(CS.UnityEngine.AudioSource))
+        if src ~= nil and src.clip ~= nil then src:Play() end
+    end)
+end
+
 -- 只开第 i 句的 quad：图集方案下换台词 = 换显隐，没有文本可改
 local function Say(i)
     if bubble == nil or #lines == 0 then return end
@@ -90,6 +99,7 @@ local function Say(i)
     end
     bubble.gameObject:SetActive(true)
     bubbleHideAt = CS.UnityEngine.Time.time + BUBBLE_TIME
+    PlayVoice(lines[i])
 end
 
 -- 四肢摆到指定角度（度）

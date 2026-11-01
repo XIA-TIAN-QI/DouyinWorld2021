@@ -120,6 +120,20 @@ end
 
 -- ---------------------------------------------------------------- 台词分档
 
+-- 台词配音：音源直接挂在 quad 上（构建脚本按 Voice/<quadName>.ogg 有文件才挂）。
+-- 气泡隐藏 SetActive(false) 时 Unity 自动停掉它身上的声音 —— "人走了话就停"符合直觉。
+-- 全程 pcall：真机 XLua 是否暴露 AudioSource 未验证，缺什么都不许拖垮气泡。
+local function PlayVoice(q)
+    local ok, err = pcall(function()
+        local src = q.gameObject:GetComponent(typeof(CS.UnityEngine.AudioSource))
+        if src ~= nil and src.clip ~= nil then
+            src:Play()
+            print("[CampusStar] 配音 " .. q.name)
+        end
+    end)
+    if not ok then print("[CampusStar] 配音跳过: " .. tostring(err)) end
+end
+
 -- 只开一块 quad：图集方案下换台词 = 换显隐，没有文本可改
 local function ShowQuad(q)
     for i = 1, #allQuads do
@@ -127,6 +141,7 @@ local function ShowQuad(q)
     end
     if bubble ~= nil then bubble.gameObject:SetActive(true) end
     bubbleHideAt = CS.UnityEngine.Time.time + BUBBLE_TIME
+    PlayVoice(q)
 end
 
 -- 取某一档的台词；这一档是空的就往前退一档（老场景只有 Line_01 时也能跑）

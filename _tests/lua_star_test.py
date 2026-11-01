@@ -33,6 +33,10 @@ end
 now = 0.0
 dt = 0.0
 
+-- 台词配音：voicePlays[name] = {clip, played}，Lua 的 ShowQuad 应该对显示的 quad Play 一次
+voicePlays = {}
+function typeof(t) return t end
+
 local V3 = {}
 V3.__index = function(t, k)
     if k == "sqrMagnitude" then return t.x * t.x + t.y * t.y + t.z * t.z end
@@ -61,6 +65,20 @@ local function new_t(name)
         name = name,
         active = true,
         SetActive = function(self, v) t.gameObject.active = v end,
+        -- 台词配音：只有 Line_x_xx 命名的 quad 带音源（和构建脚本一致），
+        -- 其余节点（名牌/路点）GetComponent 返回 nil
+        GetComponent = function(self, typ)
+            if string.match(name, "^Line_%d+_%d+$") then
+                local s = voicePlays[name]
+                if s == nil then
+                    s = { clip = "Voice/" .. name .. ".ogg", played = 0 }
+                    function s:Play() s.played = s.played + 1 end
+                    voicePlays[name] = s
+                end
+                return s
+            end
+            return nil
+        end,
     }
     function t:Find(path)
         local cur = self
@@ -94,7 +112,7 @@ bubbleNode = new_t("Bubble")
 add_child(labelNode, bubbleNode)
 -- 台词 quad：四档，命名 Line_<档>_<序号>（和构建脚本一致）
 -- 每档都按倒序插入，验证 Lua 会自己按名字重排，而不是依赖子物体顺序
-local QUAD_COUNTS = { 8, 5, 5, 3 }
+local QUAD_COUNTS = { 8, 5, 5, 4 }   -- 与 NpcLines.txt 实际一致（典礼台词是第 4 档第 4 句）
 for tier = 1, 4 do
     for i = QUAD_COUNTS[tier], 1, -1 do
         add_child(bubbleNode, new_t(string.format("Line_%d_%02d", tier, i)))
@@ -201,7 +219,7 @@ def main():
     g = lt.globals()
 
     print("[1] 初始化")
-    check(g.log[1].find("lines=21") != -1, "读到 21 句台词（8+5+5+3）：" + g.log[1])
+    check(g.log[1].find("lines=22") != -1, "读到 22 句台词（8+5+5+4）：" + g.log[1])
     check(g.log[1].find("home") != -1 and g.log[1].find("home=nil") == -1, "读到待机点")
     check(bubble_active(lt) is False, "初始气泡关闭")
 
@@ -372,6 +390,29 @@ _G["CampusSave"] = saveMock
     lt5 = new_state()
     check(lt5.eval("_G['CampusStar'].IsMax()") is False, "新会话初始不是满档")
     check(lt5.eval("_G['CampusStar'].Affinity()") == 0, "初始好感 0")
+
+    print("[17] 台词配音：显示哪句就播哪句的音")
+    lt6 = new_state()
+    player_at(lt6, 2.5, 0, -5.0)     # 站到她身边，让她开口
+    step(lt6, 60 * 2)
+    name6 = active_line(lt6)
+    check(name6 is not None, "有台词在显示：" + str(name6))
+    if name6:
+        lt6.globals()["qname"] = name6
+        check(lt6.eval("voicePlays[qname] ~= nil and voicePlays[qname].played == 1"),
+            "这句 quad 的配音正好放了一次")
+        total = lt6.eval("(function() local n=0 for _,s in pairs(voicePlays) do n=n+s.played end return n end)()")
+        check(total == 1, "一次只响一句（共 %d 声）" % total)
+    # 走开让气泡收掉，再回来 —— 换句后新 quad 的音要响，旧的不重复响
+    step(lt6, 30)
+    step(lt6, 3)
+    name6b = active_line(lt6)
+    if name6b and name6b != name6:
+        lt6.globals()["qname2"] = name6b
+        check(lt6.eval("voicePlays[qname2] ~= nil and voicePlays[qname2].played == 1"),
+            "换句后新 quad 的配音放了一次")
+        total2 = lt6.eval("(function() local n=0 for _,s in pairs(voicePlays) do n=n+s.played end return n end)()")
+        check(total2 == 2, "累计两声，没有叠着响（共 %d 声）" % total2)
 
     print()
     print("全部通过" if ok else "有失败项")
