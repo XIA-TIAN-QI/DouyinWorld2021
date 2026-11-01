@@ -21,6 +21,20 @@ local TOTAL       = 8
 local doneCount = 0
 local isDone = {}
 
+-- 未收集提示：基座顶面的呼吸光环（构建脚本生成 Glow_01..08）。
+-- 收集后不能 SetActive(false) —— 那样 GameObject.Find 就再也找不到了，
+-- 存档恢复时没法重新熄一遍。所以用 localScale=0 代替"隐藏"。
+local V = CS.UnityEngine.Vector3
+local glowNode = {}      -- [i] = Transform
+local glowOn = {}        -- [i] = 是否还亮着
+
+-- 校徽所在区域，和 DouyinCampusBuilder.BuildCollection 的 spots 顺序一一对应。
+-- 只在"还剩最后一枚"时用来报位置。改坐标时这里必须同步改。
+local EMBLEM_REGION = {
+    "校门内侧", "广场地标旁", "一层门厅", "一层教室",
+    "二层走廊西端", "二层楼梯厅", "三层阅览角", "操场看台前",
+}
+
 -- 前向声明：QuestApi.Accept 定义在下面，但那会儿 SyncSave 还没声明，
 -- 不提前 local 的话闭包里会被解析成全局 nil
 local SyncSave
@@ -62,6 +76,27 @@ local function Toast(msg)
     end)
     if not ok then
         print(msg)
+    end
+end
+
+-- 缓存 8 个呼吸光环。只做一次：GameObject.Find 不便宜，而且光环 scale=0 之后
+-- 未必还找得到，每帧重找既浪费又不可靠。
+local function CacheGlows()
+    glowNode = {}
+    glowOn = {}
+    for i = 1, TOTAL do
+        local go = FindGo(string.format("Glow_%02d", i))
+        if go ~= nil then
+            glowNode[i] = go.transform
+            glowOn[i] = true
+        end
+    end
+end
+-- 熄掉某一枚的提示光
+local function HideGlow(index)
+    if glowNode[index] ~= nil then
+        glowOn[index] = false
+        glowNode[index].localScale = V(0, 0, 0)
     end
 end
 
@@ -186,16 +221,28 @@ local function TryCollect(actor)
 
     print(string.format("[CampusCollect] %s 已入柜 (%d/%d)", item.name, doneCount, TOTAL))
 
-    -- ⚠️ 这里必须补一句。玩家如果在遇到老陈之前就捡了校徽，任务会在他毫不知情的
-    -- 情况下开始，而老陈那句"毕业典礼要用八枚校徽……"的开场白也再不会播出来
-    -- （QuestSpecialLine 只在未接取时返回 offer 句）。只弹"校徽 1/8"等于什么都没说。
-    if not questAccepted then
-        questAccepted = true
-        stage = "collecting"
-        Toast(string.format("校徽 %d/%d · 老陈让你把八枚带回门厅陈列架", doneCount, TOTAL))
-        print("[CampusCollect] 未接任务先拾取，已自动接取并提示")
-    else
-        Toast(string.format("校徽 %d/%d", doneCount, TOTAL))
+    HideGlow(index)      -- 已经拿到手，提示光收掉
+
+    -- 进度提示。玩家最容易放弃的时刻是"只剩一枚、却不知道在哪"，
+    -- 所以最后一枚直接报区域 —— Toast 是动态文本，不占台词图集的格数。
+    local remaining = TOTAL - doneCount
+    if remaining == 1 then
+        local where = ""
+        for i = 1, TOTAL do
+            if not isDone[i] then where = EMBLEM_REGION[i] end
+        end
+        Toast(string.format("校徽 %d/%d · 最后一枚在%s", doneCount, TOTAL, where))
+    elseif remaining > 1 then
+        if not questAccepted then
+            -- 玩家先捡到校徽时，任务会在没人知道的情况下开始，老陈那句开场白也再不会播
+            --（QuestSpecialLine 只在未接取时返回 offer 句）。所以必须说清楚你在收集什么。
+            questAccepted = true
+            stage = "collecting"
+            Toast(string.format("校徽 %d/%d · 老陈让你把八枚带回门厅陈列架", doneCount, TOTAL))
+            print("[CampusCollect] 未接任务先拾取，已自动接取并提示")
+        else
+            Toast(string.format("校徽 %d/%d · 还剩 %d 枚", doneCount, TOTAL, remaining))
+        end
     end
 
     if doneCount >= TOTAL then
@@ -240,6 +287,7 @@ local function Restore()
                 item:SetActive(false)     -- 没有槽位就只藏起来，别把徽章留在场上
             end
             LightSlot(i)
+            HideGlow(i)                   -- 已经收在架上了，基座不该还亮着
         end
     end
 
@@ -254,6 +302,17 @@ local function Restore()
 
     print(string.format("[CampusCollect] 存档恢复 %d 枚（共 %d/%d, quest=%s, stage=%s）",
         restored, doneCount, TOTAL, tostring(questAccepted), stage))
+
+    -- 恢复到"只差最后一枚"时也要报位置。否则玩家上次退出前看到过提示，
+    -- 这次进来又不知道去哪找了 —— 而那正是最容易放弃的节点。
+    if doneCount == TOTAL - 1 then
+        for i = 1, TOTAL do
+            if not isDone[i] then
+                Toast("还差一枚 · " .. EMBLEM_REGION[i])
+                break
+            end
+        end
+    end
 
     -- ⚠️ 必须回写一次。读档比 Awake 晚十几帧，玩家可能已经在这期间捡了校徽；
     -- 那次 SyncSave 因为 ready=false 被存档层挡掉了。如果这里不补写，内存位图会
@@ -294,8 +353,9 @@ function Awake()
     emblemFound = {}
     saveHooked = false
     _G["CampusQuest"] = QuestApi
+    CacheGlows()
     TryHookSave()
-    print("[CampusCollect] ready, total=" .. TOTAL .. " (CampusQuest registered)")
+    print("[CampusCollect] ready, total=" .. TOTAL .. " (CampusQuest registered), glow=" .. #glowNode)
 end
 
 function OnDestroy()
@@ -330,11 +390,23 @@ local function Tick()
     if f == nil then f = CS.UnityEngine.Time.time end
     if f == lastFrame then return end
     lastFrame = f
+
+    local now = CS.UnityEngine.Time.time
     TryHookSave()
+
+    -- 未收集提示：基座光环缓慢呼吸。每枚相位错开，否则 8 个一起明暗变化
+    -- 像排故障指示灯，反而分散注意。
+    if #glowNode > 0 then
+        for i = 1, TOTAL do
+            if glowOn[i] and glowNode[i] ~= nil then
+                local s = 1.0 + math.sin(now * 1.5 + i * 0.8) * 0.16
+                glowNode[i].localScale = V(s, s, s)
+            end
+        end
+    end
 
     -- 灯光秀：奖励子物体逐个点亮
     if #rewardQueue > 0 then
-        local now = CS.UnityEngine.Time.time
         if now >= rewardNextAt then
             local go = table.remove(rewardQueue, 1)
             if go ~= nil then go:SetActive(true) end

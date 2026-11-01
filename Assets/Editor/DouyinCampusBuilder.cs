@@ -1551,7 +1551,24 @@ public static class DouyinCampusBuilder
             // 只留基座。原先基座上还有"青绿光圈 + 竖直光柱 + 顶端小球"三件套标出收集点，
             // 光柱正好从玻璃杯中间穿过，杯子看起来像被人打了个洞 —— 已整体去掉。
             // 现在靠杯体本身在光池里，找起来反而更自然。
-            Cyl("Pedestal_" + i, parent, 0.30f, 0.9f, new Vector3(b.x, b.y + 0.45f, b.z), "M_Concrete");
+            // 命名必须和 Glow_xx / Collect_xx 一样是 1 基。原来是 "Pedestal_" + i（0 基），
+            // 于是第 2 枚校徽的基座叫 Pedestal_1 —— 谁按 Pedestal_%02d 去找都会拿错对象。
+            Cyl("Pedestal_" + (i + 1).ToString("00"), parent, 0.30f, 0.9f,
+                new Vector3(b.x, b.y + 0.45f, b.z), "M_Concrete");
+
+            // 未收集提示：基座顶面一圈呼吸光。
+            // 之前那套"光圈 + 竖直光柱 + 顶端小球"因为光柱从玻璃杯中间穿过、杯子像被打了个洞
+            // 而整体删掉了。这次只补回**水平**的一圈 —— 不穿过杯子、不挡视线，
+            // 远远看见地上有团暖光就知道这儿还有东西没拿。
+            // 收集后由 CampusCollect.lua 把 localScale 压到 0（不用 SetActive(false)，
+            // 那样 GameObject.Find 就再也找不到了）。
+            var glow = new GameObject("Glow_" + (i + 1).ToString("00"));
+            glow.transform.SetParent(parent, false);
+            glow.transform.position = new Vector3(b.x, b.y + 0.92f, b.z);
+            glow.AddComponent<MeshFilter>().sharedMesh =
+                GetMesh("Glow_Disc_0p55", () => BuildGlowDisc(0.55f, 32));
+            glow.AddComponent<MeshRenderer>().sharedMaterial = _mats["M_Glow"];
+            glow.layer = LayerCameraNoCollision;
 
             if (prefab == null) continue;
             var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
@@ -3761,6 +3778,22 @@ public static class DouyinCampusBuilder
         Debug.Log("[Campus] 收集完成态截图已生成");
     }
 
+    /// <summary>
+    /// 未收集提示光环的近景验收。站在玩家眼高斜看 + 退远看，各拍一张 ——
+    /// 加法光效在明亮场景下会不会被天空光压掉、平视角度会不会因为掠射角而变暗，
+    /// 这两张图是唯一能看出来途径（动画呼吸在批处理里看不出来，只能看静态亮度）。
+    /// </summary>
+    public static void PreviewGlowRing()
+    {
+        EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        DynamicGI.UpdateEnvironment();
+        Capture("15b_glow_ring", new Vector3(6.3f, 1.6f, 4.6f), new Vector3(3.4f, 0.92f, 2.2f), 40f);
+        Capture("15c_glow_far", new Vector3(12.0f, 2.2f, 8.0f), new Vector3(3.4f, 0.92f, 2.2f), 50f);
+        // 低角度：光环半径 0.55m > 基座半径 0.30m，从齐胸高看外圈是否悬空
+        Capture("15d_glow_low", new Vector3(4.6f, 0.75f, 3.4f), new Vector3(3.4f, 0.92f, 2.2f), 45f);
+        Debug.Log("[Campus] 光环近景截图已生成");
+    }
+
     [MenuItem("抖音虚拟创作SDK/校园：生成预览截图")]
     public static void CaptureAllFromMenu() => CaptureAll();
 
@@ -3848,6 +3881,11 @@ public static class DouyinCampusBuilder
         Capture("13_floor2_corridor", new Vector3(-16.7f, 7.15f, 20.7f), new Vector3(10f, 6.9f, 21.6f), 66f);
         Capture("14_stair_hall2", new Vector3(10.9f, 7.05f, 27.4f), new Vector3(15.6f, 5.6f, 28.6f), 70f);
         Capture("15_pickup", new Vector3(-9.2f, 1.95f, 22.5f), new Vector3(-9.2f, 1.3f, 21.2f), 46f);
+        // 未收集提示光环的近景：站在玩家眼高（1.6m）斜看基座，验证明亮场景下加法光环到底显不显
+        Capture("15b_glow_ring", new Vector3(6.3f, 1.6f, 4.6f), new Vector3(3.4f, 0.92f, 2.2f), 40f);
+        Capture("15c_glow_far", new Vector3(12.0f, 2.2f, 8.0f), new Vector3(3.4f, 0.92f, 2.2f), 50f);
+        // 低角度：光环半径 0.55m > 基座半径 0.30m，从齐胸高看外圈是否悬空
+        Capture("15d_glow_low", new Vector3(4.6f, 0.75f, 3.4f), new Vector3(3.4f, 0.92f, 2.2f), 45f);
         Capture("16_classroom_small", new Vector3(11.1f, 2.9f, 24.3f), new Vector3(11.1f, 2.5f, 31.6f), 62f);
         // 三层与校徽收集
         Capture("17_shelf", new Vector3(-1.0f, 2.75f, 19.85f), new Vector3(-3.55f, 1.4f, 18.05f), 60f);

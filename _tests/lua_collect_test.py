@@ -112,9 +112,22 @@ local seqTime = setmetatable({}, {
     end,
 })
 
+-- 未收集提示用的基座光环（builder 生成 Glow_01..08）
+scene.baseGlow = {}
+for i = 1, 8 do
+    local t = new_transform(string.format("Glow_%02d", i))
+    t.localScale = { x = 1, y = 1, z = 1 }
+    scene.baseGlow[i] = { name = t.name, transform = t }
+end
+
+local glowVec3 = setmetatable({}, {
+    __call = function(_, x, y, z) return { x = x, y = y, z = z } end,
+})
+
 CS = {
     UnityEngine = {
         Time = seqTime,
+        Vector3 = glowVec3,
         GameObject = {
             Find = function(n)
                 if n == "CollectShelf" then return shelfGo end
@@ -123,6 +136,10 @@ CS = {
                 local idx = string.match(n, "^Collect_(%d+)$")
                 if idx ~= nil and scene.items[tonumber(idx)] ~= nil then
                     return scene.items[tonumber(idx)].go
+                end
+                local g = string.match(n, "^Glow_(%d+)$")
+                if g ~= nil and scene.baseGlow[tonumber(g)] ~= nil then
+                    return scene.baseGlow[tonumber(g)]
                 end
                 return nil
             end,
@@ -165,6 +182,13 @@ end
 
 Awake()
 check(#log == 1 and string.find(log[1], "ready, total=8", 1, true) ~= nil, "Awake 未打印 ready")
+check(string.find(log[1], "glow=8", 1, true) ~= nil, "缓存了 8 个基座光环")
+
+-- 基座光应该每帧呼吸（不是写死一个尺寸）
+Update()
+Update()
+local gs = scene.baseGlow[1].transform.localScale.x
+check(gs > 0.8 and gs < 1.2, "基座光在呼吸（scale=" .. tostring(gs) .. "）")
 
 -- 任务 API：注册与初始状态
 local q = _G["CampusQuest"]
@@ -203,6 +227,14 @@ end
 check(countLog("已入柜") == 7, "前 7 枚入柜数量不符：" .. countLog("已入柜"))
 check(scene.glows[7].active == true, "第 7 格没点亮")
 check(scene.glows[8].active == false, "第 8 格提前亮了")
+
+-- 未收集提示：收掉的熄灭、没收集的还亮着
+check(scene.baseGlow[1].transform.localScale.x == 0, "已收集的基座光没熄灭")
+check(scene.baseGlow[8].transform.localScale.x > 0.8, "没收集的基座光却被熄了")
+-- 只剩一枚时必须直接报位置，否则玩家会在这里放弃
+check(countLog("最后一枚在操场看台前") == 1,
+    "第 7 枚后没有指出最后一枚的位置（实际 " .. countLog("最后一枚在") .. " 次）")
+check(countLog("还剩 5 枚") >= 1, "中间进度没带剩余数量")
 check(scene.items[7].go.transform.position == scene.slots[7].position, "第 7 枚没落到槽位")
 check(scene.items[7].rb.isKinematic == true, "第 7 枚没冻结")
 check(scene.items[7].cols[0].enabled == false, "第 7 枚碰撞体没关")
@@ -389,6 +421,26 @@ lazySave.pending()      -- 触发 Restore，内部会补写一次
 check(q:Count() == 2, "合并后应为 2 枚，实际 " .. q:Count())
 check(lazySave.emblems == "10010000",
     "恢复后必须回写并集，否则第 4 枚永久丢失：" .. tostring(lazySave.emblems))
+
+-- 恢复到"只差最后一枚"：也要指出位置，否则重进世界又不知道去哪找
+_G["CampusSave"] = nil
+for i = 1, 8 do
+    scene.items[i].script.enabled = true
+    scene.glows[i].active = false
+    scene.rewardKids[i].active = false
+    scene.baseGlow[i].transform.localScale = { x = 1, y = 1, z = 1 }
+end
+Awake()
+q = _G["CampusQuest"]
+saveMock.emblems = "11111110"     -- 前 7 枚已收，只缺第 8（操场看台前）
+saveMock.quest = 1
+_G["CampusSave"] = saveMock
+local before7 = countLog("还差一枚")
+Update()
+check(q:Count() == 7, "恢复到 7 枚，实际 " .. q:Count())
+check(countLog("还差一枚 · 操场看台前") == before7 + 1, "恢复后没指出最后一枚的位置")
+check(scene.baseGlow[8].transform.localScale.x == 0 or scene.baseGlow[8].transform.localScale.x > 0.8,
+    "第 8 枚没收集，基座光应仍然亮着")
 
 result = { failures = failures, log = log }
 """
