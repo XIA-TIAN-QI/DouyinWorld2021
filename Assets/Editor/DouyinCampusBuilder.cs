@@ -1206,9 +1206,11 @@ public static class DouyinCampusBuilder
         nameGo.isStatic = false;
 
         // 气泡：一句话一个 quad，默认全关，Lua 切"开哪一个"
+        // 整体往上抬：原来在 2.28（头顶 1.73 上方 0.55），提示条又压在 1.73 被头挡；
+        // 现在气泡到 2.58、提示条 2.26、名牌 1.98，三层从下到上依次排开互不遮挡。
         var bubble = new GameObject("Bubble").transform;
         bubble.SetParent(pivot, false);
-        bubble.localPosition = new Vector3(0f, 0.30f, 0f);
+        bubble.localPosition = new Vector3(0f, 0.60f, 0f);
         bubble.gameObject.isStatic = false;
 
         for (int i = 0; i < lineCells.Length; i++)
@@ -1249,11 +1251,13 @@ public static class DouyinCampusBuilder
         }
         // 按键提示：气泡下方的小纸条「按 F 继续 ▼」，Lua 在对话可推进时点亮。
         // 初始隐藏；复用台词图集的格子，不占新材质。
+        // 位置：气泡(2.58) 下方 0.32 → 2.26，正好卡在名牌(1.98)和气泡之间，
+        // 既不压到头顶(1.73)也不和名牌/气泡重叠。
         if (promptCell >= 0)
         {
             var pg = new GameObject("Prompt_F");
             pg.transform.SetParent(bubble, false);
-            pg.transform.localPosition = new Vector3(0f, -0.55f, 0f);
+            pg.transform.localPosition = new Vector3(0f, -0.32f, 0f);
             pg.transform.localScale = new Vector3(0.72f, 0.72f, 1f);
             pg.AddComponent<MeshFilter>().sharedMesh = NpcCellMesh(promptCell);
             var pmr = pg.AddComponent<MeshRenderer>();

@@ -76,21 +76,6 @@ local function Dist(a, b)
     return math.sqrt(dx * dx + dy * dy + dz * dz)
 end
 
--- 名牌 billboard 用的相机。真机上 Camera.main 可能为 nil（抖音玩家相机未必
--- 打 MainCamera 标签），退而取 allCameras 的第一个。全程 pcall，拿不到就返回 nil
--- （此时名牌保持朝向，双面渲染兜底保证仍可见）。
-local function GetCamera()
-    local ok, cam = pcall(function() return CS.UnityEngine.Camera.main end)
-    if ok and cam ~= nil then return cam end
-    ok, cam = pcall(function()
-        local all = CS.UnityEngine.Camera.allCameras
-        if all ~= nil and all.Length > 0 then return all[0] end
-        return nil
-    end)
-    if ok and cam ~= nil then return cam end
-    return nil
-end
-
 local function HideBubble()
     if bubble ~= nil then
         bubble.gameObject:SetActive(false)
@@ -402,15 +387,6 @@ local function Tick(dt, source)
     if dt <= 0 then return end
     if dt > 0.2 then dt = 0.2 end      -- 卡帧时别一步跨半米
 
-    -- 名牌正对相机：quad 正面朝 -Z，LookRotation(away) 让 +Z 背向相机，正面就朝向相机
-    local cam = GetCamera()
-    if label ~= nil and cam ~= nil then
-        local away = label.position - cam.transform.position
-        if away.sqrMagnitude > 0.0001 then
-            label.rotation = CS.UnityEngine.Quaternion.LookRotation(away)
-        end
-    end
-
     -- 气泡到点就收
     local now = CS.UnityEngine.Time.time
     if bubbleHideAt > 0 and now >= bubbleHideAt then
@@ -422,6 +398,17 @@ local function Tick(dt, source)
     local d = nil
     if playerPos ~= nil then
         d = Dist(root.position, playerPos)
+    end
+
+    -- 名牌正对玩家：quad 正面朝 -Z，LookRotation(away) 让 +Z 背向玩家、正面朝向玩家。
+    -- 用玩家位置而不是 Camera.main —— 真机上相机未必打 MainCamera 标签、拿不到，
+    -- 而玩家位置是脚本本来就依赖的（距离判断/追人都靠它），一定可用。
+    -- 玩家就在相机旁边，名牌朝玩家 = 朝相机，观感一致。
+    if label ~= nil and playerPos ~= nil then
+        local away = label.position - playerPos
+        if away.sqrMagnitude > 0.0001 then
+            label.rotation = CS.UnityEngine.Quaternion.LookRotation(away)
+        end
     end
 
     -- 探针：头两帧 + 之后每 300 帧一条，足够看清回调有没有跑、玩家离多远
