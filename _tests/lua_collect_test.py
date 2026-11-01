@@ -98,12 +98,32 @@ for i = 1, 8 do
 end
 
 -- CS / typeof / 事件
+-- Time 用递增帧号模拟：每次读 frameCount 都换一个新值，
+-- 免得 CampusCollect 的帧去重把测试里的多次 Update() 吃掉
+_frameNo = 0
+local seqTime = setmetatable({}, {
+    __index = function(_, k)
+        if k == "frameCount" then
+            _frameNo = _frameNo + 1
+            return _frameNo
+        end
+        if k == "time" then return _frameNo * 0.1 end
+        return nil
+    end,
+})
+
 CS = {
     UnityEngine = {
+        Time = seqTime,
         GameObject = {
             Find = function(n)
                 if n == "CollectShelf" then return shelfGo end
                 if n == "Plaza_Reward" then return rewardGo end
+                -- 真实场景里 Collect_xx 是激活的、Find 得到的；恢复存档要靠它摆回架上
+                local idx = string.match(n, "^Collect_(%d+)$")
+                if idx ~= nil and scene.items[tonumber(idx)] ~= nil then
+                    return scene.items[tonumber(idx)].go
+                end
                 return nil
             end,
         },
@@ -232,9 +252,92 @@ OnPlayerTriggerEnter(scene.player)
 check(countLog("已入柜") == 8, "集齐后重复进入产生了额外计数")
 
 -- 找不到奖励物体时的兜底（不能崩）
+
+-- ================= 存档恢复：取并集，不覆盖 =================
+_G["CampusSave"] = nil
+for i = 1, 8 do
+    scene.items[i].script.enabled = true
+    scene.items[i].rb.isKinematic = false
+    scene.items[i].cols[0].enabled = true
+    scene.glows[i].active = false
+    scene.rewardKids[i].active = false
+end
+actor.held = nil
+actor.isLocal = true
+
+Awake()
+q = _G["CampusQuest"]
+
+-- 运行时先捡第 5 枚：模拟"存档还没到，玩家已经动手了"
+actor.held = scene.items[5].go
+OnPlayerTriggerEnter(scene.player)
+check(q:Count() == 1, "运行时先捡一枚，计数应为 1，实际 " .. q:Count())
+
+local beforeDone = countLog("已入柜")   -- 以此为基准：恢复不该再走一遍入柜流程
+
+-- 喂存档：1 和 5 都已入柜。5 是重复的，不能重复计数
+saveMock = { emblems = "10001000", quest = 1, flushes = 0 }
+function saveMock.Get(key, def)
+    local v = saveMock[key]
+    if v == nil then return def end
+    return v
+end
+function saveMock.Set(key, v) saveMock[key] = v end
+function saveMock.Flush(force) saveMock.flushes = saveMock.flushes + 1 end
+function saveMock.OnReady(fn) fn() end
+function saveMock.Ready() return true end
+_G["CampusSave"] = saveMock
+
+Update()   -- 补挂：Awake 时 CampusSave 还是 nil，靠帧驱动补上
+
+check(q:Count() == 2, "合并后应为 2（补 1 枚、5 已存在不重复），实际 " .. q:Count())
+check(q:Has(1) == true and q:Has(5) == true and q:Has(2) == false, "恢复的位图不对")
+check(q:IsAccepted() == true and q:Stage() == "collecting", "任务状态没从存档恢复")
+check(scene.glows[1].active == true, "恢复的第 1 格没点亮")
+check(scene.glows[2].active == false, "没恢复的第 2 格却亮了")
+check(scene.items[1].script.enabled == false, "恢复的徽章没摆上架（拾取脚本还开着）")
+check(scene.items[1].go.transform.position == scene.slots[1].position, "恢复的徽章没落到槽位")
+check(countLog("已入柜") == beforeDone, "恢复不该走入柜流程（会重复计数 / 弹 Toast）")
+check(countLog("存档恢复") == 1, "没打印恢复日志")
+
+-- 存档说集齐 → 重进世界要直接把广场地标点亮
+_G["CampusSave"] = nil
+Awake()
+q = _G["CampusQuest"]
+saveMock.emblems = "11111111"
+saveMock.quest = 1
+_G["CampusSave"] = saveMock
+Update()
+
+check(q:Count() == 8, "满档存档恢复后应为 8，实际 " .. q:Count())
+check(q:IsComplete() == true and q:Stage() == "done", "满档存档没标记完成")
+local lit2 = 0
+for i = 1, 8 do if scene.rewardKids[i].active then lit2 = lit2 + 1 end end
+check(lit2 == 8, "满档存档没点亮广场地标（" .. lit2 .. "/8）")
+
+-- 入柜要把新进度写回存档
+_G["CampusSave"] = nil
+for i = 1, 8 do
+    scene.items[i].script.enabled = true
+    scene.glows[i].active = false
+    scene.rewardKids[i].active = false
+end
+Awake()
+q = _G["CampusQuest"]
+saveMock.emblems = "00000000"
+saveMock.quest = 0
+saveMock.flushes = 0
+_G["CampusSave"] = saveMock
+Update()
+
+actor.held = scene.items[2].go
+OnPlayerTriggerEnter(scene.player)
+check(saveMock.emblems == "01000000", "入柜后位图没写回：" .. tostring(saveMock.emblems))
+check(saveMock.quest == 1, "入柜后任务位没写回")
+check(saveMock.flushes >= 1, "入柜后没有触发 Flush")
+
 result = { failures = failures, log = log }
 """
-
 
 def main() -> int:
     if not SCRIPT.exists():

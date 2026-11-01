@@ -66,6 +66,11 @@ local tier = 1
 local finalePlayed = false
 local finalePose = false
 
+-- 前向声明：UpdateTier 在上面就要用（Lua 的 local 按词法作用域，不提前声明
+-- 闭包里会解析成全局 nil）
+local SaveAffinity
+local saveHooked = false
+
 -- ---------------------------------------------------------------- 小工具
 
 local function FindChild(parent, path)
@@ -164,6 +169,51 @@ local function UpdateTier()
     else
         Toast(string.format("黄思诚 好感提升 · 第 %d 档", tier))
     end
+    SaveAffinity(true)       -- 升档是关键节点，立刻落盘，别等定期写
+end
+
+-- ---------------------------------------------------------------- 存档
+-- 存档层在 CampusSave.lua。好感度是浮点、每帧都在涨，所以这里只做两件事：
+--   1. 读档到了就把 affinity 抬到存档值，并按档位重算（**不弹 Toast、不重播收尾**，
+--      重进世界不该再提示一遍"好感已满"）
+--   2. 每帧把当前值同步进存档层的内存缓存，真正落盘由 CampusSave 自己按 4 秒节流，
+--      升档时再强制写一次
+
+local function Restore()
+    local save = _G["CampusSave"]
+    if save == nil then return end
+
+    local a = tonumber(save.Get("affinity", 0)) or 0
+    if a <= affinity then return end
+
+    affinity = math.min(AFFINITY_MAX, a)
+    local nt = TierFor(affinity)
+    if nt > tier then
+        tier = nt
+        for t = 1, nt do tierCursor[t] = 1 end
+        if nt >= 4 then
+            -- 已经满档：直接进收尾姿态，但不再弹提示
+            finalePlayed = true
+            finalePose = true
+        end
+    end
+    print(string.format("[CampusStar] 存档恢复：好感 %d，第 %d 档", math.floor(affinity), tier))
+end
+
+function SaveAffinity(force)
+    local save = _G["CampusSave"]
+    if save == nil then return end
+    -- 不自己缓存"上次写到多少"：被节流跳过时会永久漏写。交给 CampusSave 按内容比对。
+    save.Set("affinity", math.floor(affinity))
+    if force then save.Flush(true) end
+end
+
+local function TryHookSave()
+    if saveHooked then return end
+    local save = _G["CampusSave"]
+    if save == nil then return end
+    saveHooked = true
+    save.OnReady(Restore)
 end
 
 -- 只说不动：是否走到位由 Tick 里的 stopDist 判断，两个距离不能混用
@@ -325,7 +375,9 @@ function Awake()
     tier = 1
     finalePlayed = false
     finalePose = false
+    saveHooked = false
     HideBubble()
+    TryHookSave()          -- 存档若已就绪会立刻把好感度抬回来
 
     print(string.format("[CampusStar] %s ready, lines=%d, home=%s",
         tostring(root.name), #allQuads, home ~= nil and tostring(home) or "nil"))
@@ -363,6 +415,8 @@ local function Tick(dt, source)
 
     if dt <= 0 then return end
     if dt > 0.2 then dt = 0.2 end
+
+    TryHookSave()          -- CampusSave 可能比本脚本晚 Awake，这里补挂
 
     -- 名牌正对相机（quad 正面朝 +Z）
     local cam = CS.UnityEngine.Camera.main
@@ -423,6 +477,7 @@ local function Tick(dt, source)
         affinity = math.min(AFFINITY_MAX, affinity + AFFINITY_PER_SEC * dt)
         UpdateTier()
         TrySay()
+        SaveAffinity(false)   -- 只同步到内存，落盘交给 CampusSave 的定期节流
     end
 end
 

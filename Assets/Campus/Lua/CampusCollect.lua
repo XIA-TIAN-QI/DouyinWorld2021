@@ -21,6 +21,10 @@ local TOTAL       = 8
 local doneCount = 0
 local isDone = {}
 
+-- 前向声明：QuestApi.Accept 定义在下面，但那会儿 SyncSave 还没声明，
+-- 不提前 local 的话闭包里会被解析成全局 nil
+local SyncSave
+
 -- ===== 任务状态 =====
 -- 架构参考同平台开源项目 XiaoHuoRen_EggRescue（仓库无 LICENSE，只借鉴"全局管理器 +
 -- 条件分支 + 触发即改变量"的思路，代码全部自己重写）与 SDK 自带 DouyinDataStore 示例。
@@ -80,6 +84,7 @@ function QuestApi.Accept()
     stage = "collecting"
     Toast("任务：集齐 8 枚校徽，交给门厅陈列架")
     print("[CampusQuest] accepted")
+    SyncSave()
 end
 
 -- 线索表：NPC → 该优先说的台词序号（1 基，对应 NpcLines.txt 的出现顺序）。
@@ -179,6 +184,80 @@ local function TryCollect(actor)
         print("[CampusCollect] 全部集齐，广场地标已点亮")
         Toast("八枚校徽集齐！去广场看毕业典礼")
     end
+
+    SyncSave()
+end
+
+-- ---------------------------------------------------------------- 存档
+-- 存档层在 CampusSave.lua（挂在独立宿主上）。它异步读 DataStore，读到了才回调这里。
+-- 两个必须守住的点：
+--   1. **取并集**，不是覆盖。读档通常比 Awake 晚十几帧，这期间玩家可能已经捡了一枚；
+--      直接赋值会把那枚抹掉，还会让 doneCount 和 isDone 对不上。
+--   2. **读不到就不写**。CampusSave 自己会挡住（ready=false 时 WriteNow 直接返回），
+--      这里不用再判一次，但别绕过它直接调 manager。
+
+-- 把存档里"已入柜"的校徽摆回架子：直接用 FreezeTo，玩家重进世界看到的是
+-- 校徽已经在陈列架上，而不是凭空消失。FreezeTo 会禁用 DouyinScript，捡不起来。
+local function Restore()
+    local save = _G["CampusSave"]
+    if save == nil then return end
+
+    local bits = save.Get("emblems", "")
+    local restored = 0
+
+    for i = 1, TOTAL do
+        if isDone[i] ~= true and string.sub(bits, i, i) == "1" then
+            isDone[i] = true
+            emblemFound[i] = true
+            doneCount = doneCount + 1
+            restored = restored + 1
+
+            local item = FindGo(string.format(ITEM_PREFIX .. "%02d", i))
+            local slot = SlotOf(i)
+            if item ~= nil and slot ~= nil then
+                FreezeTo(item, slot)
+            elseif item ~= nil then
+                item:SetActive(false)     -- 没有槽位就只藏起来，别把徽章留在场上
+            end
+            LightSlot(i)
+        end
+    end
+
+    if save.Get("quest", 0) == 1 or doneCount > 0 then
+        questAccepted = true
+        if stage == "idle" then stage = "collecting" end
+    end
+    if doneCount >= TOTAL then
+        stage = "done"
+        ShowReward()
+    end
+
+    print(string.format("[CampusCollect] 存档恢复 %d 枚（共 %d/%d, quest=%s, stage=%s）",
+        restored, doneCount, TOTAL, tostring(questAccepted), stage))
+end
+
+function SyncSave()
+    local save = _G["CampusSave"]
+    if save == nil then return end
+    local bits = {}
+    for i = 1, TOTAL do
+        bits[i] = isDone[i] and "1" or "0"
+    end
+    save.Set("emblems", table.concat(bits))
+    save.Set("quest", (questAccepted or doneCount > 0) and 1 or 0)
+    save.Flush(true)     -- 入柜是低频事件（最多 8 次），强制立刻落盘
+end
+
+-- CampusSave 的 Awake 可能比本脚本晚（场景对象顺序不保证），
+-- 所以 Awake 里试一次，没挂上就靠 LateUpdate 补挂。
+local saveHooked = false
+
+local function TryHookSave()
+    if saveHooked then return end
+    local save = _G["CampusSave"]
+    if save == nil then return end
+    saveHooked = true
+    save.OnReady(Restore)
 end
 
 function Awake()
@@ -187,7 +266,9 @@ function Awake()
     questAccepted = false
     stage = "idle"
     emblemFound = {}
+    saveHooked = false
     _G["CampusQuest"] = QuestApi
+    TryHookSave()
     print("[CampusCollect] ready, total=" .. TOTAL .. " (CampusQuest registered)")
 end
 
@@ -211,3 +292,21 @@ end
 function OnActorTriggerEnter(actor)
     TryCollect(actor)
 end
+
+-- ---------------------------------------------------------------- 帧驱动
+-- 只为补挂存档：CampusSave 的 Awake 可能比本脚本晚。挂上之后 TryHookSave
+-- 第一行就 return，开销可以忽略。帧号去重，理由同 NPCTalk.lua。
+
+local lastFrame = -1
+
+local function Tick()
+    local f = CS.UnityEngine.Time.frameCount
+    if f == nil then f = CS.UnityEngine.Time.time end
+    if f == lastFrame then return end
+    lastFrame = f
+    TryHookSave()
+end
+
+function Update()     Tick() end
+function LateUpdate() Tick() end
+function OnUpdate()   Tick() end

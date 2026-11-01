@@ -123,6 +123,7 @@ public static class DouyinCampusBuilder
         BuildDetails(props, building);
         BuildCollection(collect);
         BuildNPCs(npc);
+        BuildDataStore(campus);     // 存档：官方 DataStore 预制体 + CampusSave 宿主
 
         // 拾取物都建完了，统一玻璃材质（省 2 个额度给女主角用）
         UnifyGlassSceneWide();
@@ -1392,6 +1393,49 @@ public static class DouyinCampusBuilder
         Debug.Log("[Campus] NPC = " + NpcSpecs.Length);
 
         BuildStar(parent, nameCells, lineCellsByNpc, lineTiersByNpc);
+    }
+
+    /// <summary>
+    /// 存档系统：两个对象。
+    ///   1) 官方 DouyinDataStore 预制体 —— 它身上有 NetGUID（网络对象），必须实例化，
+    ///      自己 new 一个空物体挂 DouyinScript 未必能注册到网络层。里面是 3 个 manager
+    ///      脚本（DataStore / PlayerDataStore / PetDataStore），Pet 那个没有宠物就什么都不做。
+    ///   2) CampusSave 宿主 —— 我们自己的业务层（内存缓存 + 串行化 + 节流 + 就绪回调），
+    ///      复用 CreateNpcHost 造壳，因为 DouyinScript 的 ScriptAsset / autoUpdate
+    ///      这些序列化字段只有走那条路才设得对。
+    /// </summary>
+    static void BuildDataStore(Transform parent)
+    {
+        const string prefabPath = "Assets/DouyinVCreateSDK/World/Examples/DouyinDataStore/DouyinDataStore.prefab";
+        const string saveLua = "Assets/Campus/Lua/CampusSave.lua";
+
+        var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        if (prefab == null)
+        {
+            Debug.LogWarning("[Campus] 缺少 " + prefabPath + "，存档不可用（玩法仍可跑，只是不保存）");
+        }
+        else
+        {
+            var store = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
+            store.name = "CampusDataStore";
+            store.transform.localPosition = Vector3.zero;
+            var mgr = FindType("DouyinScript");
+            int n = 0;
+            if (mgr != null)
+            {
+                foreach (var s in store.GetComponents(mgr)) n++;
+            }
+            Debug.Log("[Campus] 存档 DataStore 就位，manager 脚本 " + n + " 个");
+        }
+
+        var host = CreateNpcHost(parent, "CampusSave", Vector3.zero, saveLua);
+        if (host != null)
+        {
+            // 存档宿主只是挂脚本用的，别留刚体参与物理
+            var rb = host.GetComponent<Rigidbody>();
+            if (rb != null) UnityEngine.Object.DestroyImmediate(rb);
+            Debug.Log("[Campus] 存档业务宿主 CampusSave 已建成");
+        }
     }
 
     /// <summary>

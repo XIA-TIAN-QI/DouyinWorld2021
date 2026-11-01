@@ -329,6 +329,42 @@ def main():
     d = dist_xz(p, (1.5, 0, -3.8))
     check(d < 1.7, "满档后靠得更近（%.2fm）" % d)
 
+    print("[15] 存档恢复：好感度按档回归，且不重复提示")
+    # 存档层 mock：OnReady 立即回放，等价于"读档比 Awake 晚，但在第一帧就到了"
+    SAVE_MOCK = """
+saveMock = { affinity = %d, flushes = 0 }
+function saveMock.Get(key, def)
+    local v = saveMock[key]
+    if v == nil then return def end
+    return v
+end
+function saveMock.Set(key, v) saveMock[key] = v end
+function saveMock.Flush(force) saveMock.flushes = saveMock.flushes + 1 end
+function saveMock.OnReady(fn) fn() end
+function saveMock.Ready() return true end
+_G["CampusSave"] = saveMock
+"""
+
+    lt3 = new_state()
+    lt3.execute(SAVE_MOCK % 100)          # 100 > 门槛 80 → 第 3 档
+    player_at(lt3, 1.5, 0, -3.8)
+    step(lt3, 1)                          # 一帧内补挂存档并恢复
+    check(lt3.eval("#toastLog") == 0, "恢复第 3 档不弹提示（重进世界不该再报一遍）")
+    l3 = active_line(lt3)
+    check(l3 is not None and l3.startswith("Line_3"), "恢复后直接说第 3 档：" + str(l3))
+    check(lt3.eval("saveMock.affinity") >= 100, "内存值同步进了存档层")
+
+    lt4 = new_state()
+    lt4.execute(SAVE_MOCK % 200)          # 满档
+    player_at(lt4, 1.5, 0, -3.8)
+    step(lt4, 60 * 6)
+    check(lt4.eval("#toastLog") == 0, "满档存档恢复不重复弹提示")
+    l4 = active_line(lt4)
+    check(l4 is not None and l4.startswith("Line_4"), "恢复满档直接说第 4 档：" + str(l4))
+    p = pos(lt4)
+    d = dist_xz(p, (1.5, 0, -3.8))
+    check(d < 1.7, "恢复满档后靠得更近（%.2fm）" % d)
+
     print()
     print("全部通过" if ok else "有失败项")
     return 0 if ok else 1
