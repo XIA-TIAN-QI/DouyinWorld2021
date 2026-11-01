@@ -44,7 +44,7 @@ Material:
     m_Floats:
     - _AlphaCutoff: 0.5
     - _BaseColorPower: 1
-    - _CullMode: 2
+    - _CullMode: 0
     - _EmissionPower: 0.85
     - _FresnelInt: 5
     - _Metallic: 0

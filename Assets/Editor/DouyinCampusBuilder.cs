@@ -2496,6 +2496,12 @@ public static class DouyinCampusBuilder
                 m.SetColor("_EmissionColor", new Color(0.92f, 0.92f, 0.92f));
                 m.SetFloat("_EmissionPower", 0.85f);
                 m.SetColor("_BaseColor", new Color(0.35f, 0.35f, 0.35f));   // 压暗底图，避免自发光叠加后过曝
+                // 双面渲染：名牌/气泡是单面 quad，靠 Lua 每帧 billboard 朝向相机。
+                // 真机上 Camera.main 可能拿不到（或不是玩家视角相机），billboard 一旦失效，
+                // quad 就保持背对玩家被背面剔除 —— 表现为"头顶名字和台词全都看不见"。
+                // World_Lit 的 Forward pass 读 _CullMode（0=Off 双面），把它关掉就彻底根治：
+                // 背面看文字是镜像的，但"能看到"永远优于"看不到"。
+                m.SetFloat("_CullMode", 0f);
             }
             if (kv.Key == "M_SignText")
             {

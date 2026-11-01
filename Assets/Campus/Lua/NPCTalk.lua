@@ -76,6 +76,21 @@ local function Dist(a, b)
     return math.sqrt(dx * dx + dy * dy + dz * dz)
 end
 
+-- 名牌 billboard 用的相机。真机上 Camera.main 可能为 nil（抖音玩家相机未必
+-- 打 MainCamera 标签），退而取 allCameras 的第一个。全程 pcall，拿不到就返回 nil
+-- （此时名牌保持朝向，双面渲染兜底保证仍可见）。
+local function GetCamera()
+    local ok, cam = pcall(function() return CS.UnityEngine.Camera.main end)
+    if ok and cam ~= nil then return cam end
+    ok, cam = pcall(function()
+        local all = CS.UnityEngine.Camera.allCameras
+        if all ~= nil and all.Length > 0 then return all[0] end
+        return nil
+    end)
+    if ok and cam ~= nil then return cam end
+    return nil
+end
+
 local function HideBubble()
     if bubble ~= nil then
         bubble.gameObject:SetActive(false)
@@ -387,8 +402,8 @@ local function Tick(dt, source)
     if dt <= 0 then return end
     if dt > 0.2 then dt = 0.2 end      -- 卡帧时别一步跨半米
 
-    -- 名牌正对相机：quad 正面朝 +Z，所以让 +Z 指向相机
-    local cam = CS.UnityEngine.Camera.main
+    -- 名牌正对相机：quad 正面朝 -Z，LookRotation(away) 让 +Z 背向相机，正面就朝向相机
+    local cam = GetCamera()
     if label ~= nil and cam ~= nil then
         local away = label.position - cam.transform.position
         if away.sqrMagnitude > 0.0001 then
