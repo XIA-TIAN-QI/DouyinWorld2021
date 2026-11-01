@@ -153,10 +153,17 @@ testVec3 = v3
 """
 
 
-def new_state():
+def new_state(npc="NPC_01", lines=4, quest_lua=None):
+    h = HARNESS
+    if npc != "NPC_01":
+        h = h.replace('root = new_t("NPC_01")', 'root = new_t("%s")' % npc)
+    if lines != 4:
+        h = h.replace("for i = 1, 4 do", "for i = 1, %d do" % lines)
     lt = lupa.LuaRuntime(unpack_returned_tuples=True)
-    lt.execute(HARNESS)
+    lt.execute(h)
     lt.execute(SCRIPT.read_text(encoding="utf-8"))
+    if quest_lua:
+        lt.execute(quest_lua)
     lt.execute("Awake()")
     return lt
 
@@ -186,6 +193,38 @@ def active_line(lt):
         if lt.eval("bubbleNode.childList[%d].gameObject.active" % i):
             return lt.eval("bubbleNode.childList[%d].name" % i)
     return None
+
+
+QUEST_STUB = r"""
+-- 假任务 API（对应 CampusCollect.lua 注册的 _G["CampusQuest"]）
+QUEST = { accepted = %s, count = %d, complete = %s, acceptCalls = 0, hint = %d }
+_G["CampusQuest"] = {
+    IsAccepted = function(self) return QUEST.accepted end,
+    Count = function(self) return QUEST.count end,
+    IsComplete = function(self) return QUEST.complete end,
+    Stage = function(self)
+        if QUEST.complete then return "done" end
+        if QUEST.accepted then return "collecting" end
+        return "idle"
+    end,
+    HintLine = function(self, npcId)
+        if QUEST.complete then return nil end
+        return QUEST.hint
+    end,
+    Accept = function(self)
+        QUEST.accepted = true
+        QUEST.acceptCalls = QUEST.acceptCalls + 1
+    end,
+}
+"""
+
+
+def approach(lt):
+    """把玩家放到 NPC 身边 1.2m 范围内，推 3 帧让它开口"""
+    g = lt.globals()
+    p = lt.eval("root.position")
+    g.playerPos = lt.eval("testVec3(%f, 0, %f)" % (p.x + 1.2, p.z + 1.2))
+    step(lt, 3)
 
 
 def main():
@@ -302,6 +341,28 @@ def main():
     after = pos(lt)
     jump = ((after[0] - cur[0]) ** 2 + (after[2] - cur[2]) ** 2) ** 0.5
     check(jump < 0.5, "5 秒卡帧只前进了 %.2f 米（被截断到 0.2s）" % jump)
+
+    print("[13] 任务选句：老陈发任务 / 进度 / 完成，其他 NPC 给线索")
+    lt_o = new_state(npc="NPC_07", lines=7,
+                     quest_lua=QUEST_STUB % ("false", 0, "false", 0))
+    approach(lt_o)
+    check(active_line(lt_o) == "Line_05", "老陈先说发任务句：" + str(active_line(lt_o)))
+    check(lt_o.eval("QUEST.acceptCalls") == 1, "说完没接取任务")
+
+    lt_m = new_state(npc="NPC_07", lines=7,
+                     quest_lua=QUEST_STUB % ("true", 0, "false", 0))
+    approach(lt_m)
+    check(active_line(lt_m) == "Line_06", "进行中先说提醒句：" + str(active_line(lt_m)))
+
+    lt_d = new_state(npc="NPC_07", lines=7,
+                     quest_lua=QUEST_STUB % ("true", 8, "true", 0))
+    approach(lt_d)
+    check(active_line(lt_d) == "Line_07", "完成后说收尾句：" + str(active_line(lt_d)))
+
+    lt_h = new_state(npc="NPC_01", lines=4,
+                     quest_lua=QUEST_STUB % ("true", 2, "false", 3))
+    approach(lt_h)
+    check(active_line(lt_h) == "Line_03", "线索 NPC 先说线索句：" + str(active_line(lt_h)))
 
     print()
     if ok:

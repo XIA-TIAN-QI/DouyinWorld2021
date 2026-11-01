@@ -25,6 +25,15 @@ local TURN_RATE   = 7.0    -- 转向插值速度
 local id
 local speed = 1.0
 
+-- ===== 任务线选句 =====
+-- 老陈（NPC_07）的 5~7 句只在对应阶段说，不进日常轮播（平时只轮 1~4 句）。
+-- 其他 NPC 靠近时优先插一句线索（由 CampusCollect.lua 的 _G["CampusQuest"] 提供）。
+local QUEST_LINES = {
+    NPC_07 = { offer = 5, mid = 6, done = 7 },
+}
+local normalMax = 0          -- 日常轮播上限
+local pendingSpecial = true  -- 这次靠近还没插过任务/线索句
+
 local root, model
 local armL, armR, legL, legR
 local label, bubble
@@ -139,6 +148,40 @@ end
 
 -- ---------------------------------------------------------------- 搭话
 
+-- 任务阶段句：老陈专用。返回 1 基台词序号或 nil
+local function QuestSpecialLine()
+    local quest = _G["CampusQuest"]
+    local q = QUEST_LINES[id]
+    if q == nil or quest == nil or quest.IsComplete == nil then
+        return nil
+    end
+    if not quest:IsAccepted() then
+        if q.offer <= #lines then return q.offer end
+        return nil
+    end
+    if quest:IsComplete() then
+        if q.done <= #lines then return q.done end
+        return nil
+    end
+    if quest:Count() == 0 and q.mid <= #lines then
+        return q.mid
+    end
+    return nil
+end
+
+-- 线索句：其他 NPC 专用。只在任务进行中、这次刚靠近时插一句
+local function QuestHintLine()
+    local quest = _G["CampusQuest"]
+    if quest == nil or quest.HintLine == nil then
+        return nil
+    end
+    local idx = quest:HintLine(id)
+    if idx ~= nil and idx >= 1 and idx <= normalMax then
+        return idx
+    end
+    return nil
+end
+
 local function Talk(dt, playerPos)
     local pos = root.position
     FaceTo(playerPos.x - pos.x, playerPos.z - pos.z, dt * 1.4)
@@ -146,8 +189,28 @@ local function Talk(dt, playerPos)
 
     local now = CS.UnityEngine.Time.time
     if now >= nextLineAt then
-        Say(lineIndex)
-        lineIndex = lineIndex % math.max(1, #lines) + 1
+        local special = nil
+        if pendingSpecial then
+            pendingSpecial = false
+            special = QuestSpecialLine()
+            if special == nil then
+                special = QuestHintLine()
+            end
+        end
+
+        if special ~= nil then
+            Say(special)
+            -- 老陈把任务说出口之后正式接取（Say 只负责显示）
+            local q = QUEST_LINES[id]
+            local quest = _G["CampusQuest"]
+            if q ~= nil and quest ~= nil and quest.Accept ~= nil
+                and special == q.offer and not quest:IsAccepted() then
+                quest:Accept()
+            end
+        else
+            Say(lineIndex)
+            lineIndex = lineIndex % math.max(1, normalMax) + 1
+        end
         nextLineAt = now + TALK_GAP
     end
 end
@@ -187,10 +250,16 @@ function Awake()
     end
 
     id = self.gameObject.name
+    normalMax = #lines
+    local q = QUEST_LINES[id]
+    if q ~= nil and q.offer > 1 then
+        normalMax = math.min(#lines, q.offer - 1)
+    end
     wpIndex = 1
     phase = 0
     talking = false
     lineIndex = 1
+    pendingSpecial = true
     nextLineAt = 0
     bubbleHideAt = 0
     HideBubble()
@@ -266,6 +335,7 @@ local function Tick(dt, source)
         if not talking then
             talking = true
             nextLineAt = 0            -- 一靠近就说第一句
+            pendingSpecial = true     -- 这次靠近允许插一句任务/线索
         end
         Talk(dt, playerPos)
     elseif talking and d ~= nil and d < LEAVE_RANGE then

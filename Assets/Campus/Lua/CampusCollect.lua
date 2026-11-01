@@ -21,6 +21,14 @@ local TOTAL       = 8
 local doneCount = 0
 local isDone = {}
 
+-- ===== 任务状态 =====
+-- 架构参考同平台开源项目 XiaoHuoRen_EggRescue（仓库无 LICENSE，只借鉴"全局管理器 +
+-- 条件分支 + 触发即改变量"的思路，代码全部自己重写）与 SDK 自带 DouyinDataStore 示例。
+-- 不新增场景对象：状态就挂在收集脚本上，NPC 通过 _G["CampusQuest"] 查询。
+local questAccepted = false
+local stage = "idle"          -- idle / collecting / done
+local emblemFound = {}
+
 local function FindGo(name)
     return CS.UnityEngine.GameObject.Find(name)
 end
@@ -51,6 +59,42 @@ local function Toast(msg)
     if not ok then
         print(msg)
     end
+end
+
+-- ---------------------------------------------------------------- 任务 API
+-- 对外只读查询 + 一个 Accept()。NPCTalk.lua 用 _G["CampusQuest"] 拿它。
+local QuestApi = {}
+
+function QuestApi.Count() return doneCount end
+function QuestApi.Total() return TOTAL end
+-- 注意：这两个方法带参数，必须显式写 self —— 调用方用的是冒号语法 `quest:Has(i)`，
+-- 不写 self 的话第一个实参会被当 self 吃掉，index/npcId 永远拿到表本身。
+function QuestApi.Has(self, index) return emblemFound[index] == true end
+function QuestApi.IsAccepted() return questAccepted end
+function QuestApi.IsComplete() return doneCount >= TOTAL end
+function QuestApi.Stage() return stage end
+
+function QuestApi.Accept()
+    if questAccepted then return end
+    questAccepted = true
+    stage = "collecting"
+    Toast("任务：集齐 8 枚校徽，交给门厅陈列架")
+    print("[CampusQuest] accepted")
+end
+
+-- 线索表：NPC → 该优先说的台词序号（1 基，对应 NpcLines.txt 的出现顺序）。
+-- 只在"任务进行中 + 这次刚靠近"时插一句，日常轮播仍是前 4 句。
+local HINT_LINE = {
+    NPC_01 = 3,   -- 听说集齐八枚，广场地标会亮
+    NPC_03 = 2,   -- 广场中间的台子
+    NPC_04 = 4,   -- 球门那边好像有一枚
+    NPC_05 = 4,   -- 三层阅览角
+    NPC_06 = 3,   -- 二楼走廊尽头还有个柜子
+}
+
+function QuestApi.HintLine(self, npcId)
+    if not questAccepted or doneCount >= TOTAL then return nil end
+    return HINT_LINE[npcId]
 end
 
 -- 奖励根节点保持激活（否则 Find 不到），子物体才是真正点亮的部分
@@ -113,7 +157,14 @@ local function TryCollect(actor)
     end
 
     isDone[index] = true
+    emblemFound[index] = true
     doneCount = doneCount + 1
+
+    -- 玩家先捡到再找老陈也不会卡住：第一枚自动把任务置为进行中
+    if not questAccepted then
+        questAccepted = true
+        stage = "collecting"
+    end
 
     actor:Drop(item)
     FreezeTo(item, slot)
@@ -123,16 +174,27 @@ local function TryCollect(actor)
     Toast(string.format("校徽 %d/%d", doneCount, TOTAL))
 
     if doneCount >= TOTAL then
+        stage = "done"
         ShowReward()
         print("[CampusCollect] 全部集齐，广场地标已点亮")
-        Toast("校徽集齐！广场地标已点亮")
+        Toast("八枚校徽集齐！去广场看毕业典礼")
     end
 end
 
 function Awake()
     doneCount = 0
     isDone = {}
-    print("[CampusCollect] ready, total=" .. TOTAL)
+    questAccepted = false
+    stage = "idle"
+    emblemFound = {}
+    _G["CampusQuest"] = QuestApi
+    print("[CampusCollect] ready, total=" .. TOTAL .. " (CampusQuest registered)")
+end
+
+function OnDestroy()
+    if _G["CampusQuest"] == QuestApi then
+        _G["CampusQuest"] = nil
+    end
 end
 
 -- 道具侧（本物体是触发器）走这个：玩家 collider 进入时派发

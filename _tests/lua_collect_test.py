@@ -146,6 +146,22 @@ end
 Awake()
 check(#log == 1 and string.find(log[1], "ready, total=8", 1, true) ~= nil, "Awake 未打印 ready")
 
+-- 任务 API：注册与初始状态
+local q = _G["CampusQuest"]
+check(q ~= nil, "CampusQuest 未注册")
+if q ~= nil then
+    check(q:IsAccepted() == false, "初始不该已接取")
+    check(q:Count() == 0, "初始计数不是 0")
+    check(q:IsComplete() == false, "初始不该完成")
+    check(q:Stage() == "idle", "初始阶段不是 idle")
+
+    -- 主动接取：老陈发任务走这条
+    q:Accept()
+    check(q:IsAccepted() == true, "Accept() 没生效")
+    check(q:Stage() == "collecting", "Accept() 后阶段不是 collecting")
+    check(countLog("TOAST:任务") == 1, "接取提示没弹")
+end
+
 -- 空手进入：什么都不该发生
 actor.held = nil
 OnPlayerTriggerEnter(scene.player)
@@ -173,6 +189,14 @@ check(scene.items[7].cols[0].enabled == false, "第 7 枚碰撞体没关")
 check(scene.items[7].script.enabled == false, "第 7 枚脚本没关")
 check(scene.rewardKids[1].active == false, "没集齐就把奖励点亮了")
 
+-- 任务进度：7 枚时仍在进行中，线索可用
+if q ~= nil then
+    check(q:Count() == 7, "计数不是 7")
+    check(q:Has(7) == true and q:Has(8) == false, "Has() 状态不对")
+    check(q:Stage() == "collecting", "阶段不是 collecting")
+    check(q:HintLine("NPC_04") == 4, "进行中没给线索")
+end
+
 -- 重复交付：同一枚再进一次，不应计数
 actor.held = scene.items[3].go
 OnPlayerTriggerEnter(scene.player)
@@ -188,7 +212,14 @@ local lit = 0
 for i = 1, 8 do if scene.rewardKids[i].active then lit = lit + 1 end end
 check(lit == 8, "奖励子物体点亮 " .. lit .. "/8")
 check(countLog("全部集齐") == 1, "集齐日志没打印")
-check(countLog("TOAST:校徽集齐") == 1, "集齐提示没弹")
+check(countLog("TOAST:八枚校徽集齐") == 1, "集齐提示没弹")
+
+-- 任务完成：阶段切换、线索关闭
+if q ~= nil then
+    check(q:IsComplete() == true, "没有标记完成")
+    check(q:Stage() == "done", "阶段不是 done")
+    check(q:HintLine("NPC_04") == nil, "完成后还在给线索")
+end
 
 -- 全部 8 格都亮
 local glowOn = 0
