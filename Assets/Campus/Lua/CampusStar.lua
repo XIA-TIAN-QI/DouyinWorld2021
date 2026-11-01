@@ -216,6 +216,13 @@ local function TryHookSave()
     save.OnReady(Restore)
 end
 
+-- 对外只读状态。结局系统靠 IsMax() 判断"她会不会陪你参加毕业典礼"——
+-- 第 4 档台词「毕业典礼那天，我陪你去」就是挂在这个条件上的，不能是句空话。
+local StarApi = {}
+function StarApi.IsMax() return tier >= 4 end
+function StarApi.Tier() return tier end
+function StarApi.Affinity() return math.floor(affinity) end
+
 -- 只说不动：是否走到位由 Tick 里的 stopDist 判断，两个距离不能混用
 local function TrySay()
     local now = CS.UnityEngine.Time.time
@@ -377,6 +384,7 @@ function Awake()
     finalePose = false
     saveHooked = false
     HideBubble()
+    _G["CampusStar"] = StarApi
     TryHookSave()          -- 存档若已就绪会立刻把好感度抬回来
 
     print(string.format("[CampusStar] %s ready, lines=%d, home=%s",
@@ -486,3 +494,9 @@ end
 function Update()     Tick(CS.UnityEngine.Time.deltaTime, "Update")     end
 function LateUpdate() Tick(CS.UnityEngine.Time.deltaTime, "LateUpdate") end
 function OnUpdate()   Tick(CS.UnityEngine.Time.deltaTime, "OnUpdate")   end
+
+function OnDestroy()
+    if _G["CampusStar"] == StarApi then
+        _G["CampusStar"] = nil
+    end
+end

@@ -365,6 +365,14 @@ _G["CampusSave"] = saveMock
     d = dist_xz(p, (1.5, 0, -3.8))
     check(d < 1.7, "恢复满档后靠得更近（%.2fm）" % d)
 
+    print("[16] 对外状态接口（结局系统要用）")
+    check(lt4.eval("_G['CampusStar'] ~= nil"), "CampusStar 已注册到 _G")
+    check(lt4.eval("_G['CampusStar'].IsMax()") is True, "满档后 IsMax() 为 true")
+    check(lt4.eval("_G['CampusStar'].Tier()") == 4, "Tier() 返回 4")
+    lt5 = new_state()
+    check(lt5.eval("_G['CampusStar'].IsMax()") is False, "新会话初始不是满档")
+    check(lt5.eval("_G['CampusStar'].Affinity()") == 0, "初始好感 0")
+
     print()
     print("全部通过" if ok else "有失败项")
     return 0 if ok else 1

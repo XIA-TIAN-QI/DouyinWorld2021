@@ -946,7 +946,9 @@ public static class DouyinCampusBuilder
         // 校门内，门卫在主干道东沿来回。
         // 原来走 x=4.2 —— 正好压在 Hedge_E1 的 x 范围（4.15~5.05）里，人会插进绿篱
         new NpcSpec("老陈", "short", "M_Metal", "M_Glass", "M_Metal", 0.70f, 1.06f, false,
-            new[] { P(3.05f, -22.0f), P(3.05f, -18.2f) }),
+            // 门卫不巡逻，只在门内小范围踱步（1.4m）。原来从 -22 走到 -18.2 会走离出生点，
+            // 玩家一睁眼就看到他已经晃到 4m 外了
+            new[] { P(2.4f, -20.3f), P(2.4f, -18.9f) }),
     };
 
     static Font _npcFont;
@@ -1900,9 +1902,11 @@ public static class DouyinCampusBuilder
         go.name = "DouyinWorldRoot";
         go.transform.position = Vector3.zero;
 
-        // 出生点：广场中心偏南，面朝教学楼
-        var spawn = new GameObject("Spawn_Plaza").transform;
-        spawn.position = new Vector3(0, 0.2f, -3f);
+        // 出生点：校门内侧，老陈斜前方 2.4m —— 让他成为玩家进世界看到的第一个人。
+        // 之前出生在广场中心 (0,-3)，玩家几乎必然先捡到广场那枚校徽（离出生点 6m），
+        // 触发"第一枚自动接取任务"，老陈的发任务台词就永远播不出来了。
+        var spawn = new GameObject("Spawn_SchoolGate").transform;
+        spawn.position = new Vector3(0f, 0.2f, -20.5f);
         spawn.rotation = Quaternion.Euler(0, 0, 0);
 
         var so = new SerializedObject(go.GetComponent(FindType("DouyinWorldRoot")));

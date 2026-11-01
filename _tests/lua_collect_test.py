@@ -331,10 +331,14 @@ _G["CampusSave"] = saveMock
 Update()
 
 actor.held = scene.items[2].go
+local beforeTip = countLog("老陈让你把八枚带回门厅陈列架")
 OnPlayerTriggerEnter(scene.player)
 check(saveMock.emblems == "01000000", "入柜后位图没写回：" .. tostring(saveMock.emblems))
 check(saveMock.quest == 1, "入柜后任务位没写回")
 check(saveMock.flushes >= 1, "入柜后没有触发 Flush")
+-- 这一段是"没接任务就先捡"的路径：必须补提示，否则玩家不知道自己在收集什么
+check(countLog("老陈让你把八枚带回门厅陈列架") == beforeTip + 1,
+    "未接任务时捡第一枚没有补提示")
 
 -- 存档到达前就捡了一枚：恢复时必须并集回写，否则那枚永久丢失
 _G["CampusSave"] = nil

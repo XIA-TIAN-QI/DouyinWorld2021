@@ -166,17 +166,23 @@ local function TryCollect(actor)
     doneCount = doneCount + 1
 
     -- 玩家先捡到再找老陈也不会卡住：第一枚自动把任务置为进行中
-    if not questAccepted then
-        questAccepted = true
-        stage = "collecting"
-    end
-
     actor:Drop(item)
     FreezeTo(item, slot)
     LightSlot(index)
 
     print(string.format("[CampusCollect] %s 已入柜 (%d/%d)", item.name, doneCount, TOTAL))
-    Toast(string.format("校徽 %d/%d", doneCount, TOTAL))
+
+    -- ⚠️ 这里必须补一句。玩家如果在遇到老陈之前就捡了校徽，任务会在他毫不知情的
+    -- 情况下开始，而老陈那句"毕业典礼要用八枚校徽……"的开场白也再不会播出来
+    -- （QuestSpecialLine 只在未接取时返回 offer 句）。只弹"校徽 1/8"等于什么都没说。
+    if not questAccepted then
+        questAccepted = true
+        stage = "collecting"
+        Toast(string.format("校徽 %d/%d · 老陈让你把八枚带回门厅陈列架", doneCount, TOTAL))
+        print("[CampusCollect] 未接任务先拾取，已自动接取并提示")
+    else
+        Toast(string.format("校徽 %d/%d", doneCount, TOTAL))
+    end
 
     if doneCount >= TOTAL then
         stage = "done"
