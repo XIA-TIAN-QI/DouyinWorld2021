@@ -1138,7 +1138,7 @@ public static class DouyinCampusBuilder
     }
 
     /// <summary>生成女主角：人形 + 名牌/台词 + 待机点，挂 CampusStar.lua</summary>
-    static void BuildStar(Transform parent, Dictionary<string, int> nameCells, Dictionary<string, int[]> lineCellsByNpc)
+    static void BuildStar(Transform parent, Dictionary<string, int> nameCells, Dictionary<string, int[]> lineCellsByNpc, Dictionary<string, int[]> lineTiersByNpc)
     {
         const string id = "NPC_08";
         var host = CreateNpcHost(parent, id, StarHome, "Assets/Campus/Lua/CampusStar.lua");
@@ -1148,7 +1148,8 @@ public static class DouyinCampusBuilder
 
         int nameCell = nameCells.ContainsKey(id) ? nameCells[id] : 0;
         var cells = lineCellsByNpc.ContainsKey(id) ? lineCellsByNpc[id] : new[] { 0 };
-        BuildNpcLabel(host.transform, nameCell, cells);
+        var tiers = (lineTiersByNpc != null && lineTiersByNpc.ContainsKey(id)) ? lineTiersByNpc[id] : null;
+        BuildNpcLabel(host.transform, nameCell, cells, tiers);
 
         // 待机点：Lua 用 Path/Waypoint_01 作为"回家"的坐标（她不像别人那样沿路点巡逻）
         var pathRoot = new GameObject("Path").transform;
@@ -1180,7 +1181,7 @@ public static class DouyinCampusBuilder
     /// 而 quad + World_Lit 和校名牌是同一条已验证的管线，截图和真机都能看到。
     /// 代价是台词要预先画进图集 —— 所以每句话一个 quad，Lua 只负责切显隐。
     /// </summary>
-    static void BuildNpcLabel(Transform root, int nameCell, int[] lineCells)
+    static void BuildNpcLabel(Transform root, int nameCell, int[] lineCells, int[] lineTiers = null)
     {
         var pivot = new GameObject("Label").transform;
         pivot.SetParent(root, false);
@@ -1207,7 +1208,12 @@ public static class DouyinCampusBuilder
 
         for (int i = 0; i < lineCells.Length; i++)
         {
-            var go = new GameObject("Line_" + (i + 1).ToString("00"));
+            // 有分档信息时把档号编进名字（Line_2_09），CampusStar.lua 靠它分组；
+            // 没有就沿用旧的 Line_09，NPC_01..07 完全不受影响。
+            string quadName = (lineTiers != null && i < lineTiers.Length)
+                ? "Line_" + lineTiers[i] + "_" + (i + 1).ToString("00")
+                : "Line_" + (i + 1).ToString("00");
+            var go = new GameObject(quadName);
             go.transform.SetParent(bubble, false);
             go.transform.localPosition = Vector3.zero;
             go.transform.localScale = new Vector3(1.26f, 1.26f, 1f);
@@ -1221,11 +1227,18 @@ public static class DouyinCampusBuilder
         bubble.gameObject.SetActive(false);
     }
 
-    /// <summary>读 NpcLines.txt：名字格号 + 每人的台词格号。格号必须和图集脚本铺的顺序一致（先名字后台词）</summary>
-    static void LoadNpcLineCells(out Dictionary<string, int> nameCells, out Dictionary<string, int[]> lineCells)
+    /// <summary>
+    /// 读 NpcLines.txt：名字格号 + 每人的台词格号 + 每句的档号。
+    /// 格号必须和图集脚本铺的顺序一致（先名字、后台词出现顺序）。
+    /// 档号来自 kind：L → 1，L2/L3/L4 → 2/3/4（黄思诚好感度分档用）。
+    /// </summary>
+    static void LoadNpcLineCells(out Dictionary<string, int> nameCells,
+                                 out Dictionary<string, int[]> lineCells,
+                                 out Dictionary<string, int[]> lineTiers)
     {
         nameCells = new Dictionary<string, int>();
         lineCells = new Dictionary<string, int[]>();
+        lineTiers = new Dictionary<string, int[]>();
 
         const string path = "Assets/Campus/NpcLines.txt";
         if (!File.Exists(path))
@@ -1235,8 +1248,8 @@ public static class DouyinCampusBuilder
         }
 
         var nameOrder = new List<string>();
-        var perNpc = new Dictionary<string, List<string>>();
-        var ids = new List<string>();
+        var ids = new List<string>();        // 每句台词属于谁，按文件出现顺序
+        var tierOfLine = new List<int>();    // 与 ids 一一对应
 
         foreach (var raw in File.ReadAllLines(path))
         {
@@ -1246,18 +1259,23 @@ public static class DouyinCampusBuilder
             if (parts.Length != 3) continue;
             string who = parts[0].Trim(), kind = parts[1].Trim();
             if (kind == "N") { nameOrder.Add(who); }
-            else if (kind == "L")
+            else if (kind.StartsWith("L"))
             {
-                if (!perNpc.ContainsKey(who)) perNpc[who] = new List<string>();
-                perNpc[who].Add(who);
+                int t = 1;
+                if (kind.Length > 1) int.TryParse(kind.Substring(1), out t);
+                if (t < 1) t = 1;
                 ids.Add(who);
+                tierOfLine.Add(t);
             }
         }
 
         int cell = 0;
         foreach (var who in nameOrder) nameCells[who] = cell++;
+
+        int k = 0;
         foreach (var who in ids)
         {
+            int t = tierOfLine[k++];
             if (lineCells.ContainsKey(who))
             {
                 var old = lineCells[who];
@@ -1265,8 +1283,18 @@ public static class DouyinCampusBuilder
                 old.CopyTo(grown, 0);
                 grown[old.Length] = cell++;
                 lineCells[who] = grown;
+
+                var oldT = lineTiers[who];
+                var grownT = new int[oldT.Length + 1];
+                oldT.CopyTo(grownT, 0);
+                grownT[oldT.Length] = t;
+                lineTiers[who] = grownT;
             }
-            else lineCells[who] = new[] { cell++ };
+            else
+            {
+                lineCells[who] = new[] { cell++ };
+                lineTiers[who] = new[] { t };
+            }
         }
 
         // 兜底：图集只有 64 格，越界就全指回第 0 格（宁可显示错字也不要空 mesh）
@@ -1335,7 +1363,7 @@ public static class DouyinCampusBuilder
 
     static void BuildNPCs(Transform parent)
     {
-        LoadNpcLineCells(out var nameCells, out var lineCellsByNpc);
+        LoadNpcLineCells(out var nameCells, out var lineCellsByNpc, out var lineTiersByNpc);
 
         for (int i = 0; i < NpcSpecs.Length; i++)
         {
@@ -1363,7 +1391,7 @@ public static class DouyinCampusBuilder
         }
         Debug.Log("[Campus] NPC = " + NpcSpecs.Length);
 
-        BuildStar(parent, nameCells, lineCellsByNpc);
+        BuildStar(parent, nameCells, lineCellsByNpc, lineTiersByNpc);
     }
 
     /// <summary>

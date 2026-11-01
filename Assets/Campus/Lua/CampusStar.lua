@@ -1,5 +1,9 @@
--- 黄思诚：女主角。和 NPCTalk.lua 那几个"路过的人"不是一套逻辑 ——
+-- 黄思诚：女主角 + 好感度系统
+--
+-- 和 NPCTalk.lua 那几个"路过的人"不是一套逻辑 ——
 -- 她不巡逻，她等你：发现玩家就主动迎上来，玩家走动就跟着，走太远才回原位。
+-- 在这之上叠了一层好感度：在 TALK_RANGE 内陪着她会慢慢加分（每说一句再加一点），
+-- 分四档（初识 / 熟络 / 心动 / 满），到档换一套台词；满档触发收尾：靠得更近 + 专属提示。
 --
 -- 挂在 NPC_08 的 DouyinScript 上（构建脚本 BuildStar 自动挂），子物体结构：
 --   Model/ArmL, ArmR, LegL, LegR   四肢枢轴
@@ -7,22 +11,34 @@
 --   Label / Label/Bubble/Line_xx   名牌与台词（贴图 quad，见 NPCTalk.lua 顶部注释）
 --   Path/Waypoint_01               待机点
 --
--- 台词同样是预渲染图集（T_NpcLines.png），脚本只切显隐。
+-- 台词是预渲染图集（T_NpcLines.png），脚本只切显隐。
+-- 分档信息写在 quad 名字里：Line_<档>_<序号>（见 NpcLines.txt 的 L2/L3/L4）。
+-- 老场景没有档号（Line_09）就全按第 1 档处理，不会崩。
+--
 -- 不用 NavMesh：她只在校门→广场这段活动，直线走就够；
 -- 玩家上楼/进教学楼她跟不进去（同层判定会让她放弃），这是刻意的 —— 她没有寻路能力，
 -- 硬追只会贴着墙根原地磨。
 
 local NOTICE     = 14.0   -- 进入这个距离：发现玩家，主动过来
-local TALK_RANGE = 2.60   -- 进入这个距离：开始说话。**注意它只控制"说不说"，不控制"走不走"** ——
+local TALK_RANGE = 2.60   -- 进入这个距离：开始说话 + 开始涨好感。
+                          -- **注意它只控制"说不说"，不控制"走不走"** ——
                           -- 走路的下限是 STOP_AT(1.9)。两个用途用同一个数，她就会在 2.6m 站住不走了
 local GIVEUP     = 22.0   -- 超出这个距离：放弃，回原位
 local STOP_AT    = 1.9    -- 追到离玩家这么近就停（不贴脸）
+local FINALE_AT  = 1.35   -- 满好感后她会站得更近一点
 local SPEED      = 2.10   -- 比普通 NPC 快一点，否则跟不上走路的玩家
 local TURN_RATE  = 8.0
 local TALK_GAP   = 4.6    -- 两句之间的间隔（她话密，比路人快）
 local BUBBLE_TIME= 4.5
 local ARRIVE_EPS = 0.35
 local LEVEL_EPS  = 1.0    -- 高度差超过这个就算"换了楼层"，不追
+
+-- 好感度：陪她站着 +3/秒；每说出一句额外 +4。
+-- 门槛 30 / 80 / 160 → 大约 10s / 27s / 53s 连续相处到档，短会话也跑得完。
+local AFFINITY_MAX      = 220
+local AFFINITY_PER_SEC  = 3.0
+local AFFINITY_PER_LINE = 4.0
+local TIER_THRESH       = { 0, 30, 80, 160 }   -- 下标 1..4
 
 -- 活动范围：只在校门 → 广场这一带。她不会冲进教学楼、也不会跑到操场去
 local AREA_X = 13.0
@@ -34,14 +50,21 @@ local V = CS.UnityEngine.Vector3
 local root, model
 local armL, armR, legL, legR
 local label, bubble
-local lines = {}
 local home
 
+local tierLines = {}     -- [档] = { quad, ... }
+local allQuads = {}      -- 扁平表，换句时统一关
+local tierCursor = {}    -- [档] = 下一句下标
+
 local phase = 0
-local lineIndex = 1
 local nextLineAt = 0
 local bubbleHideAt = 0
 local engaged = false
+
+local affinity = 0
+local tier = 1
+local finalePlayed = false
+local finalePose = false
 
 -- ---------------------------------------------------------------- 小工具
 
@@ -70,24 +93,87 @@ local function Dist(a, b)
     return math.sqrt(dx * dx + dy * dy + dz * dz)
 end
 
-local function FlatDist(a, b)
-    local dx, dz = a.x - b.x, a.z - b.z
-    return math.sqrt(dx * dx + dz * dz)
-end
-
 local function HideBubble()
     if bubble ~= nil then bubble.gameObject:SetActive(false) end
 end
 
-local function Say(i)
-    if bubble == nil or #lines == 0 then return end
-    if i < 1 then i = 1 end
-    if i > #lines then i = #lines end
-    for k = 1, #lines do
-        lines[k].gameObject:SetActive(k == i)
+local function Toast(msg)
+    local ok = pcall(function()
+        CS.DouyinUtility.Toast(msg)
+    end)
+    if not ok then print("[CampusStar] " .. msg) end
+end
+
+-- ---------------------------------------------------------------- 台词分档
+
+-- 只开一块 quad：图集方案下换台词 = 换显隐，没有文本可改
+local function ShowQuad(q)
+    for i = 1, #allQuads do
+        allQuads[i].gameObject:SetActive(allQuads[i] == q)
     end
-    bubble.gameObject:SetActive(true)
+    if bubble ~= nil then bubble.gameObject:SetActive(true) end
     bubbleHideAt = CS.UnityEngine.Time.time + BUBBLE_TIME
+end
+
+-- 取某一档的台词；这一档是空的就往前退一档（老场景只有 Line_01 时也能跑）
+local function TierList(t)
+    local list = tierLines[t]
+    while (list == nil or #list == 0) and t > 1 do
+        t = t - 1
+        list = tierLines[t]
+    end
+    return list or {}
+end
+
+local function SayFromTier(t)
+    local list = TierList(t)
+    if #list == 0 then return end
+    local idx = tierCursor[t] or 1
+    if idx < 1 or idx > #list then idx = 1 end
+    ShowQuad(list[idx])
+    tierCursor[t] = idx % #list + 1
+end
+
+local function TierFor(a)
+    local t = 1
+    for i = 2, #TIER_THRESH do
+        if a >= TIER_THRESH[i] then t = i end
+    end
+    return t
+end
+
+local function PlayFinale()
+    finalePose = true
+    if finalePlayed then return end
+    finalePlayed = true
+    -- 收尾那句多停一会儿，让玩家看清楚
+    if bubble ~= nil then
+        bubbleHideAt = CS.UnityEngine.Time.time + BUBBLE_TIME + 1.5
+    end
+    Toast("黄思诚 的好感已满 · 她好像有话对你说")
+end
+
+-- 只升不降：离开再回来不会掉档（短会话里惩罚感太重）
+local function UpdateTier()
+    local nt = TierFor(affinity)
+    if nt <= tier then return end
+    tier = nt
+    tierCursor[tier] = 1
+    if tier >= 4 then
+        PlayFinale()
+    else
+        Toast(string.format("黄思诚 好感提升 · 第 %d 档", tier))
+    end
+end
+
+-- 只说不动：是否走到位由 Tick 里的 stopDist 判断，两个距离不能混用
+local function TrySay()
+    local now = CS.UnityEngine.Time.time
+    if now < nextLineAt then return end
+    SayFromTier(tier)
+    nextLineAt = now + TALK_GAP
+    affinity = math.min(AFFINITY_MAX, affinity + AFFINITY_PER_LINE)
+    UpdateTier()
 end
 
 -- ---------------------------------------------------------------- 姿态
@@ -101,6 +187,18 @@ local function PoseIdle(now)
     if model ~= nil then
         model.localPosition = V(0, math.sin(now * 1.2) * 0.008, 0)
         model.localRotation = Q.Euler(0, 0, math.sin(now * 0.75) * 1.1)
+    end
+end
+
+-- 满好感：手放下来，不再叉腰（叉腰是"生人勿近"的架子），整个人松下来
+local function PoseFinale(now)
+    if armR ~= nil then armR.localRotation = Q.Euler(9, 0, -6) end
+    if armL ~= nil then armL.localRotation = Q.Euler(-9, 0, 6) end
+    if legL ~= nil then legL.localRotation = Q.identity end
+    if legR ~= nil then legR.localRotation = Q.identity end
+    if model ~= nil then
+        model.localPosition = V(0, math.sin(now * 1.1) * 0.006, 0)
+        model.localRotation = Q.Euler(0, 0, math.sin(now * 0.9) * 0.8)
     end
 end
 
@@ -162,22 +260,13 @@ end
 
 -- ---------------------------------------------------------------- 状态
 
-local function ChaseTo(playerPos, dt)
+local function ChaseTo(playerPos, dt, stopAt)
     local target = ClampTarget(playerPos)
-    local moved = MoveTo(target, dt, STOP_AT)
+    local moved = MoveTo(target, dt, stopAt)
     -- 走到边上了（玩家在范围外）：站着等，但脸朝玩家
     if moved then
         FaceTo(playerPos.x - root.position.x, playerPos.z - root.position.z, dt * 1.2)
     end
-end
-
--- 只说不动：是否走到位由 Update 里的 STOP_AT 判断，两个距离不能混用
-local function TrySay()
-    local now = CS.UnityEngine.Time.time
-    if now < nextLineAt then return end
-    Say(lineIndex)
-    lineIndex = lineIndex % math.max(1, #lines) + 1
-    nextLineAt = now + TALK_GAP
 end
 
 local function GoHome(dt)
@@ -205,12 +294,22 @@ function Awake()
     label = FindChild(root, "Label")
     bubble = FindChild(root, "Label/Bubble")
 
-    lines = {}
+    -- 台词 quad：按名字里的档号分组，组内按名字排序（Line_2_09 < Line_2_10）
+    tierLines = {}
+    allQuads = {}
+    tierCursor = {}
     if bubble ~= nil then
         for i = 0, bubble.childCount - 1 do
-            lines[#lines + 1] = bubble:GetChild(i)
+            local c = bubble:GetChild(i)
+            local t = tonumber(string.match(c.name, "^Line_(%d+)_%d+$"))
+            if t == nil then t = 1 end          -- 老格式 Line_09 全算第 1 档
+            if tierLines[t] == nil then tierLines[t] = {} end
+            table.insert(tierLines[t], c)
+            allQuads[#allQuads + 1] = c
         end
-        table.sort(lines, function(a, b) return a.name < b.name end)
+        for _, list in pairs(tierLines) do
+            table.sort(list, function(a, b) return a.name < b.name end)
+        end
     end
 
     local pathRoot = FindChild(root, "Path")
@@ -219,14 +318,17 @@ function Awake()
     end
 
     phase = 0
-    lineIndex = 1
     nextLineAt = 0
     bubbleHideAt = 0
     engaged = false
+    affinity = 0
+    tier = 1
+    finalePlayed = false
+    finalePose = false
     HideBubble()
 
     print(string.format("[CampusStar] %s ready, lines=%d, home=%s",
-        tostring(root.name), #lines, home ~= nil and tostring(home) or "nil"))
+        tostring(root.name), #allQuads, home ~= nil and tostring(home) or "nil"))
 end
 
 -- ---------------------------------------------------------------- 帧驱动
@@ -243,12 +345,12 @@ local function Diag(tag, playerPos, d, dt)
     diagCount = diagCount + 1
     local fc = CS.UnityEngine.Time.frameCount
     if fc == nil then fc = -1 end
-    print(string.format("[CampusStar] %s %s tick=%d via=%s frame=%d dt=%.3f player=%s d=%s engaged=%s",
+    print(string.format("[CampusStar] %s %s tick=%d via=%s frame=%d dt=%.3f player=%s d=%s aff=%.0f tier=%d",
         tostring(root ~= nil and root.name or "?"), tag, tickCount, tostring(tickVia),
         fc, dt,
         playerPos ~= nil and string.format("(%.2f,%.2f,%.2f)", playerPos.x, playerPos.y, playerPos.z) or "nil",
         d ~= nil and string.format("%.2f", d) or "nil",
-        tostring(engaged)))
+        affinity, tier))
 end
 
 local function Tick(dt, source)
@@ -307,16 +409,19 @@ local function Tick(dt, source)
         return
     end
 
-    -- 走路：一直走到 STOP_AT(1.9) 才停 —— 她会真的走到你身边，不是隔着三米喊话
-    if d <= STOP_AT then
+    -- 走路：一直走到 stopDist 才停 —— 她会真的走到你身边，不是隔着三米喊话
+    local stopDist = finalePose and FINALE_AT or STOP_AT
+    if d <= stopDist then
         FaceTo(playerPos.x - root.position.x, playerPos.z - root.position.z, dt * 1.4)
-        PoseIdle(CS.UnityEngine.Time.time)
+        if finalePose then PoseFinale(now) else PoseIdle(CS.UnityEngine.Time.time) end
     else
-        ChaseTo(playerPos, dt)
+        ChaseTo(playerPos, dt, stopDist)
     end
 
-    -- 说话：TALK_RANGE(2.6) 内就开口（比停止距离大 0.7，留一点回差）
+    -- 说话 + 涨好感：TALK_RANGE 内持续累积，说的每一句再加一点
     if d <= TALK_RANGE then
+        affinity = math.min(AFFINITY_MAX, affinity + AFFINITY_PER_SEC * dt)
+        UpdateTier()
         TrySay()
     end
 end

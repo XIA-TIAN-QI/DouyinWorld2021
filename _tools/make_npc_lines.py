@@ -31,7 +31,11 @@ INK = (38, 31, 26)          # 深棕字
 
 
 def load_rows():
-    """返回 (names, lines)。格式：NPC_01|N|林小满 / NPC_01|L|台词"""
+    """返回 (names, lines)。格式：NPC_01|N|林小满 / NPC_01|L|台词
+
+    kind 以 L 开头都算台词：L 是第 1 档，L2/L3/L4 是第 2/3/4 档（好感度分档）。
+    档号只影响构建脚本给 quad 起名，图集格子仍然是"先名字、后台词出现顺序"。
+    """
     names, lines = [], []
     with io.open(TXT, encoding="utf-8") as f:
         for raw in f:
@@ -44,7 +48,7 @@ def load_rows():
             who, kind, text = parts[0].strip(), parts[1].strip(), parts[2].strip()
             if kind == "N":
                 names.append((who, text))
-            elif kind == "L":
+            elif kind.startswith("L"):
                 lines.append((who, text))
     return names, lines
 

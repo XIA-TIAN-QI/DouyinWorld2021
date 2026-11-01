@@ -92,10 +92,14 @@ labelNode = new_t("Label")
 add_child(root, labelNode)
 bubbleNode = new_t("Bubble")
 add_child(labelNode, bubbleNode)
-for i = 1, 8 do
-    add_child(bubbleNode, new_t(string.format("Line_%02d", i)))
+-- 台词 quad：四档，命名 Line_<档>_<序号>（和构建脚本一致）
+-- 每档都按倒序插入，验证 Lua 会自己按名字重排，而不是依赖子物体顺序
+local QUAD_COUNTS = { 8, 5, 5, 3 }
+for tier = 1, 4 do
+    for i = QUAD_COUNTS[tier], 1, -1 do
+        add_child(bubbleNode, new_t(string.format("Line_%d_%02d", tier, i)))
+    end
 end
-bubbleNode.childList[2], bubbleNode.childList[7] = bubbleNode.childList[7], bubbleNode.childList[2]
 
 local path = new_t("Path")
 add_child(root, path)
@@ -105,6 +109,7 @@ add_child(path, home)
 
 playerPos = nil
 cameraAvailable = true
+toastLog = {}
 
 CS = {
     UnityEngine = {
@@ -123,6 +128,9 @@ CS = {
                 return { transform = { position = v3(0, 2, -30) } }
             end,
         }),
+    },
+    DouyinUtility = {
+        Toast = function(s) toastLog[#toastLog + 1] = s end,
     },
     DouyinActorService = {
         GetLocalActor = function()
@@ -193,7 +201,7 @@ def main():
     g = lt.globals()
 
     print("[1] 初始化")
-    check(g.log[1].find("lines=8") != -1, "读到 8 句台词：" + g.log[1])
+    check(g.log[1].find("lines=21") != -1, "读到 21 句台词（8+5+5+3）：" + g.log[1])
     check(g.log[1].find("home") != -1 and g.log[1].find("home=nil") == -1, "读到待机点")
     check(bubble_active(lt) is False, "初始气泡关闭")
 
@@ -301,6 +309,25 @@ def main():
     after = pos(lt)
     jump = dist_xz(after, cur)
     check(jump < 0.6, "卡 5 秒只走 %.2fm（截断到 0.2s）" % jump)
+
+    print("[14] 好感度分档：陪着待着会升档，满档触发收尾")
+    lt2 = new_state()
+    player_at(lt2, 1.5, 0, -3.8)          # 距待机点 2m，落在 TALK_RANGE 内
+    step(lt2, 60 * 20)
+    l20 = active_line(lt2)
+    check(l20 is not None and l20.startswith("Line_2"), "20s 后升到第 2 档：" + str(l20))
+    step(lt2, 60 * 20)                     # 累计 40s
+    l40 = active_line(lt2)
+    t40 = int(l40.split("_")[1]) if l40 else 0
+    check(t40 >= 3, "40s 后到第 3 档：" + str(l40))
+    step(lt2, 60 * 35)                     # 累计 75s
+    l75 = active_line(lt2)
+    check(l75 is not None and l75.startswith("Line_4"), "75s 后到满档：" + str(l75))
+    toasts = lt2.eval("#toastLog")
+    check(toasts > 0, "升档/满档有 Toast 提示（%d 条）" % toasts)
+    p = pos(lt2)
+    d = dist_xz(p, (1.5, 0, -3.8))
+    check(d < 1.7, "满档后靠得更近（%.2fm）" % d)
 
     print()
     print("全部通过" if ok else "有失败项")
