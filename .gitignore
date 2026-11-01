@@ -59,3 +59,6 @@ _d_*.png
 # 诊断输出与构建日志
 _*.log
 _*.txt
+# 例外：台词配音清单是功能文件（ja 版是手写翻译，不可再生），必须入库
+!Assets/Campus/Audio/Voice/_manifest.txt
+!Assets/Campus/Audio/Voice/**/_manifest*.txt
